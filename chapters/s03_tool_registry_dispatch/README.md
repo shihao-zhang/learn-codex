@@ -50,7 +50,7 @@ python3 chapters/s03_tool_registry_dispatch/mock.py --demo
 
 映射解释：
 
-- `registry.rs` 是理解工具索引和执行分发的主要入口。固定 SHA 源码中可以看到工具 runtime、tool output、pre/post tool hook、telemetry、生命周期通知和未知工具错误等职责聚合在这一层附近。
+- `registry.rs` 是理解工具索引和执行分发的主要入口。本章只把它作为官方阅读锚点；工具 runtime、tool output、pre/post tool hook、telemetry、生命周期通知和未知工具错误等细节必须继续按本章核验清单逐文件确认。
 - `router.rs` 是理解“模型响应 item 如何变成内部 ToolCall”的入口。它连接模型输出结构、工具名、call id、payload 和 registry dispatch。
 - `handlers` 目录是具体工具实现的入口。教学里的 handler 是一个极简函数；真实 handler 会面对权限、环境、参数解析、错误传播和结果格式。
 - 本章不把 mock 中的 `ApplyPatchHandler` 当成官方类型名；它只是帮助读者理解“路由到 handler”这件事。

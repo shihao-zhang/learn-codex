@@ -14,6 +14,7 @@ Step 2 初版已完成：12 章均包含 README、Mermaid 图、Python mock、�
 - Python 代码只用于教学 mock，不代表 OpenAI 官方实现。
 - Codex Web、Codex Cloud、IDE 体验和 GitHub 集成只在公开资料范围内作为旁支说明。
 - 所有“官方事实”必须能追到固定 commit 的 OpenAI 源码 permalink、OpenAI 官方文档或 release note；否则章节必须标注为“待核实”或“教学抽象”，句子层面的解释可以标注为“推断”。
+- 本仓内容对应 [docs/fact-snapshot.md](docs/fact-snapshot.md) 的核验日期和目标 commit；release、model/provider、权限策略和 app-server 协议都属于易过期点。
 
 当前事实快照见 [docs/fact-snapshot.md](docs/fact-snapshot.md)。
 
@@ -29,7 +30,7 @@ Step 2 初版已完成：12 章均包含 README、Mermaid 图、Python mock、�
 | 指令系统 | [s06_prompts_instructions](chapters/s06_prompts_instructions/README.md) | system prompt、AGENTS.md、指令层级 | 已核实官方事实 |
 | 配置与模型 | [s07_config_auth_models](chapters/s07_config_auth_models/README.md) | config、认证、model/provider 选择 | 已核实官方事实 |
 | 会话状态 | [s08_sessions_threads_rollout](chapters/s08_sessions_threads_rollout/README.md) | session、thread、恢复、rollout 持久化 | 待核实 |
-| App Server | [s09_app_server_transport](chapters/s09_app_server_transport/README.md) | app-server、transport、状态同步 | 已核实官方事实 |
+| App Server | [s09_app_server_transport](chapters/s09_app_server_transport/README.md) | app-server、transport、状态同步 | 待核实 |
 | 扩展面 | [s10_extensions_mcp_skills](chapters/s10_extensions_mcp_skills/README.md) | MCP、extensions、skills 目录与动态工具 | 待核实 |
 | 并行与委派 | [s11_subagents_parallel_jobs](chapters/s11_subagents_parallel_jobs/README.md) | 子任务、并行、委派 | 待核实 |
 | 综合架构 | [s12_comprehensive_architecture](chapters/s12_comprehensive_architecture/README.md) | 端到端架构整合 | 教学抽象 |

@@ -40,6 +40,7 @@ def render_text(scenario: TeachingScenario, path_name: str, events: Iterable[Tra
     lines: List[str] = [
         f"{scenario.chapter}: {scenario.title}",
         scenario.summary,
+        "note: Teaching mock only; not an OpenAI Codex implementation.",
         f"path: {path_name}",
         "",
     ]

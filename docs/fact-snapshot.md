@@ -42,8 +42,6 @@
 | s07_config_auth_models | [codex-rs/protocol/src/models.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/protocol/src/models.rs) |
 | s07_config_auth_models | [codex-rs/protocol/src/openai_models.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/protocol/src/openai_models.rs) |
 | s07_config_auth_models | [codex-rs/protocol/src/auth.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/protocol/src/auth.rs) |
-| s09_app_server_transport | [codex-rs/app-server/src](https://github.com/openai/codex/tree/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/app-server/src) |
-| s09_app_server_transport | [codex-rs/app-server-protocol/src](https://github.com/openai/codex/tree/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/app-server-protocol/src) |
 
 ## 已引用但行为待核实的源码路径
 
@@ -56,6 +54,8 @@
 | s08_sessions_threads_rollout | [codex-rs/core/src/thread_rollout_truncation.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/core/src/thread_rollout_truncation.rs) |
 | s08_sessions_threads_rollout | [codex-rs/thread-store](https://github.com/openai/codex/tree/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/thread-store) |
 | s08_sessions_threads_rollout | [codex-rs/rollout](https://github.com/openai/codex/tree/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/rollout) |
+| s09_app_server_transport | [codex-rs/app-server/src](https://github.com/openai/codex/tree/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/app-server/src) |
+| s09_app_server_transport | [codex-rs/app-server-protocol/src](https://github.com/openai/codex/tree/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/app-server-protocol/src) |
 | s10_extensions_mcp_skills | [codex-rs/core/src/tools/handlers/mcp.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/core/src/tools/handlers/mcp.rs) |
 | s10_extensions_mcp_skills | [codex-rs/core/src/tools/handlers/extension_tools.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/core/src/tools/handlers/extension_tools.rs) |
 | s10_extensions_mcp_skills | [codex-rs/skills/src](https://github.com/openai/codex/tree/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/skills/src) |
@@ -81,3 +81,4 @@
 - `codex-rs/skills/src` 与 CLI 一等 skills 能力之间的关系。
 - `agent_jobs`、`codex_delegate`、`parallel` 是否构成开源 CLI harness 主线能力。
 - `thread-store`、`rollout`、`thread_rollout_truncation.rs` 与 app-server/thread 恢复的完整数据流。
+- `app-server`、`app-server-protocol` 中 request、outgoing message、thread state/status、protocol export 的字段级边界。

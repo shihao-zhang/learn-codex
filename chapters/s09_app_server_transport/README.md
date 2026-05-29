@@ -2,13 +2,13 @@
 
 ## 状态标签
 
-状态：已核实官方事实
+状态：待核实
 
 ## 本章回答什么
 
 本章回答一个产品层问题：当 Codex 不只运行在终端里，而要被 App、IDE、远程界面或其他客户端驱动时，运行时如何把“请求、事件、状态、工具进度”整理成可消费的接口层。
 
-公开事实边界很窄：本章只讨论已登记的 `codex-rs/app-server/src` 与 `codex-rs/app-server-protocol/src`。其中可以确认的是公开源码中存在 app-server、transport、request/outgoing message、thread state/status、protocol export 等接口层线索；本章不会把它扩展成 Codex Cloud 或任何非公开服务架构。
+公开事实边界很窄：本章只讨论已登记且已核实存在的 `codex-rs/app-server/src` 与 `codex-rs/app-server-protocol/src`。接口层的具体 request、outgoing message、thread state/status、protocol export 等字段和行为仍待逐文件核实；本章不会把这些路径扩展成 Codex Cloud 或任何非公开服务架构。
 
 ## 对产品与平台设计的意义
 
@@ -45,7 +45,7 @@ python3 chapters/s09_app_server_transport/mock.py --demo
 - [codex-rs/app-server/src](https://github.com/openai/codex/tree/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/app-server/src)
 - [codex-rs/app-server-protocol/src](https://github.com/openai/codex/tree/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/app-server-protocol/src)
 
-这些链接只能证明当前固定 commit 上的公开源码范围。本章的教学解释必须回到这两个目录，不能新增未登记的源码 permalink，也不能把目录名推导成未公开产品实现。
+这些链接只能证明当前固定 commit 上的公开源码范围。由于本章仍未完成字段级和行为级核验，章节状态保持为“待核实”。本章的教学解释必须回到这两个目录，不能新增未登记的源码 permalink，也不能把目录名推导成未公开产品实现。
 
 ## 教学简化与生产差异
 
@@ -69,4 +69,4 @@ python3 chapters/s09_app_server_transport/mock.py --demo
 - [x] 仅使用 fact-snapshot 中登记的固定 SHA permalink。
 - [x] 明确区分公开 app-server/app-server-protocol 源码与任何非公开 Codex Cloud 行为。
 - [x] 明确 Python mock 和 Mermaid 图都是教学材料，不是官方实现。
-- [ ] 后续如要写字段级解释，需逐文件核实 request、outgoing message、thread state/status 的真实类型与边界。
+- [ ] 逐文件核实 request、outgoing message、thread state/status、protocol export 的真实类型与边界后，再考虑是否升级为“已核实官方事实”。

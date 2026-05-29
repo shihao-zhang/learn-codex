@@ -51,6 +51,10 @@ PINNED_LINK_RE = re.compile(
     + re.escape(SOURCE_COMMIT)
     + r"/[^\s)]+"
 )
+ANY_OPENAI_CODE_LINK_RE = re.compile(
+    r"https://github\.com/openai/codex/(?:blob|tree)/"
+    r"(?P<sha>[0-9a-f]{40})/[^\s)]+"
+)
 SNAPSHOT_ROW_RE = re.compile(
     r"\|\s*(?P<chapter>s\d{2}_[^|]+?)\s*\|\s*\[[^\]]+\]\((?P<link>https://github\.com/openai/codex/(?:blob|tree)/"
     + re.escape(SOURCE_COMMIT)
@@ -92,6 +96,23 @@ def check_root_docs() -> None:
     for phrase in ["三选一规则", "固定 commit SHA", "教学抽象"]:
         if phrase not in sourcing:
             fail(f"docs/sourcing.md missing phrase: {phrase}")
+    check_openai_code_link_shas()
+
+
+def check_openai_code_link_shas() -> None:
+    for path in sorted(ROOT.rglob("*")):
+        if path.is_dir() or ".git" in path.parts:
+            continue
+        if path.suffix not in {".md", ".mmd", ".py"}:
+            continue
+        text = read(path)
+        for match in ANY_OPENAI_CODE_LINK_RE.finditer(text):
+            sha = match.group("sha")
+            if sha != SOURCE_COMMIT:
+                fail(
+                    f"{path.relative_to(ROOT)} has openai/codex link with "
+                    f"unexpected SHA {sha}: {match.group(0)}"
+                )
 
 
 def pinned_links(text: str) -> set[str]:
@@ -156,6 +177,14 @@ def check_chapter(chapter: str) -> None:
             fail(f"{diagram.relative_to(ROOT)} still contains placeholder phrase {phrase!r}")
 
     status = chapter_status(text, readme)
+    if status == "待核实" and not any(
+        marker in diagram_text for marker in ["待核实", "to be verified", "pending"]
+    ):
+        fail(f"{diagram.relative_to(ROOT)} for pending chapter must mark pending semantics")
+    if status == "教学抽象" and not any(
+        marker in diagram_text for marker in ["教学抽象", "Teaching abstraction", "not official"]
+    ):
+        fail(f"{diagram.relative_to(ROOT)} for teaching abstraction must say it is not official")
 
     links = pinned_links(text)
     if not links:
