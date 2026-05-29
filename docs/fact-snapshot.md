@@ -45,6 +45,28 @@
 | s09_app_server_transport | [codex-rs/app-server/src](https://github.com/openai/codex/tree/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/app-server/src) |
 | s09_app_server_transport | [codex-rs/app-server-protocol/src](https://github.com/openai/codex/tree/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/app-server-protocol/src) |
 
+## 已引用但行为待核实的源码路径
+
+以下路径同样已在 2026-05-29 通过 GitHub Contents API 对目标 commit 验证存在，返回 HTTP 200。但对应章节仍标为 `待核实` 或 `教学抽象`，因为路径存在不等于行为解释已经核实。
+
+| 章节 | 已核实存在的路径 |
+| --- | --- |
+| s08_sessions_threads_rollout | [codex-rs/protocol/src/session_id.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/protocol/src/session_id.rs) |
+| s08_sessions_threads_rollout | [codex-rs/protocol/src/thread_id.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/protocol/src/thread_id.rs) |
+| s08_sessions_threads_rollout | [codex-rs/core/src/thread_rollout_truncation.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/core/src/thread_rollout_truncation.rs) |
+| s08_sessions_threads_rollout | [codex-rs/thread-store](https://github.com/openai/codex/tree/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/thread-store) |
+| s08_sessions_threads_rollout | [codex-rs/rollout](https://github.com/openai/codex/tree/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/rollout) |
+| s10_extensions_mcp_skills | [codex-rs/core/src/tools/handlers/mcp.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/core/src/tools/handlers/mcp.rs) |
+| s10_extensions_mcp_skills | [codex-rs/core/src/tools/handlers/extension_tools.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/core/src/tools/handlers/extension_tools.rs) |
+| s10_extensions_mcp_skills | [codex-rs/skills/src](https://github.com/openai/codex/tree/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/skills/src) |
+| s11_subagents_parallel_jobs | [codex-rs/core/src/tools/handlers/agent_jobs.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/core/src/tools/handlers/agent_jobs.rs) |
+| s11_subagents_parallel_jobs | [codex-rs/core/src/codex_delegate.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/core/src/codex_delegate.rs) |
+| s11_subagents_parallel_jobs | [codex-rs/core/src/tools/parallel.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/core/src/tools/parallel.rs) |
+| s12_comprehensive_architecture | [codex-rs/core](https://github.com/openai/codex/tree/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/core) |
+| s12_comprehensive_architecture | [codex-rs/protocol](https://github.com/openai/codex/tree/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/protocol) |
+| s12_comprehensive_architecture | [codex-rs/app-server](https://github.com/openai/codex/tree/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/app-server) |
+| s12_comprehensive_architecture | [codex-rs/Cargo.toml](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/Cargo.toml) |
+
 ## 易过期点
 
 - release 版本和 npm/Homebrew 分发方式。

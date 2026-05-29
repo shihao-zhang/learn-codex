@@ -45,6 +45,11 @@ PINNED_LINK_RE = re.compile(
     + re.escape(SOURCE_COMMIT)
     + r"/[^\s)]+"
 )
+SNAPSHOT_ROW_RE = re.compile(
+    r"\|\s*(?P<chapter>s\d{2}_[^|]+?)\s*\|\s*\[[^\]]+\]\((?P<link>https://github\.com/openai/codex/(?:blob|tree)/"
+    + re.escape(SOURCE_COMMIT)
+    + r"/[^\s)]+)\)\s*\|"
+)
 STATUS_ROW_RE = re.compile(
     r"\|\s*[^|]+\s*\|\s*\[(?P<chapter>s\d{2}_[^\]]+)\]\([^)]+\)\s*"
     r"\|\s*[^|]+\s*\|\s*(?P<status>[^|]+?)\s*\|"
@@ -109,6 +114,15 @@ def root_statuses() -> dict[str, str]:
     return statuses
 
 
+def snapshot_links_by_chapter() -> dict[str, set[str]]:
+    snapshot = read(ROOT / "docs/fact-snapshot.md")
+    links: dict[str, set[str]] = {}
+    for match in SNAPSHOT_ROW_RE.finditer(snapshot):
+        chapter = match.group("chapter").strip()
+        links.setdefault(chapter, set()).add(match.group("link"))
+    return links
+
+
 def check_chapter(chapter: str) -> None:
     chapter_dir = ROOT / "chapters" / chapter
     if not chapter_dir.is_dir():
@@ -133,14 +147,24 @@ def check_chapter(chapter: str) -> None:
     if not links:
         fail(f"{readme.relative_to(ROOT)} has no pinned openai/codex permalink")
 
+    snapshot_by_chapter = snapshot_links_by_chapter()
+    all_snapshot_links = set().union(*snapshot_by_chapter.values())
+    missing_from_snapshot = sorted(links - all_snapshot_links)
+    if missing_from_snapshot:
+        missing_list = "\n".join(f"  - {link}" for link in missing_from_snapshot)
+        fail(
+            f"{readme.relative_to(ROOT)} has links missing from "
+            f"docs/fact-snapshot.md:\n{missing_list}"
+        )
+
     if status == "已核实官方事实":
-        snapshot_links = pinned_links(read(ROOT / "docs/fact-snapshot.md"))
-        missing = sorted(links - snapshot_links)
-        if missing:
-            missing_list = "\n".join(f"  - {link}" for link in missing)
+        chapter_snapshot_links = snapshot_by_chapter.get(chapter, set())
+        missing_for_chapter = sorted(links - chapter_snapshot_links)
+        if missing_for_chapter:
+            missing_list = "\n".join(f"  - {link}" for link in missing_for_chapter)
             fail(
-                f"{readme.relative_to(ROOT)} has verified-status links missing "
-                f"from docs/fact-snapshot.md:\n{missing_list}"
+                f"{readme.relative_to(ROOT)} has verified-status links not "
+                f"registered under {chapter} in docs/fact-snapshot.md:\n{missing_list}"
             )
 
     mock_text = read(mock)

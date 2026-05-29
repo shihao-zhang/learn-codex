@@ -26,6 +26,8 @@ https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/co
 https://github.com/openai/codex/tree/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/core/src/tools
 ```
 
+Step 1 骨架阶段，每章必须至少包含一个固定 SHA 的 Codex 源码 permalink。Step 2 如出现只依赖官方文档或 release note 的章节，必须同步放宽 `scripts/check_docs.py` 并在本文件记录新规则。
+
 ## 写作标签
 
 - `已核实官方事实`：路径或文档已经在当前事实快照中核实。
