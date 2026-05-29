@@ -1,0 +1,7 @@
+flowchart LR
+    A["shell request"] --> B["policy check"]
+    B --> C["sandbox"]
+    B --> D["approval"]
+    C --> E["exec result"]
+    D --> E
+

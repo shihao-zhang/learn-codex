@@ -1,0 +1,6 @@
+flowchart LR
+    A["parent task"] --> B["job?"]
+    A --> C["parallel?"]
+    B -. "待核实" .-> D["result merge"]
+    C -. "待核实" .-> D
+

@@ -1,0 +1,6 @@
+flowchart LR
+    A["user input"] --> B["agent loop"]
+    B --> C["model step"]
+    C --> D["tool call or final answer"]
+    D --> B
+
