@@ -49,6 +49,7 @@ python3 chapters/s04_shell_sandbox_permissions/mock.py --demo
 - `network_approval.rs` 是理解托管网络、按 host/protocol/port 审批、session 级缓存、拒绝结果和网络策略修订的入口。
 - `permissions.rs` 是理解文件系统 sandbox policy、访问模式、特殊路径、writable roots、deny-read 规则和网络 sandbox policy 的入口。
 - 本章只使用 fact snapshot 已登记的三个固定 SHA permalink；不同 OS 的底层 sandbox 细节需要继续逐文件核验。
+- 机制级证据登记在 [docs/source-evidence.md](../../docs/source-evidence.md)，包括 approval requirement、sandbox attempt、网络审批结构和 filesystem permission 类型。
 
 ## 教学简化与生产差异
 
@@ -67,9 +68,9 @@ python3 chapters/s04_shell_sandbox_permissions/mock.py --demo
 
 ## 事实核验清单
 
-- [ ] 在固定 SHA 的 `sandboxing.rs` 中核实 approval、sandbox attempt、执行上下文和错误路径。
-- [ ] 在固定 SHA 的 `network_approval.rs` 中核实网络审批触发条件、缓存粒度、拒绝传播和策略修订。
-- [ ] 在固定 SHA 的 `permissions.rs` 中核实文件系统 policy、访问模式、特殊路径、metadata 保护和 deny-read 行为。
+- [x] 在固定 SHA 的 `sandboxing.rs` / `orchestrator.rs` 中核实 approval requirement、approval cache 和 sandbox attempt 主路径。
+- [x] 在固定 SHA 的 `network_approval.rs` 中核实网络审批 mode、active/deferred approval 和 host approval key 主结构。
+- [x] 在固定 SHA 的 `permissions.rs` 中核实文件系统 policy、访问模式、特殊路径和 metadata 保护入口。
 - [ ] 分 OS 核实 sandbox backend 的能力差异，不把教学图当成跨平台实现承诺。
 - [ ] 明确区分 approval policy、sandbox policy、network policy、permission profile 和用户可见审批文案。
 - [ ] 不把“用户批准”写成“无限制执行”；仍需核实批准后是否保留 sandbox 或 deny-read 规则。

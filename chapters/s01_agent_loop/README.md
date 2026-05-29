@@ -51,6 +51,7 @@ python3 chapters/s01_agent_loop/mock.py --demo
 - `agent` 目录是理解 agent 控制流、状态和角色组织的入口。教学里的“loop”对应的是一组运行时控制职责，不应被理解成某个单一 Python 函数。
 - `tools` 目录是理解工具调用如何进入执行层的入口。教学里的“tool observation”强调结果回填语义；真实实现还要处理工具注册、路由、生命周期、错误、取消和 telemetry。
 - 本章只用这两个已登记 permalink 建立阅读入口；具体类型名、字段名和事件名以固定 SHA 下的源码为准。
+- 机制级证据登记在 [docs/source-evidence.md](../../docs/source-evidence.md)，包括 session loop 启动、tool call 路由和 conversation item 记录。
 
 ## 教学简化与生产差异
 
@@ -68,8 +69,9 @@ python3 chapters/s01_agent_loop/mock.py --demo
 
 ## 事实核验清单
 
-- [ ] 逐文件核实 `agent` 目录中控制流入口、turn/任务边界和状态更新位置。
-- [ ] 逐文件核实 `tools` 目录中工具结果如何转换为后续模型输入或客户端事件。
+- [x] 核实 session loop 启动入口与 `submission_loop` 任务创建。
+- [x] 核实 tool call 从模型 response item 进入 router/registry dispatch 的机制路径。
+- [x] 核实 conversation items 会写历史、持久化 rollout 并发送 raw response item 事件。
 - [ ] 不把 Python mock 的 `TeachingScenario`、事件名或函数名写成官方 Rust 类型名。
 - [ ] 区分教学术语“observation”和真实源码中的协议 item、tool output、event、trace 结构。
 - [ ] 遇到无法从固定 SHA 源码确认的行为，标注为“教学抽象”或“推断”，不要升级成官方事实。

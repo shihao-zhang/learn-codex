@@ -1,9 +1,9 @@
 flowchart TD
-    A["start or resume request"] --> B["session_id.rs path"]
-    A --> C["thread_id.rs path"]
-    C --> D["thread-store / rollout paths"]
-    D --> E["possible history lookup"]
-    D --> F["thread_rollout_truncation path"]
+    A["start or resume request"] --> B["SessionId<br/>UUID v7 evidence"]
+    A --> C["ThreadId<br/>UUID v7 evidence"]
+    C --> D["ThreadStore / rollout<br/>mechanism evidence"]
+    D --> E["history lookup<br/>end-to-end pending"]
+    D --> F["thread_rollout_truncation<br/>turn-boundary helpers"]
     E --> G["resume surface"]
     F --> G
     G --> H["behavior semantics: to be verified"]

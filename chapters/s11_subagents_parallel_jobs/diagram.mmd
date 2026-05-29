@@ -13,6 +13,7 @@ flowchart LR
     J --> R["Failure recovery<br/>retry / cancel / resume"]
     R --> M
 
-    S1["agent_jobs.rs<br/>path exists"] -. "语义待核实" .-> J
-    S2["codex_delegate.rs<br/>path exists"] -. "语义待核实" .-> W2
-    S3["parallel.rs<br/>path exists"] -. "语义待核实" .-> L
+    S1["agent_jobs.rs<br/>behavior evidence"] --> J
+    S2["codex_delegate.rs<br/>approval/event forwarding"] --> W2
+    S3["parallel.rs<br/>tool-call runtime"] --> L
+    OQ["open questions<br/>default exposure / v1-v2 UX"] -.-> P

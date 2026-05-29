@@ -6,9 +6,9 @@
 
 ## 本章回答什么
 
-本章解释长任务恢复的产品问题：一次 agent 工作如何被识别、历史如何被关联、进程中断后用户如何继续。当前状态仍是待核实：本章只确认 `session_id.rs`、`thread_id.rs`、`thread_rollout_truncation.rs`、`thread-store` 和 `rollout` 等路径已进入事实快照；它们的完整行为语义、数据流和生产职责尚未在本章确认。
+本章解释长任务恢复的产品问题：一次 agent 工作如何被识别、历史如何被关联、进程中断后用户如何继续。当前状态仍是待核实：本章已核实 `session_id.rs`、`thread_id.rs`、`ThreadStore` trait、rollout 记录、`InitialHistory::Resumed/Forked` 等局部机制，但从 app-server resume 请求到 thread-store/rollout/reconstruction 的完整数据流尚未闭环。
 
-因此，本章采用“教学抽象 + 待核实边界”的写法：把 session、thread、rollout、resume 作为理解会话恢复的概念框架，但不声称这些词在真实 Codex 中已经按本文语义工作。
+因此，本章采用“局部官方事实 + 待核实端到端语义”的写法：把 session、thread、rollout、resume 作为理解会话恢复的概念框架，但不把局部源码证据扩写成完整恢复承诺。
 
 ## 对产品与平台设计的意义
 
@@ -18,7 +18,7 @@
 
 ## 机制图
 
-见 [diagram.mmd](diagram.mmd)。该图只表达待核实章节的阅读框架：路径已核实，行为语义待核实；它不是官方数据流图。
+见 [diagram.mmd](diagram.mmd)。该图只表达待核实章节的阅读框架：局部机制已核实，端到端恢复语义待核实；它不是官方数据流图。
 
 ## 运行 mock
 
@@ -30,10 +30,10 @@ python3 chapters/s08_sessions_threads_rollout/mock.py --demo
 
 ## 核心机制
 
-- `session id`：教学上表示一次运行或交互的身份标识。真实生成方式、生命周期和跨进程语义待核实。
-- `thread id`：教学上表示一条可继续的对话/任务线索。它与 session 的关系、是否跨设备或跨进程稳定，均待核实。
-- `rollout`：教学上表示可保存、可回放或可截断的历史轨迹。当前只确认相关路径存在，不确认其完整生产职责。
-- `resume`：教学上表示从已有历史恢复工作状态。真实恢复会加载哪些内容、如何处理缺失或过长历史，待核实。
+- `session id`：源码显示 `SessionId::new()` 使用 UUID v7，并可与 `ThreadId` 相互转换。生命周期、跨进程语义和产品展示仍需结合调用链核实。
+- `thread id`：源码显示 `ThreadId::new()` 使用 UUID v7，并支持字符串解析。它与 session 的关系、是否跨设备或跨进程稳定，仍需端到端核实。
+- `rollout`：教学上表示可保存、可回放或可截断的历史轨迹。源码显示 rollout line 会序列化为 JSONL，并带 timestamp；完整生产职责仍需结合 thread-store 与 app-server 核实。
+- `resume`：源码显示 `InitialHistory::Resumed/Forked` 会重建历史、处理 token 信息并 flush/persist。真实恢复会加载哪些内容、如何处理缺失或过长历史，仍需完整核实。
 - `thread rollout truncation`：路径已在事实快照登记；其职责边界需要继续读源码确认，不能直接等同于 s05 的 compaction。
 
 ## 真实 Codex 映射
@@ -44,7 +44,9 @@ python3 chapters/s08_sessions_threads_rollout/mock.py --demo
 - [codex-rs/thread-store](https://github.com/openai/codex/tree/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/thread-store)
 - [codex-rs/rollout](https://github.com/openai/codex/tree/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/rollout)
 
-以上固定 SHA 链接只作为“路径存在已核实”的事实入口。由于本章状态仍为待核实，本文不把这些路径解释成已确认的数据流或产品语义。
+以上固定 SHA 链接是本章的官方事实入口。由于本章状态仍为待核实，本文不把局部机制证据扩写成完整恢复数据流或产品语义。
+
+机制级证据登记在 [docs/source-evidence.md](../../docs/source-evidence.md)。当前证据足以支持 id 生成、thread-store trait、resume/fork 初始历史处理等局部事实；不足以支持完整恢复体验承诺。
 
 ## 教学简化与生产差异
 
@@ -61,6 +63,8 @@ python3 chapters/s08_sessions_threads_rollout/mock.py --demo
 
 ## 事实核验清单
 
-- [ ] 核实 session、thread、rollout 的真实职责边界。
-- [ ] 核实恢复流程中的数据写入、读取、缺失处理和过长历史处理。
+- [x] 核实 `SessionId` / `ThreadId` 的 UUID v7 生成入口。
+- [x] 核实 `ThreadStore` trait 中 create/resume/append/load/read 的存储边界。
+- [x] 核实 `InitialHistory::Resumed/Forked` 会触发 rollout reconstruction 和历史替换。
+- [ ] 核实 app-server resume 请求、thread-store 读取、rollout reconstruction、history pagination 和 redaction 的端到端数据流。
 - [ ] 明确哪些状态由 CLI、app-server 或存储 crate 维护；在完成前保持本章状态为待核实。

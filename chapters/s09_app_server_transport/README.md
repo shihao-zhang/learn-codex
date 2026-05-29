@@ -2,13 +2,13 @@
 
 ## 状态标签
 
-状态：待核实
+状态：已核实官方事实
 
 ## 本章回答什么
 
 本章回答一个产品层问题：当 Codex 不只运行在终端里，而要被 App、IDE、远程界面或其他客户端驱动时，运行时如何把“请求、事件、状态、工具进度”整理成可消费的接口层。
 
-公开事实边界很窄：本章只讨论已登记且已核实存在的 `codex-rs/app-server/src` 与 `codex-rs/app-server-protocol/src`。接口层的具体 request、outgoing message、thread state/status、protocol export 等字段和行为仍待逐文件核实；本章不会把这些路径扩展成 Codex Cloud 或任何非公开服务架构。
+公开事实边界仍要收窄：本章只讨论固定 commit 中的 `codex-rs/app-server/src` 与 `codex-rs/app-server-protocol/src`。目前已核实 transport 连接状态、outgoing message 路由、server request 回调、thread status 投影和 schema export 入口；字段级兼容性和客户端实现细节仍放在事实核验清单里。本章不会把这些路径扩展成 Codex Cloud 或任何非公开服务架构。
 
 ## 对产品与平台设计的意义
 
@@ -21,7 +21,7 @@
 
 ## 机制图
 
-见 [diagram.mmd](diagram.mmd)。图是教学拆解：把客户端请求、transport、app-server 协调层、核心运行时、状态投影和 outgoing message 分开看，帮助读者理解接口边界。
+见 [diagram.mmd](diagram.mmd)。图是教学拆解：把客户端请求、transport、app-server 协调层、核心运行时、状态投影和 outgoing message 分开看，帮助读者理解接口边界；它不是官方部署图。
 
 ## 运行 mock
 
@@ -45,13 +45,13 @@ python3 chapters/s09_app_server_transport/mock.py --demo
 - [codex-rs/app-server/src](https://github.com/openai/codex/tree/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/app-server/src)
 - [codex-rs/app-server-protocol/src](https://github.com/openai/codex/tree/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/app-server-protocol/src)
 
-这些链接只能证明当前固定 commit 上的公开源码范围。由于本章仍未完成字段级和行为级核验，章节状态保持为“待核实”。本章的教学解释必须回到这两个目录，不能新增未登记的源码 permalink，也不能把目录名推导成未公开产品实现。
+机制级证据登记在 [docs/source-evidence.md](../../docs/source-evidence.md)：transport/outgoing/status/schema export 已核实到具体源码行。章节状态因此升级为“已核实官方事实”，但这个标签只覆盖本章明确列出的公开源码机制；字段级兼容性、客户端实现和非公开服务架构仍不能外推。
 
 ## 教学简化与生产差异
 
 本章把接口层简化成“request -> runtime -> state/outgoing message”。真实生产实现会复杂得多：
 
-- transport 需要处理连接生命周期、背压、取消、重放、超时和客户端版本差异。
+- transport 需要处理连接生命周期、背压、取消、重放、超时和客户端版本差异；本章只核实了连接状态、消息路由和慢连接队列处理的一部分源码路径。
 - protocol 需要兼顾类型稳定、schema 导出、兼容性和错误码，而不是随便传 JSON。
 - 状态同步通常不是完整事件日志的逐字转发，而是面向产品视图的投影与压缩。
 - app-server 不等于模型服务，也不等于 Codex Cloud；它位于客户端体验和本地/核心运行时之间。
@@ -69,4 +69,5 @@ python3 chapters/s09_app_server_transport/mock.py --demo
 - [x] 仅使用 fact-snapshot 中登记的固定 SHA permalink。
 - [x] 明确区分公开 app-server/app-server-protocol 源码与任何非公开 Codex Cloud 行为。
 - [x] 明确 Python mock 和 Mermaid 图都是教学材料，不是官方实现。
-- [ ] 逐文件核实 request、outgoing message、thread state/status、protocol export 的真实类型与边界后，再考虑是否升级为“已核实官方事实”。
+- [x] 已把 transport、outgoing message、thread status 和 schema export 的机制级证据登记到 `docs/source-evidence.md`。
+- [ ] 继续逐字段核实 request、notification、response、thread history pagination 和 experimental API 兼容性。

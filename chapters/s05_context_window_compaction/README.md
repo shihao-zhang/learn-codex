@@ -44,6 +44,8 @@ python3 chapters/s05_context_window_compaction/mock.py --demo
 
 以上固定 SHA 链接是本章的官方事实入口：它们说明当前教学对象中存在 compaction 相关源码。README 中的机制解释用于教学，不把 Python mock 或 Mermaid 图声明为官方实现。
 
+机制级证据登记在 [docs/source-evidence.md](../../docs/source-evidence.md)，包括 compact task 入口、compact 后历史替换与 rollout 记录、以及 thread rollout truncation helper。
+
 ## 教学简化与生产差异
 
 教学版把上下文管理压成三步：测量、压缩、截断。生产系统通常还要处理更多问题：不同模型的窗口上限不同，工具输出可能很长，文件内容可能需要重新读取，摘要本身也会占用 token，且摘要质量会受模型、提示词和历史结构影响。
@@ -59,6 +61,9 @@ python3 chapters/s05_context_window_compaction/mock.py --demo
 
 ## 事实核验清单
 
-- [ ] 逐文件核实 compact、remote compact 与 v2 compact 的职责边界。
+- [x] 核实 `compact.rs` 中 compact task 的主入口和 inline/remote 选择入口。
+- [x] 核实 compact 后会替换历史、写入 `Compacted` / `TurnContext` rollout item，并推进窗口 generation。
+- [x] 核实 `thread_rollout_truncation.rs` 中按 user turn / fork turn 截断 rollout 的 helper。
+- [ ] 继续核实 remote compact 与 v2 compact 的字段级职责边界。
 - [ ] 核实 compaction 与 truncation 的真实触发条件，避免把教学 mock 的阈值写成官方行为。
-- [ ] 明确 compaction 与 rollout 的边界；rollout 相关路径在 s08 仍按待核实处理。
+- [ ] 明确 compaction 与 rollout 的边界；rollout 相关端到端路径在 s08 仍按待核实处理。

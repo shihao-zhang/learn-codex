@@ -54,6 +54,7 @@ python3 chapters/s03_tool_registry_dispatch/mock.py --demo
 - `router.rs` 是理解“模型响应 item 如何变成内部 ToolCall”的入口。它连接模型输出结构、工具名、call id、payload 和 registry dispatch。
 - `handlers` 目录是具体工具实现的入口。教学里的 handler 是一个极简函数；真实 handler 会面对权限、环境、参数解析、错误传播和结果格式。
 - 本章不把 mock 中的 `ApplyPatchHandler` 当成官方类型名；它只是帮助读者理解“路由到 handler”这件事。
+- 机制级证据登记在 [docs/source-evidence.md](../../docs/source-evidence.md)，包括 router 参数、registry 构造、pre/post hook、handler 调用和错误回写。
 
 ## 教学简化与生产差异
 
@@ -72,8 +73,8 @@ python3 chapters/s03_tool_registry_dispatch/mock.py --demo
 
 ## 事实核验清单
 
-- [ ] 在固定 SHA 的 `registry.rs` 中核实工具注册、dispatch、hook、telemetry 和错误处理的真实职责。
-- [ ] 在固定 SHA 的 `router.rs` 中核实模型响应 item 到内部 tool call 的转换边界。
+- [x] 在固定 SHA 的 `registry.rs` 中核实工具注册、dispatch、hook、telemetry 和错误处理的主要职责。
+- [x] 在固定 SHA 的 `router.rs` 中核实模型响应 item 到内部 tool call 的转换边界。
 - [ ] 在固定 SHA 的 `handlers` 目录中核实具体工具 handler 的实际分布，不把教学 handler 名称写成官方类型。
 - [ ] 区分模型可见工具、隐藏工具、动态工具、扩展工具和外部 MCP/extension 工具。
 - [ ] 不把“工具调用成功”简化成“业务动作成功”；handler 运行、权限通过、业务结果符合预期是不同层级。

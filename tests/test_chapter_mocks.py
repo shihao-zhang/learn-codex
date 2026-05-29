@@ -49,9 +49,11 @@ class ChapterMockTest(unittest.TestCase):
                 payload = self.run_mock(chapter, "happy")
                 self.assertEqual(payload["chapter"], chapter)
                 self.assertEqual(payload["path"], "happy")
+                self.assertIn("Teaching mock only", payload["note"])
                 self.assertGreaterEqual(len(payload["events"]), 3)
             with self.subTest(chapter=chapter, path="failure"):
                 payload = self.run_mock(chapter, "failure")
                 self.assertEqual(payload["chapter"], chapter)
                 self.assertEqual(payload["path"], "failure")
+                self.assertIn("Teaching mock only", payload["note"])
                 self.assertGreaterEqual(len(payload["events"]), 3)

@@ -6,7 +6,7 @@
 
 Step 1 已完成：目录、章节边界、状态标签、事实快照和溯源规则已经固定。
 
-Step 2 初版已完成：12 章均包含 README、Mermaid 图、Python mock、真实映射、生产差异、练习和事实核验清单。Python mock 只用于教学，不调用 OpenAI API，不代表官方实现，也不证明与官方 Codex 实现等价。
+Step 2 初版已完成：12 章均包含 README、Mermaid 图、Python mock、真实映射、生产差异、练习和事实核验清单。Phase 3/4 正在把“路径存在”提升为机制级证据索引，并收窄 `sessions`、`skills`、`multi-agent` 等容易误读的边界。Python mock 只用于教学，不调用 OpenAI API，不代表官方实现，也不证明与官方 Codex 实现等价。
 
 ## 事实边界
 
@@ -16,7 +16,7 @@ Step 2 初版已完成：12 章均包含 README、Mermaid 图、Python mock、�
 - 所有“官方事实”必须能追到固定 commit 的 OpenAI 源码 permalink、OpenAI 官方文档或 release note；否则章节必须标注为“待核实”或“教学抽象”，句子层面的解释可以标注为“推断”。
 - 本仓内容对应 [docs/fact-snapshot.md](docs/fact-snapshot.md) 的核验日期和目标 commit；release、model/provider、权限策略和 app-server 协议都属于易过期点。
 
-当前事实快照见 [docs/fact-snapshot.md](docs/fact-snapshot.md)。
+当前事实快照见 [docs/fact-snapshot.md](docs/fact-snapshot.md)，机制级证据见 [docs/source-evidence.md](docs/source-evidence.md)。
 
 ## 学习地图
 
@@ -30,9 +30,9 @@ Step 2 初版已完成：12 章均包含 README、Mermaid 图、Python mock、�
 | 指令系统 | [s06_prompts_instructions](chapters/s06_prompts_instructions/README.md) | system prompt、AGENTS.md、指令层级 | 已核实官方事实 |
 | 配置与模型 | [s07_config_auth_models](chapters/s07_config_auth_models/README.md) | config、认证、model/provider 选择 | 已核实官方事实 |
 | 会话状态 | [s08_sessions_threads_rollout](chapters/s08_sessions_threads_rollout/README.md) | session、thread、恢复、rollout 持久化 | 待核实 |
-| App Server | [s09_app_server_transport](chapters/s09_app_server_transport/README.md) | app-server、transport、状态同步 | 待核实 |
+| App Server | [s09_app_server_transport](chapters/s09_app_server_transport/README.md) | app-server、transport、状态同步 | 已核实官方事实 |
 | 扩展面 | [s10_extensions_mcp_skills](chapters/s10_extensions_mcp_skills/README.md) | MCP、extensions、skills 目录与动态工具 | 待核实 |
-| 并行与委派 | [s11_subagents_parallel_jobs](chapters/s11_subagents_parallel_jobs/README.md) | 子任务、并行、委派 | 待核实 |
+| 并行与委派 | [s11_subagents_parallel_jobs](chapters/s11_subagents_parallel_jobs/README.md) | 子任务、并行、委派 | 已核实官方事实 |
 | 综合架构 | [s12_comprehensive_architecture](chapters/s12_comprehensive_architecture/README.md) | 端到端架构整合 | 教学抽象 |
 
 ## 读者路径
