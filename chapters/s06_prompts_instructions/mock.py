@@ -1,20 +1,32 @@
 #!/usr/bin/env python3
-"""Step 1 placeholder for s06_prompts_instructions."""
+"""Teaching mock for s06_prompts_instructions."""
 
-import argparse
-import json
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "src"))
+
+from learn_codex_mock import TeachingScenario, event, run_cli
 
 
-def main() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--demo", action="store_true")
-    parser.add_argument("--trace-json", action="store_true")
-    args = parser.parse_args()
-    event = {"chapter": "s06_prompts_instructions", "status": "Step 1 placeholder"}
-    print(json.dumps(event, ensure_ascii=False) if args.trace_json else event["status"])
-    return 0
+SCENARIO = TeachingScenario(
+    chapter="s06_prompts_instructions",
+    title="Prompt and instruction layering",
+    summary="Shows how long-lived project instructions shape a turn.",
+    happy_path=[
+        event("load", "runtime reads system/developer instructions", layer="system"),
+        event("load", "runtime reads AGENTS.md rules", layer="project"),
+        event("merge", "runtime builds ordered instruction stack", conflict=False),
+        event("model_input", "user task is sent with scoped guidance", source="public"),
+    ],
+    failure_path=[
+        event("load", "AGENTS.md says avoid external review without authorization", layer="project"),
+        event("user", "user asks to send private diff externally", authorization=False),
+        event("decision", "runtime should surface authorization need", action="ask_first"),
+    ],
+)
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
-
+    raise SystemExit(run_cli(SCENARIO))

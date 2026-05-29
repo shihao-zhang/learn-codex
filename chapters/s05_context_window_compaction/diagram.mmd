@@ -1,7 +1,9 @@
-flowchart LR
-    A["history"] --> B["context budget"]
-    B --> C["compact"]
-    B --> D["truncate"]
-    C --> E["next model input"]
-    D --> E
-
+flowchart TD
+    A["turn history + tool observations"] --> B["measure context pressure"]
+    B -->|fits budget| C["keep recent working set"]
+    B -->|near or over budget| D["compact older turns"]
+    D --> E["lossy summary: goals, constraints, decisions"]
+    D --> F["truncate low-value detail"]
+    C --> G["next model input"]
+    E --> G
+    F --> G

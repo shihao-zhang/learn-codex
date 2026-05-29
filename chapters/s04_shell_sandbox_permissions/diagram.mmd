@@ -1,7 +1,15 @@
-flowchart LR
-    A["shell request"] --> B["policy check"]
-    B --> C["sandbox"]
-    B --> D["approval"]
-    C --> E["exec result"]
-    D --> E
-
+flowchart TD
+    A["Shell tool request"] --> B["Resolve cwd, command, permissions"]
+    B --> C{"Approval required?"}
+    C -->|yes| D["Ask human / policy reviewer"]
+    D --> E{"Decision"}
+    E -->|deny / timeout| F["Do not execute; return denial"]
+    E -->|approve| G["Select sandbox attempt"]
+    C -->|no| G
+    G --> H{"Network managed?"}
+    H -->|yes| I["Network policy / approval observer"]
+    H -->|no| J["Run command in sandbox"]
+    I --> J
+    J --> K["Capture exit code and output"]
+    K --> L["Tool result to loop and events"]
+    J -->|sandbox failure needing escalation| C

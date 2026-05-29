@@ -1,6 +1,8 @@
-flowchart LR
-    A["config"] --> B["auth"]
-    A --> C["model/provider"]
-    B --> D["request context"]
-    C --> D
-
+flowchart TD
+    A["config profile"] --> B["provider + model"]
+    A --> C["model settings: effort, limits, defaults"]
+    D["credential source"] --> E{"usable auth?"}
+    B --> E
+    E -->|yes| F["request context"]
+    C --> F
+    E -->|no| G["actionable setup error"]

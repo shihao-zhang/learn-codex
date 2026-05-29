@@ -1,6 +1,13 @@
-flowchart LR
-    A["tool spec"] --> B["registry"]
-    B --> C["router"]
-    C --> D["handler"]
-    D --> E["tool result"]
-
+flowchart TD
+    A["Tool implementations"] --> B["Registry"]
+    B --> C["Model-visible specs"]
+    C --> D["Model chooses tool"]
+    D --> E["Router builds ToolCall"]
+    E --> F{"Known tool and compatible payload?"}
+    F -->|yes| G["Pre hooks / lifecycle / telemetry"]
+    G --> H["Handler executes"]
+    H --> I["Tool output"]
+    I --> J["Model-facing result"]
+    I --> K["Client event / trace"]
+    F -->|no| L["Structured tool error"]
+    L --> J

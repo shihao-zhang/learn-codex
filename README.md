@@ -2,11 +2,11 @@
 
 `learn-codex` 是一个面向 AI 产品经理和 agent 平台设计者的中文教学仓库。它用公开源码拆解 Codex CLI 的 agent harness：loop、tools、context、permissions、sessions、models、extensions、app-server 与综合架构。
 
-## 现在处于 Step 1
+## 当前阶段
 
-本仓当前只建设骨架，不填大段内容，也不实现完整 mock。这样做是为了先把目录、章节边界和事实溯源规则固定住，避免后续写作时把教学抽象、社区理解或其他 agent 产品的概念顺手写成 Codex 官方实现。
+Step 1 已完成：目录、章节边界、状态标签、事实快照和溯源规则已经固定。
 
-Step 2 才会逐章补齐 README、Mermaid 图、Python mock、真实映射、生产差异、练习和事实核验清单。
+Step 2 初版已完成：12 章均包含 README、Mermaid 图、Python mock、真实映射、生产差异、练习和事实核验清单。Python mock 只用于教学，不调用 OpenAI API，不代表官方实现，也不证明与官方 Codex 实现等价。
 
 ## 事实边界
 
@@ -40,10 +40,11 @@ Step 2 才会逐章补齐 README、Mermaid 图、Python mock、真实映射、�
 - Agent 平台设计者：从源码映射和机制图进入，再看后续 Step 2 的 mock、trace 与 failure path。
 - 内容贡献者：先读 [docs/sourcing.md](docs/sourcing.md) 和 [docs/glossary.md](docs/glossary.md)，再动任何“官方事实”相关文字。
 
-## 骨架检查
+## 本地检查
 
 ```bash
 python3 scripts/check_docs.py
+python3 scripts/run_all.py
 python3 -m unittest discover -s tests
 ```
 

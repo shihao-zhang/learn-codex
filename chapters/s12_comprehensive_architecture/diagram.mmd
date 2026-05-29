@@ -1,8 +1,28 @@
-flowchart LR
-    A["user"] --> B["CLI / app surface"]
-    B --> C["harness"]
-    C --> D["tools"]
-    C --> E["context"]
-    C --> F["permissions"]
-    C --> G["state"]
+flowchart TB
+    U["User"] --> UI["Product surface<br/>CLI / app / IDE"]
+    UI --> AP["App-server + protocol<br/>interface boundary"]
+    UI --> CLI["CLI harness entry"]
 
+    AP --> CORE["Core runtime<br/>agent loop + turn"]
+    CLI --> CORE
+
+    CORE --> M["Model + config + auth"]
+    CORE --> CTX["Context window<br/>compaction"]
+    CORE --> TOOLS["Tool registry<br/>router + handlers"]
+    TOOLS --> PERM["Sandbox + permissions<br/>approval boundary"]
+    CORE --> SES["Session / thread<br/>rollout state"]
+
+    TOOLS --> OBS["Tool observations"]
+    PERM --> OBS
+    M --> EV["Protocol events"]
+    CTX --> EV
+    OBS --> EV
+    SES --> EV
+    EV --> AP
+    EV --> UI
+
+    EXT["Extensions / MCP / skills<br/>s10 semantic pending"] -. "待核实语义" .-> TOOLS
+    PAR["Subagents / parallel jobs<br/>s11 semantic pending"] -. "待核实语义" .-> CORE
+
+    NOTE["Teaching abstraction<br/>not official architecture"] -.-> AP
+    NOTE -.-> CORE

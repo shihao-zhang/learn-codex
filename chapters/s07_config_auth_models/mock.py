@@ -1,20 +1,32 @@
 #!/usr/bin/env python3
-"""Step 1 placeholder for s07_config_auth_models."""
+"""Teaching mock for s07_config_auth_models."""
 
-import argparse
-import json
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "src"))
+
+from learn_codex_mock import TeachingScenario, event, run_cli
 
 
-def main() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--demo", action="store_true")
-    parser.add_argument("--trace-json", action="store_true")
-    args = parser.parse_args()
-    event = {"chapter": "s07_config_auth_models", "status": "Step 1 placeholder"}
-    print(json.dumps(event, ensure_ascii=False) if args.trace_json else event["status"])
-    return 0
+SCENARIO = TeachingScenario(
+    chapter="s07_config_auth_models",
+    title="Config, auth, and model/provider selection",
+    summary="Shows why model selection belongs with config and auth, not only UX.",
+    happy_path=[
+        event("config", "profile selects provider and model", provider="openai", model="example-model"),
+        event("auth", "credential source is available", source="api_key_or_login"),
+        event("request", "runtime attaches model settings", reasoning_effort="medium"),
+        event("result", "model client is constructed", status="ready"),
+    ],
+    failure_path=[
+        event("config", "profile references missing provider", provider="missing"),
+        event("auth", "no usable credential found", source=None),
+        event("error", "runtime returns actionable configuration error", recoverable=True),
+    ],
+)
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
-
+    raise SystemExit(run_cli(SCENARIO))

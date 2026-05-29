@@ -1,6 +1,18 @@
 flowchart LR
-    A["parent task"] --> B["job?"]
-    A --> C["parallel?"]
-    B -. "待核实" .-> D["result merge"]
-    C -. "待核实" .-> D
+    P["Parent task"] --> Q["Split strategy"]
+    Q --> J["Job / item ledger<br/>product model"]
+    J --> L["Concurrency limit"]
+    L --> W1["Worker item A"]
+    L --> W2["Worker item B"]
+    L --> W3["Worker item N"]
+    W1 --> M["Result merge"]
+    W2 --> M
+    W3 --> M
+    M --> F["Final answer<br/>or partial export"]
 
+    J --> R["Failure recovery<br/>retry / cancel / resume"]
+    R --> M
+
+    S1["agent_jobs.rs<br/>path exists"] -. "语义待核实" .-> J
+    S2["codex_delegate.rs<br/>path exists"] -. "语义待核实" .-> W2
+    S3["parallel.rs<br/>path exists"] -. "语义待核实" .-> L

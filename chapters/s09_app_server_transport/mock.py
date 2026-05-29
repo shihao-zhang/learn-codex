@@ -1,20 +1,32 @@
 #!/usr/bin/env python3
-"""Step 1 placeholder for s09_app_server_transport."""
+"""Teaching mock for s09_app_server_transport."""
 
-import argparse
-import json
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "src"))
+
+from learn_codex_mock import TeachingScenario, event, run_cli
 
 
-def main() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--demo", action="store_true")
-    parser.add_argument("--trace-json", action="store_true")
-    args = parser.parse_args()
-    event = {"chapter": "s09_app_server_transport", "status": "Step 1 placeholder"}
-    print(json.dumps(event, ensure_ascii=False) if args.trace_json else event["status"])
-    return 0
+SCENARIO = TeachingScenario(
+    chapter="s09_app_server_transport",
+    title="App-server transport and state synchronization",
+    summary="Shows how UI-facing requests can bridge into runtime state.",
+    happy_path=[
+        event("client", "client sends request over transport", method="start_turn"),
+        event("server", "app-server validates and forwards request", target="core"),
+        event("runtime", "core emits state update", update="turn_started"),
+        event("client", "client renders synchronized status", status="running"),
+    ],
+    failure_path=[
+        event("client", "transport connection drops mid-turn", connected=False),
+        event("server", "app-server keeps thread state", state="running"),
+        event("client", "client reconnects and requests snapshot", recovery="sync_state"),
+    ],
+)
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
-
+    raise SystemExit(run_cli(SCENARIO))

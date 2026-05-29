@@ -1,6 +1,14 @@
 flowchart LR
-    A["client"] --> B["transport"]
-    B --> C["app-server"]
-    C --> D["core runtime"]
-    C --> E["state updates"]
+    C["Client / UI"] --> T["Transport<br/>connection boundary"]
+    T --> P["App-server protocol<br/>request / response"]
+    P --> S["App-server<br/>request processors"]
+    S --> R["Core runtime<br/>agent loop + tools"]
+    R --> E["Runtime events"]
+    E --> O["Outgoing messages"]
+    E --> ST["Thread state / status"]
+    O --> P
+    ST --> P
+    P --> T
+    T --> C
 
+    S -. "does not imply" .-> X["Codex Cloud<br/>not modeled here"]

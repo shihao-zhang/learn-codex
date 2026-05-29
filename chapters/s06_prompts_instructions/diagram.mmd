@@ -1,5 +1,9 @@
-flowchart LR
-    A["system prompt"] --> D["model input"]
-    B["AGENTS.md"] --> D
-    C["user instruction"] --> D
-
+flowchart TD
+    A["system / developer instructions"] --> D["ordered instruction stack"]
+    B["AGENTS.md project rules"] --> C["scope by workspace and path"]
+    C --> D
+    E["current user request"] --> D
+    D --> F{"conflict or missing authorization?"}
+    F -->|no| G["model input with scoped guidance"]
+    F -->|yes| H["apply priority or ask user first"]
+    H --> G

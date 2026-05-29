@@ -1,5 +1,9 @@
-flowchart LR
-    A["session"] --> B["thread"]
-    B --> C["rollout store"]
-    C --> D["resume"]
-
+flowchart TD
+    A["start or resume request"] --> B["session_id.rs path"]
+    A --> C["thread_id.rs path"]
+    C --> D["thread-store / rollout paths"]
+    D --> E["possible history lookup"]
+    D --> F["thread_rollout_truncation path"]
+    E --> G["resume surface"]
+    F --> G
+    G --> H["behavior semantics: to be verified"]

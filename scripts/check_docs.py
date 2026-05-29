@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check Step 1 documentation contracts for learn-codex."""
+"""Check documentation and teaching mock contracts for learn-codex."""
 
 from __future__ import annotations
 
@@ -40,6 +40,12 @@ REQUIRED_HEADINGS = [
 ]
 
 VALID_STATUSES = {"已核实官方事实", "待核实", "教学抽象"}
+PLACEHOLDER_PHRASES = [
+    "Step 1 placeholder",
+    "Step 2 补充",
+    "当前是占位图",
+    "placeholder",
+]
 PINNED_LINK_RE = re.compile(
     r"https://github\.com/openai/codex/(?:blob|tree)/"
     + re.escape(SOURCE_COMMIT)
@@ -140,6 +146,14 @@ def check_chapter(chapter: str) -> None:
     for heading in REQUIRED_HEADINGS:
         if heading not in text:
             fail(f"{readme.relative_to(ROOT)} missing heading {heading}")
+    for phrase in PLACEHOLDER_PHRASES:
+        if phrase in text:
+            fail(f"{readme.relative_to(ROOT)} still contains placeholder phrase {phrase!r}")
+
+    diagram_text = read(diagram)
+    for phrase in PLACEHOLDER_PHRASES:
+        if phrase in diagram_text:
+            fail(f"{diagram.relative_to(ROOT)} still contains placeholder phrase {phrase!r}")
 
     status = chapter_status(text, readme)
 
@@ -168,8 +182,12 @@ def check_chapter(chapter: str) -> None:
             )
 
     mock_text = read(mock)
-    if "Step 1 placeholder" not in mock_text:
-        fail(f"{mock.relative_to(ROOT)} is not marked as Step 1 placeholder")
+    for phrase in PLACEHOLDER_PHRASES:
+        if phrase in mock_text:
+            fail(f"{mock.relative_to(ROOT)} still contains placeholder phrase {phrase!r}")
+    for token in ["TeachingScenario", "happy_path", "failure_path", "run_cli"]:
+        if token not in mock_text:
+            fail(f"{mock.relative_to(ROOT)} missing teaching mock token {token}")
 
 
 def check_status_map() -> None:
@@ -191,7 +209,7 @@ def main() -> int:
     for chapter in CHAPTERS:
         check_chapter(chapter)
     check_status_map()
-    print("OK: Step 1 documentation skeleton is complete.")
+    print("OK: documentation and teaching mock contracts are complete.")
     return 0
 
 

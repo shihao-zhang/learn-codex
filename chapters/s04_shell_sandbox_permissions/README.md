@@ -6,15 +6,19 @@
 
 ## 本章回答什么
 
-Step 1 只固定边界：本章将解释 shell tool、sandbox policy、approval 与网络权限如何一起形成安全边界。
+本章回答：当 agent 想运行 shell 命令时，平台如何在“让它有用”和“防止它越界”之间做决策。
+
+shell 是最强也最危险的工具之一。它既能跑测试、读文件、改代码，也可能删除数据、访问网络、写出工作区、读取敏感信息。本章把安全边界拆成四层：命令请求、sandbox policy、approval policy、network policy。
 
 ## 对产品与平台设计的意义
 
-权限系统是在“让 agent 有用”和“防止 agent 越界”之间做产品权衡。它影响用户信任、企业合规、默认权限和中断体验。
+对 AI 产品经理来说，权限系统直接影响信任。默认太松，用户担心 agent 私自行动；默认太紧，用户会被反复打断。好的产品体验不是“永远弹窗”，而是在风险升高时解释清楚：要做什么、为什么需要、会影响哪里、拒绝后会怎样。
+
+对平台设计者来说，shell 权限不是一个开关，而是组合策略：文件系统可读写范围、是否允许网络、是否允许绕过 sandbox、何时要求人类审批、审批是否可缓存、不同 OS sandbox 能力是否一致。核心权衡是：最小权限、可恢复性、用户摩擦、企业策略和跨平台一致性。
 
 ## 机制图
 
-见 [diagram.mmd](diagram.mmd)。当前是占位图，Step 2 会补成教学图。
+见 [diagram.mmd](diagram.mmd)。图里把 shell 执行拆成“权限判定、审批、sandbox 执行、网络拦截、结果回传”几个决策点。
 
 ## 运行 mock
 
@@ -22,14 +26,16 @@ Step 1 只固定边界：本章将解释 shell tool、sandbox policy、approval 
 python3 chapters/s04_shell_sandbox_permissions/mock.py --demo
 ```
 
-当前 mock 是 Step 1 placeholder，不代表真实 Codex 行为。
+这个 mock 只展示决策点：普通测试命令可在工作区 sandbox 中运行；请求网络和高权限的命令需要升级审批，用户拒绝时不执行。它不是 macOS Seatbelt、Linux sandbox 或 Windows restricted token 的复刻。
 
 ## 核心机制
 
-- shell execution
-- sandbox policy
-- approval request
-- network approval
+- shell 请求首先是一段待执行命令，但平台不能只看字符串。还要结合 cwd、工作区根、环境、是否需要网络、是否要求提升权限、当前 approval policy 和 sandbox policy。
+- `sandbox policy` 决定命令能读写哪里。典型产品语义包括只读、工作区可写、额外 writable roots、拒绝读取敏感路径、完全不受限或外部 sandbox。
+- `approval policy` 决定什么时候问人。常见分支包括默认不问、失败后再问、用户显式请求时问、受限环境下问、永远要求确认等。审批结果还可能只允许一次或本会话复用。
+- `network policy` 和文件系统权限是两条线。一个命令即使能在工作区写文件，也不代表它能访问任意域名；网络 allowlist miss 可能触发单独的网络审批或直接拒绝。
+- sandbox 与 approval 不是同义词。sandbox 是技术执行边界，approval 是人类/策略决策边界；一个命令可以“已获批但仍在 sandbox 中运行”，也可以“无需审批但仍受 sandbox 限制”。
+- 失败路径必须安全：审批拒绝不能执行；策略禁止不能绕过；sandbox 失败后的重试必须重新评估是否允许非 sandbox 执行。
 
 ## 真实 Codex 映射
 
@@ -37,15 +43,33 @@ python3 chapters/s04_shell_sandbox_permissions/mock.py --demo
 - [codex-rs/core/src/tools/network_approval.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/core/src/tools/network_approval.rs)
 - [codex-rs/protocol/src/permissions.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/protocol/src/permissions.rs)
 
+映射解释：
+
+- `sandboxing.rs` 是理解工具运行时如何组织审批、sandbox attempt、执行上下文和错误结果的入口。教学里的“policy check”在真实实现里会拆成多个 trait、上下文和决策分支。
+- `network_approval.rs` 是理解托管网络、按 host/protocol/port 审批、session 级缓存、拒绝结果和网络策略修订的入口。
+- `permissions.rs` 是理解文件系统 sandbox policy、访问模式、特殊路径、writable roots、deny-read 规则和网络 sandbox policy 的入口。
+- 本章只使用 fact snapshot 已登记的三个固定 SHA permalink；不同 OS 的底层 sandbox 细节需要继续逐文件核验。
+
 ## 教学简化与生产差异
 
-Python mock 不能复刻 macOS Seatbelt、Linux sandbox 或 Windows restricted token，只能表达“决策点”和“用户确认点”。
+- mock 把 shell 权限简化成“允许 / 需要审批 / 拒绝”。真实实现会组合文件系统 policy、approval policy、network policy、sandbox backend、hook、guardian review、缓存和 telemetry。
+- mock 不复刻 OS 隔离机制。生产里 macOS、Linux、Windows 的可用 sandbox 能力和失败模式不同，产品文案不能承诺完全一致的底层行为。
+- mock 只展示用户拒绝审批；生产里还要处理策略拒绝、审批超时、审批缓存、网络访问中途被拦截、sandbox transform 失败、命令取消和输出截断。
+- 教学图把网络审批画成一个节点；真实实现可能在命令开始前登记，也可能在命令运行中由网络代理观察到被阻断请求后触发。
 
 ## 练习
 
-Step 2 补充。
+1. 运行 mock，解释为什么 `python3 -m unittest` 可以走默认 sandbox，而 `curl | sudo sh` 应该要求升级或拒绝。
+2. 为三个命令设计策略：`ls`、`pytest`、`rm -rf /tmp/build-cache`。分别说明是否需要审批、可写范围和失败提示。
+3. 写一段面向用户的审批文案：说明命令、原因、影响范围、允许一次/允许本会话/拒绝的差异。
+4. 设计一个企业策略：默认禁止网络，但允许访问公司内网域名。遇到新域名时，应该允许用户临时批准还是必须管理员配置？
+5. 思考跨平台问题：如果某 OS 不能表达某个 deny-read 规则，产品应该降级、拒绝执行，还是要求外部 sandbox？
 
 ## 事实核验清单
 
-- [ ] 分 OS 核实 sandbox 行为。
-- [ ] 区分 approval policy、sandbox policy 和 network policy。
+- [ ] 在固定 SHA 的 `sandboxing.rs` 中核实 approval、sandbox attempt、执行上下文和错误路径。
+- [ ] 在固定 SHA 的 `network_approval.rs` 中核实网络审批触发条件、缓存粒度、拒绝传播和策略修订。
+- [ ] 在固定 SHA 的 `permissions.rs` 中核实文件系统 policy、访问模式、特殊路径、metadata 保护和 deny-read 行为。
+- [ ] 分 OS 核实 sandbox backend 的能力差异，不把教学图当成跨平台实现承诺。
+- [ ] 明确区分 approval policy、sandbox policy、network policy、permission profile 和用户可见审批文案。
+- [ ] 不把“用户批准”写成“无限制执行”；仍需核实批准后是否保留 sandbox 或 deny-read 规则。

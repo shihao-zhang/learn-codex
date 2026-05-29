@@ -1,20 +1,32 @@
 #!/usr/bin/env python3
-"""Step 1 placeholder for s03_tool_registry_dispatch."""
+"""Teaching mock for s03_tool_registry_dispatch."""
 
-import argparse
-import json
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "src"))
+
+from learn_codex_mock import TeachingScenario, event, run_cli
 
 
-def main() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--demo", action="store_true")
-    parser.add_argument("--trace-json", action="store_true")
-    args = parser.parse_args()
-    event = {"chapter": "s03_tool_registry_dispatch", "status": "Step 1 placeholder"}
-    print(json.dumps(event, ensure_ascii=False) if args.trace_json else event["status"])
-    return 0
+SCENARIO = TeachingScenario(
+    chapter="s03_tool_registry_dispatch",
+    title="Tool registry, router, and handler dispatch",
+    summary="Shows how a tool name is resolved to a checked handler call.",
+    happy_path=[
+        event("register", "runtime registers shell and apply_patch tools", count=2),
+        event("model", "model requests apply_patch", tool="apply_patch"),
+        event("router", "router finds matching handler", handler="ApplyPatchHandler"),
+        event("handler", "handler validates args and returns result", status="ok"),
+    ],
+    failure_path=[
+        event("model", "model requests unknown tool", tool="delete_world"),
+        event("router", "router cannot resolve tool name", known_tools=["shell", "apply_patch"]),
+        event("event", "runtime returns structured tool error", recoverable=True),
+    ],
+)
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
-
+    raise SystemExit(run_cli(SCENARIO))

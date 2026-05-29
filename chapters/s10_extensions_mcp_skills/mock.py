@@ -1,20 +1,32 @@
 #!/usr/bin/env python3
-"""Step 1 placeholder for s10_extensions_mcp_skills."""
+"""Teaching mock for s10_extensions_mcp_skills."""
 
-import argparse
-import json
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "src"))
+
+from learn_codex_mock import TeachingScenario, event, run_cli
 
 
-def main() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--demo", action="store_true")
-    parser.add_argument("--trace-json", action="store_true")
-    args = parser.parse_args()
-    event = {"chapter": "s10_extensions_mcp_skills", "status": "Step 1 placeholder"}
-    print(json.dumps(event, ensure_ascii=False) if args.trace_json else event["status"])
-    return 0
+SCENARIO = TeachingScenario(
+    chapter="s10_extensions_mcp_skills",
+    title="Extensions, MCP, skills directory, and dynamic tools",
+    summary="Shows the boundary between verified paths and still-unverified capability semantics.",
+    happy_path=[
+        event("config", "runtime discovers configured MCP server", source="config"),
+        event("list_tools", "server advertises tool metadata", count=2),
+        event("register", "runtime exposes dynamic tools to model", mode="teaching"),
+        event("call", "tool call is routed through extension/MCP boundary", status="ok"),
+    ],
+    failure_path=[
+        event("config", "extension claims unsupported tool schema", schema="invalid"),
+        event("validate", "runtime refuses to register unsafe dynamic tool", registered=False),
+        event("error", "user sees extension/tool setup failure", recoverable=True),
+    ],
+)
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
-
+    raise SystemExit(run_cli(SCENARIO))

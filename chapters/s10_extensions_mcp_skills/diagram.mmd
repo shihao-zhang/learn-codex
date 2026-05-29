@@ -1,6 +1,12 @@
 flowchart LR
-    A["MCP"] --> D["tool surface"]
-    B["extensions"] --> D
-    C["skills?"] --> D
-    C -. "待核实" .-> D
+    M["MCP handler<br/>path exists"] -. "语义待核实" .-> D["Capability discovery"]
+    E["Extension tools handler<br/>path exists"] -. "语义待核实" .-> D
+    K["skills crate<br/>path exists"] -. "语义待核实" .-> D
 
+    D --> S["Tool spec / schema"]
+    S --> G["Governance<br/>permission + exposure"]
+    G --> R["Runtime invocation"]
+    R --> O["Observation / events"]
+    O --> U["User-visible tool surface"]
+
+    K -. "not assumed to be<br/>CLI skills feature" .-> U

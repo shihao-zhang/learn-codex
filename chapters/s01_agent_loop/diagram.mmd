@@ -1,6 +1,12 @@
-flowchart LR
-    A["user input"] --> B["agent loop"]
-    B --> C["model step"]
-    C --> D["tool call or final answer"]
-    D --> B
-
+flowchart TD
+    A["User input / turn starts"] --> B["Runtime builds context"]
+    B --> C["Model step"]
+    C --> D{"Model output"}
+    D -->|final answer| E["Turn completes"]
+    D -->|tool call| F["Runtime validates tool call"]
+    F --> G{"Can execute?"}
+    G -->|yes| H["Tool handler runs"]
+    H --> I["Tool observation added"]
+    I --> B
+    G -->|no: error / denied / cancelled| J["Recover, explain, or fail"]
+    J --> E

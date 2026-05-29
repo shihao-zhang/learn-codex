@@ -1,5 +1,12 @@
-flowchart LR
-    A["runtime"] --> B["protocol event"]
-    B --> C["transport"]
-    C --> D["UI or client"]
-
+flowchart TD
+    A["Client submits input"] --> B["Runtime accepts operation"]
+    B --> C["Internal state changes"]
+    C --> D["Protocol event"]
+    D --> E["Transport / stream"]
+    E --> F["Client state machine"]
+    F --> G["Progress, output, error, approval UI"]
+    C --> H["Trace / correlation ids"]
+    H --> D
+    D --> I{"Schema understood?"}
+    I -->|yes| F
+    I -->|unknown field or new event| J["Compatible fallback"]

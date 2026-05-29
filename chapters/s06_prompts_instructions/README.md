@@ -6,15 +6,19 @@
 
 ## 本章回答什么
 
-Step 1 只固定边界：本章将解释 system prompt、AGENTS.md 和多层指令如何进入 agent harness。
+本章解释 agent 为什么不是只听最后一句用户输入。一次模型调用通常会同时受到系统/开发者指令、项目级规则、当前用户请求和运行时上下文影响。真正难的不是“把这些文字拼起来”，而是确定来源、作用域、优先级和冲突处理。
+
+在本仓语境里，`AGENTS.md` 是项目规则的教学入口：它让仓库所有者把长期约束写进工作区，例如哪些文件不能改、何时必须问人、哪些外部服务需要授权。它不是用户即时需求的替代品，而是让 agent 在执行即时需求时遵守项目边界。
 
 ## 对产品与平台设计的意义
 
-指令层级决定平台如何表达长期规则、项目规则和用户即时意图。它直接影响可控性、冲突处理和团队协作体验。
+指令系统是 agent 产品的治理层。没有清晰层级，用户会遇到三类问题：规则被忽略、旧规则意外覆盖新需求、冲突时 agent 自作主张。对团队场景尤其如此，同一个仓库可能同时有安全规则、代码风格、发布流程和个人偏好。
+
+平台设计要把“谁有权写规则”“规则覆盖多大范围”“冲突时是否必须停下来问人”产品化。最稳妥的用户体验不是让 agent 背诵全部规则，而是在关键动作前体现规则约束：例如调用外部服务前说明发送范围并请求授权，或在用户要求改禁止文件时明确拒绝/询问。
 
 ## 机制图
 
-见 [diagram.mmd](diagram.mmd)。当前是占位图，Step 2 会补成教学图。
+见 [diagram.mmd](diagram.mmd)。该图是教学抽象，用来展示指令来源、作用域和冲突处理，不包含官方或私有 prompt 文本。
 
 ## 运行 mock
 
@@ -22,29 +26,38 @@ Step 1 只固定边界：本章将解释 system prompt、AGENTS.md 和多层指�
 python3 chapters/s06_prompts_instructions/mock.py --demo
 ```
 
-当前 mock 是 Step 1 placeholder，不代表真实 Codex 行为。
+这个 mock 只演示“加载多层指令 -> 合并成有序指令栈 -> 冲突时先处理授权/优先级”的思路。它不是真实 Codex 实现，也不会暴露官方 prompt 或任何私有 prompt。
 
 ## 核心机制
 
-- system prompt
-- AGENTS.md discovery
-- instruction hierarchy
-- conflict handling
+- `system/developer instructions`：平台和运行时给 agent 的高优先级约束，通常定义身份、工具使用边界、安全策略和回复规范。
+- `AGENTS.md discovery`：从工作区读取项目规则的过程。产品上可以理解为“仓库内的 agent 操作手册”，但具体搜索、合并和作用域规则必须以源码核实为准。
+- `instruction hierarchy`：多层指令的优先级秩序。下层不能随意覆盖上层；用户需求也需要在系统、开发者和项目规则允许的范围内执行。
+- `conflict handling`：当规则互相冲突或任务会越界时，agent 应表面化权衡：说明冲突点、能做什么、不能做什么，以及是否需要用户授权。
+- `scoped guidance`：不是所有规则都应该永久进入每次调用；平台需要按仓库、路径、任务类型和当前步骤控制哪些规则进入上下文。
 
 ## 真实 Codex 映射
 
 - [codex-rs/protocol/src/prompts](https://github.com/openai/codex/tree/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/protocol/src/prompts)
 - [codex-rs/core/src/agents_md.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/core/src/agents_md.rs)
 
+以上固定 SHA 链接是本章的官方事实入口：它们说明当前教学对象中存在 prompt 与 `AGENTS.md` 相关源码。README 中对优先级和冲突处理的描述是面向产品/平台的机制化解释，不引用不可公开核验的 prompt 内容。
+
 ## 教学简化与生产差异
 
-Python mock 只能展示指令优先级，不会包含官方 prompt 文本或任何私有 prompt。
+教学版把指令处理简化成“读取、排序、合并、处理冲突”。生产系统还要面对更复杂的边界：多目录规则如何叠加，规则过长时如何进入上下文，用户临时修改规则何时生效，工具结果是否会引入新的约束，以及冲突是否可以自动裁决。
+
+本章不把 `AGENTS.md` 神化成万能安全层。它更像一份可读、可审查的项目约束；真正的安全仍要依赖权限、sandbox、审批和外部服务授权等机制共同兜底。
 
 ## 练习
 
-Step 2 补充。
+1. 给一个仓库写 5 条长期 agent 规则，要求每条都有触发条件、应做/禁做和何时问人。
+2. 把“不要调用外部 review 服务”改写成可执行规则：说明发送范围、授权方式和未授权时的替代动作。
+3. 设计一个冲突案例：用户要求修改禁止文件。写出 agent 应如何解释冲突并给出可行替代方案。
+4. 运行 mock，观察 failure path 为什么应该先问授权，而不是直接执行用户最新请求。
 
 ## 事实核验清单
 
-- [ ] 核实 AGENTS.md 搜索、合并和冲突规则。
-- [ ] 禁止引用不可公开核验的 prompt 内容。
+- [ ] 核实 `AGENTS.md` 搜索、合并、作用域和冲突规则。
+- [ ] 核实 prompt 相关源码中哪些内容属于公开、可引用的事实。
+- [ ] 禁止引用不可公开核验的 prompt 内容，也禁止把教学 mock 的层级名称写成官方类型名。

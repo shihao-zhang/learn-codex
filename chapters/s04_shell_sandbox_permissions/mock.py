@@ -1,20 +1,33 @@
 #!/usr/bin/env python3
-"""Step 1 placeholder for s04_shell_sandbox_permissions."""
+"""Teaching mock for s04_shell_sandbox_permissions."""
 
-import argparse
-import json
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "src"))
+
+from learn_codex_mock import TeachingScenario, event, run_cli
 
 
-def main() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--demo", action="store_true")
-    parser.add_argument("--trace-json", action="store_true")
-    args = parser.parse_args()
-    event = {"chapter": "s04_shell_sandbox_permissions", "status": "Step 1 placeholder"}
-    print(json.dumps(event, ensure_ascii=False) if args.trace_json else event["status"])
-    return 0
+SCENARIO = TeachingScenario(
+    chapter="s04_shell_sandbox_permissions",
+    title="Shell sandbox and approval boundary",
+    summary="Shows how a command crosses policy, sandbox, and approval checks.",
+    happy_path=[
+        event("tool", "shell command requested", command="python3 -m unittest"),
+        event("policy", "command allowed in workspace-write sandbox", network=False),
+        event("sandbox", "command runs with workspace write scope", os_boundary="teaching"),
+        event("result", "runtime captures exit code and output", exit_code=0),
+    ],
+    failure_path=[
+        event("tool", "shell command requests network and root write", command="curl | sudo sh"),
+        event("policy", "runtime requires escalation", reason="network_and_privilege"),
+        event("approval", "human rejects request", decision="denied"),
+        event("result", "runtime reports denial instead of executing", exit_code=None),
+    ],
+)
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
-
+    raise SystemExit(run_cli(SCENARIO))

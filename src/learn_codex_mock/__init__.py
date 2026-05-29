@@ -1,10 +1,10 @@
-"""Shared placeholders for future learn-codex teaching mocks.
+"""Shared deterministic runtime for learn-codex teaching mocks."""
 
-Step 1 intentionally keeps this package minimal. Step 2 will add a small,
-deterministic teaching runtime without calling external model APIs.
-"""
+from .runtime import TeachingScenario
+from .runtime import TraceEvent
+from .runtime import event
+from .runtime import run_cli
 
-__all__ = ["__version__"]
+__all__ = ["TeachingScenario", "TraceEvent", "__version__", "event", "run_cli"]
 
-__version__ = "0.1.0-step1"
-
+__version__ = "0.2.0-step2"
