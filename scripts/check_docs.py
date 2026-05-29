@@ -45,6 +45,10 @@ PINNED_LINK_RE = re.compile(
     + re.escape(SOURCE_COMMIT)
     + r"/[^\s)]+"
 )
+STATUS_ROW_RE = re.compile(
+    r"\|\s*[^|]+\s*\|\s*\[(?P<chapter>s\d{2}_[^\]]+)\]\([^)]+\)\s*"
+    r"\|\s*[^|]+\s*\|\s*(?P<status>[^|]+?)\s*\|"
+)
 
 
 def fail(message: str) -> None:
@@ -79,6 +83,32 @@ def check_root_docs() -> None:
             fail(f"docs/sourcing.md missing phrase: {phrase}")
 
 
+def pinned_links(text: str) -> set[str]:
+    return set(PINNED_LINK_RE.findall(text))
+
+
+def chapter_status(text: str, readme: Path) -> str:
+    status_line = next(
+        (line for line in text.splitlines() if line.startswith("状态：")),
+        None,
+    )
+    if status_line is None:
+        fail(f"{readme.relative_to(ROOT)} missing status line")
+
+    status = status_line.replace("状态：", "", 1).strip()
+    if status not in VALID_STATUSES:
+        fail(f"{readme.relative_to(ROOT)} has invalid status {status!r}")
+    return status
+
+
+def root_statuses() -> dict[str, str]:
+    readme = read(ROOT / "README.md")
+    statuses: dict[str, str] = {}
+    for match in STATUS_ROW_RE.finditer(readme):
+        statuses[match.group("chapter")] = match.group("status").strip()
+    return statuses
+
+
 def check_chapter(chapter: str) -> None:
     chapter_dir = ROOT / "chapters" / chapter
     if not chapter_dir.is_dir():
@@ -97,33 +127,49 @@ def check_chapter(chapter: str) -> None:
         if heading not in text:
             fail(f"{readme.relative_to(ROOT)} missing heading {heading}")
 
-    status_line = next(
-        (line for line in text.splitlines() if line.startswith("状态：")),
-        None,
-    )
-    if status_line is None:
-        fail(f"{readme.relative_to(ROOT)} missing status line")
+    status = chapter_status(text, readme)
 
-    status = status_line.replace("状态：", "", 1).strip()
-    if status not in VALID_STATUSES:
-        fail(f"{readme.relative_to(ROOT)} has invalid status {status!r}")
-
-    if not PINNED_LINK_RE.search(text):
+    links = pinned_links(text)
+    if not links:
         fail(f"{readme.relative_to(ROOT)} has no pinned openai/codex permalink")
+
+    if status == "已核实官方事实":
+        snapshot_links = pinned_links(read(ROOT / "docs/fact-snapshot.md"))
+        missing = sorted(links - snapshot_links)
+        if missing:
+            missing_list = "\n".join(f"  - {link}" for link in missing)
+            fail(
+                f"{readme.relative_to(ROOT)} has verified-status links missing "
+                f"from docs/fact-snapshot.md:\n{missing_list}"
+            )
 
     mock_text = read(mock)
     if "Step 1 placeholder" not in mock_text:
         fail(f"{mock.relative_to(ROOT)} is not marked as Step 1 placeholder")
 
 
+def check_status_map() -> None:
+    statuses = root_statuses()
+    for chapter in CHAPTERS:
+        if chapter not in statuses:
+            fail(f"README.md learning map missing {chapter}")
+        readme = ROOT / "chapters" / chapter / "README.md"
+        status = chapter_status(read(readme), readme)
+        if statuses[chapter] != status:
+            fail(
+                f"README.md status for {chapter} is {statuses[chapter]!r}, "
+                f"but chapter README says {status!r}"
+            )
+
+
 def main() -> int:
     check_root_docs()
     for chapter in CHAPTERS:
         check_chapter(chapter)
+    check_status_map()
     print("OK: Step 1 documentation skeleton is complete.")
     return 0
 
 
 if __name__ == "__main__":
     sys.exit(main())
-

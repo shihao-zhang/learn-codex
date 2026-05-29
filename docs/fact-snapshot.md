@@ -18,6 +18,33 @@
 - 官方 README 描述了 npm、Homebrew、GitHub Releases 安装路径。
 - 官方 README 描述了 MCP client、experimental MCP server、sandbox policy、`codex exec` 和 `codex sandbox` 等能力。
 
+## 已核实源码路径
+
+以下路径已在 2026-05-29 通过 GitHub Contents API 对目标 commit 验证存在，返回 HTTP 200。该表只证明路径存在，不证明章节对行为的解释已经完整。
+
+| 章节 | 已核实路径 |
+| --- | --- |
+| s01_agent_loop | [codex-rs/core/src/agent](https://github.com/openai/codex/tree/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/core/src/agent) |
+| s01_agent_loop | [codex-rs/core/src/tools](https://github.com/openai/codex/tree/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/core/src/tools) |
+| s02_protocol_events | [codex-rs/protocol/src](https://github.com/openai/codex/tree/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/protocol/src) |
+| s03_tool_registry_dispatch | [codex-rs/core/src/tools/registry.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/core/src/tools/registry.rs) |
+| s03_tool_registry_dispatch | [codex-rs/core/src/tools/router.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/core/src/tools/router.rs) |
+| s03_tool_registry_dispatch | [codex-rs/core/src/tools/handlers](https://github.com/openai/codex/tree/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/core/src/tools/handlers) |
+| s04_shell_sandbox_permissions | [codex-rs/core/src/tools/sandboxing.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/core/src/tools/sandboxing.rs) |
+| s04_shell_sandbox_permissions | [codex-rs/core/src/tools/network_approval.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/core/src/tools/network_approval.rs) |
+| s04_shell_sandbox_permissions | [codex-rs/protocol/src/permissions.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/protocol/src/permissions.rs) |
+| s05_context_window_compaction | [codex-rs/core/src/compact.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/core/src/compact.rs) |
+| s05_context_window_compaction | [codex-rs/core/src/compact_remote.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/core/src/compact_remote.rs) |
+| s05_context_window_compaction | [codex-rs/core/src/compact_remote_v2.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/core/src/compact_remote_v2.rs) |
+| s06_prompts_instructions | [codex-rs/protocol/src/prompts](https://github.com/openai/codex/tree/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/protocol/src/prompts) |
+| s06_prompts_instructions | [codex-rs/core/src/agents_md.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/core/src/agents_md.rs) |
+| s07_config_auth_models | [codex-rs/protocol/src/config_types.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/protocol/src/config_types.rs) |
+| s07_config_auth_models | [codex-rs/protocol/src/models.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/protocol/src/models.rs) |
+| s07_config_auth_models | [codex-rs/protocol/src/openai_models.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/protocol/src/openai_models.rs) |
+| s07_config_auth_models | [codex-rs/protocol/src/auth.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/protocol/src/auth.rs) |
+| s09_app_server_transport | [codex-rs/app-server/src](https://github.com/openai/codex/tree/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/app-server/src) |
+| s09_app_server_transport | [codex-rs/app-server-protocol/src](https://github.com/openai/codex/tree/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/app-server-protocol/src) |
+
 ## 易过期点
 
 - release 版本和 npm/Homebrew 分发方式。
@@ -31,5 +58,4 @@
 
 - `codex-rs/skills/src` 与 CLI 一等 skills 能力之间的关系。
 - `agent_jobs`、`codex_delegate`、`parallel` 是否构成开源 CLI harness 主线能力。
-- `thread-store`、`rollout` 与 app-server/thread 恢复的完整数据流。
-
+- `thread-store`、`rollout`、`thread_rollout_truncation.rs` 与 app-server/thread 恢复的完整数据流。

@@ -8,7 +8,7 @@
 
 1. 固定 commit SHA 的 OpenAI 源码 permalink。
 2. OpenAI 官方文档、release note 或官方 README。
-3. 明确标注为“待核实”“教学抽象”或“推断”。
+3. 明确标注为“待核实”“教学抽象”或行内“推断”。
 
 不能用社区文章、教学 mock、其他 agent 产品经验来证明 Codex 官方实现。
 
@@ -31,7 +31,7 @@ https://github.com/openai/codex/tree/740d942f901a5a63421298c74dafbeb4255e946d/co
 - `已核实官方事实`：路径或文档已经在当前事实快照中核实。
 - `待核实`：路径可能存在，或行为仍需读源码确认。
 - `教学抽象`：为了帮助理解而设计的简化模型，不声称是官方架构。
-- `推断`：基于公开事实的解释性判断，必须说明推断链路。
+- `推断`：基于公开事实的解释性判断，必须说明推断链路；它不是章节级状态，只能用于句子或段落。
 
 ## 禁止项
 
@@ -46,4 +46,3 @@ https://github.com/openai/codex/tree/740d942f901a5a63421298c74dafbeb4255e946d/co
 2. 批量检查章节中的 GitHub 链接是否使用新的固定 SHA。
 3. 对状态为 `待核实` 的章节重新读源码，再决定是否升级为 `已核实官方事实`。
 4. 运行 `python3 scripts/check_docs.py` 和 `python3 -m unittest discover -s tests`。
-

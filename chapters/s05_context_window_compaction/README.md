@@ -36,7 +36,6 @@ python3 chapters/s05_context_window_compaction/mock.py --demo
 - [codex-rs/core/src/compact.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/core/src/compact.rs)
 - [codex-rs/core/src/compact_remote.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/core/src/compact_remote.rs)
 - [codex-rs/core/src/compact_remote_v2.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/core/src/compact_remote_v2.rs)
-- [codex-rs/core/src/thread_rollout_truncation.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/core/src/thread_rollout_truncation.rs)
 
 ## 教学简化与生产差异
 
@@ -49,4 +48,4 @@ Step 2 补充。
 ## 事实核验清单
 
 - [ ] 核实 compact 与 truncation 的触发条件。
-- [ ] 明确 compaction 与 rollout 的边界。
+- [ ] 明确 compaction 与 rollout 的边界；rollout 相关路径在 s08 待核实。

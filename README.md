@@ -13,7 +13,7 @@ Step 2 才会逐章补齐 README、Mermaid 图、Python mock、真实映射、�
 - 本仓研究对象是 [OpenAI Codex 开源仓库](https://github.com/openai/codex) 中的 Rust CLI harness，也就是 `codex-rs`。
 - Python 代码只用于教学 mock，不代表 OpenAI 官方实现。
 - Codex Web、Codex Cloud、IDE 体验和 GitHub 集成只在公开资料范围内作为旁支说明。
-- 所有“官方事实”必须能追到固定 commit 的 OpenAI 源码 permalink、OpenAI 官方文档或 release note；否则必须标注为“待核实”“教学抽象”或“推断”。
+- 所有“官方事实”必须能追到固定 commit 的 OpenAI 源码 permalink、OpenAI 官方文档或 release note；否则章节必须标注为“待核实”或“教学抽象”，句子层面的解释可以标注为“推断”。
 
 当前事实快照见 [docs/fact-snapshot.md](docs/fact-snapshot.md)。
 
@@ -38,7 +38,7 @@ Step 2 才会逐章补齐 README、Mermaid 图、Python mock、真实映射、�
 
 - AI 产品经理：先读每章的“本章回答什么”和“对产品与平台设计的意义”，重点看安全、成本、延迟、信任与用户摩擦。
 - Agent 平台设计者：从源码映射和机制图进入，再看后续 Step 2 的 mock、trace 与 failure path。
-- 内容贡献者：先读 [docs/sourcing.md](docs/sourcing.md)，再动任何“官方事实”相关文字。
+- 内容贡献者：先读 [docs/sourcing.md](docs/sourcing.md) 和 [docs/glossary.md](docs/glossary.md)，再动任何“官方事实”相关文字。
 
 ## 骨架检查
 
@@ -49,5 +49,4 @@ python3 -m unittest discover -s tests
 
 ## 非官方声明
 
-本仓是非官方教学项目，与 OpenAI 无隶属关系。`Codex` 是 OpenAI 相关名称。引用 OpenAI Codex 源码或文档时，必须遵守其原仓库 license 和官方使用条款；本仓自身 license 会在正式发布前明确。
-
+本仓是非官方教学项目，与 OpenAI 无隶属关系。`Codex` 是 OpenAI 相关名称。引用 OpenAI Codex 源码或文档时，必须遵守其原仓库 license 和官方使用条款；本仓自身采用 [MIT License](LICENSE)。
