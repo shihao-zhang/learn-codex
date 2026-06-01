@@ -134,3 +134,14 @@ Review summary 至少说明：
 - 是否改变官方事实、`source-evidence.md` 或 `fact-snapshot.md`。
 - 是否使用 Claude 或其他外部 review；如果没有，也明确说明。
 - 运行了哪些检查，结果如何。
+
+## PR / Release Closeout
+
+准备把一批完成的 changes 送 review 或 PR 前，先做一次 closeout：
+
+- 列出本批新增/修改的文档、章节、mock、diagram 和 OpenSpec changes。
+- 明确哪些章节状态没有变化；尤其是 s08/s10 是否仍为 `待核实`，s12 是否仍为 `教学抽象`。
+- 明确是否改变 `docs/fact-snapshot.md` target commit、release 核验值或 `scripts/check_docs.py`。
+- 给出 active OpenSpec changes 的处理策略：review 前默认保留 active，归档应在 review 后按人类指令或单独 change 执行。
+- 写出 PR summary 草案，包括事实边界、检查结果和剩余风险。
+- 不在 closeout 中新增官方事实；如果发现必须新增事实，先回到对应 evidence / OpenSpec change。

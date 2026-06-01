@@ -18,7 +18,7 @@ Step 2 初版已完成：12 章均包含 README、Mermaid 图、Python mock、�
 
 当前事实快照见 [docs/fact-snapshot.md](docs/fact-snapshot.md)，机制级证据见 [docs/source-evidence.md](docs/source-evidence.md)。
 
-项目目标见 [docs/project-goal-alignment.md](docs/project-goal-alignment.md)，Phase 5 收口见 [docs/phase5-summary.md](docs/phase5-summary.md)，Phase 8 审计见 [docs/phase8-evidence-audit.md](docs/phase8-evidence-audit.md)，后续路线见 [docs/roadmap.md](docs/roadmap.md)，维护与 review 规则见 [docs/review-checklist.md](docs/review-checklist.md)，Codex 桌面端观察边界见 [docs/codex-desktop-lens.md](docs/codex-desktop-lens.md)。
+项目目标见 [docs/project-goal-alignment.md](docs/project-goal-alignment.md)，Phase 5 收口见 [docs/phase5-summary.md](docs/phase5-summary.md)，Phase 8 审计见 [docs/phase8-evidence-audit.md](docs/phase8-evidence-audit.md)，后续路线见 [docs/roadmap.md](docs/roadmap.md)，维护与 review 规则见 [docs/review-checklist.md](docs/review-checklist.md)，P4 维护收口见 [docs/maintenance-closeout.md](docs/maintenance-closeout.md)，Codex 桌面端观察边界见 [docs/codex-desktop-lens.md](docs/codex-desktop-lens.md)。
 
 ## 学习地图
 

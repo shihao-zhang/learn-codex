@@ -65,11 +65,11 @@ Phase 7 implementation 已让 s12 具备可运行 integrated teaching trace。�
 | P1 | s12 pilot trace 插图 | `implement-s12-diagram-redraw-pilot` | 只做 s12 小样，优先 failure trace；不推广到全章全仓。 | 插图中文优先、可 diff、无外部生成依赖；不替换 `diagram.mmd`；s08/s10 保持 `待核实`。 |
 | P2 | 事实快照更新评估 | `evaluate-fact-snapshot-refresh-phase10` | 已完成评估，本轮保守不更新 target commit 或 release 核验值。 | 候选 commit 路径可访问不等于行号锚点和机制解释已复核；真正迁移需另开 implementation change。 |
 | P3 | s08/s10 深核验 | `deep-verify-s08-sessions-rollout` / `deep-verify-s10-extensions-mcp-skills` | 已完成两条 focused verification；s08/s10 都继续保持 `待核实`，但局部机制证据更细。 | s08 真实 remote thread-store/产品恢复语义未闭环；s10 通用 extension 入口、dynamic tools 产品边界和统一治理未闭环。 |
-| P4 | 开源维护收口 | future release/review hygiene change | 下一步做提交说明、active OpenSpec change 清点、PR/review hygiene 和归档策略。 | 工作树干净，检查全过，summary 能说明事实边界与未处理风险。 |
+| P4 | 开源维护收口 | `prepare-open-source-review-closeout-p4` | 已完成维护收口文档、active OpenSpec change 清点、PR/review hygiene 和归档策略。 | 工作树干净，检查全过；summary 能说明事实边界、未处理风险，以及 review 后再归档的策略。 |
 
 `design-diagram-redraw-style-guide` 是待办入口，不是全仓重绘许可。只有 s12 pilot 被 review 证明有教学价值后，才考虑是否抽象成 `docs/diagram-style-guide.md` 或推广到其他章节。
 
-当前状态：P0 `design-diagram-redraw-style-guide`、P1 `implement-s12-diagram-redraw-pilot`、P2 `evaluate-fact-snapshot-refresh-phase10` 与 P3 `deep-verify-s08-sessions-rollout` / `deep-verify-s10-extensions-mcp-skills` 已完成本轮收口。P4 开源维护收口是下一步；如果要迁移 target commit 或继续升级 s08/s10，仍需单独 change。
+当前状态：P0 `design-diagram-redraw-style-guide`、P1 `implement-s12-diagram-redraw-pilot`、P2 `evaluate-fact-snapshot-refresh-phase10`、P3 `deep-verify-s08-sessions-rollout` / `deep-verify-s10-extensions-mcp-skills` 与 P4 `prepare-open-source-review-closeout-p4` 已完成本轮收口。后续如果要迁移 target commit、继续升级 s08/s10、推广 diagram style guide 或归档 OpenSpec changes，仍需单独 change 或明确人类指令。
 
 ## Integrated Teaching Mock Planning
 
