@@ -69,6 +69,8 @@ Phase 7 implementation 已让 s12 具备可运行 integrated teaching trace。�
 
 `design-diagram-redraw-style-guide` 是待办入口，不是全仓重绘许可。只有 s12 pilot 被 review 证明有教学价值后，才考虑是否抽象成 `docs/diagram-style-guide.md` 或推广到其他章节。
 
+当前状态：P0 `design-diagram-redraw-style-guide` 与 P1 `implement-s12-diagram-redraw-pilot` 已完成本轮收口。P2 之后仍待启动，且必须继续保持事实核验、图形线和开源收口的 session 边界。
+
 ## Integrated Teaching Mock Planning
 
 Phase 7 的 integrated mock 只做教学，不复刻 OpenAI Codex。它必须是确定性的、离线的、只依赖 Python 标准库，并明确声明不等同于 OpenAI Codex 或 Codex 桌面端。

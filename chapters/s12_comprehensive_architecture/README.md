@@ -23,6 +23,8 @@
 
 见 [diagram.mmd](diagram.mmd)。图是教学总览：把产品界面、app-server/protocol、core runtime、工具/权限/上下文/模型/会话，以及待核实扩展与并行线索放在一张图里。
 
+可选 pilot 插图见 [diagrams/pilot-trace.md](diagrams/pilot-trace.md) 和 [diagrams/pilot-trace.svg](diagrams/pilot-trace.svg)。它基于 s12 失败路径 trace，以中文为主展示失败原因、副作用未执行、恢复选择和事实边界；不替代现有 Mermaid，也不是 OpenAI 官方架构图。
+
 ## 运行 mock
 
 ```bash
@@ -89,6 +91,7 @@ python3 chapters/s12_comprehensive_architecture/mock.py --demo --scenario sessio
 - [x] 明确本章是教学抽象，不是 OpenAI 官方架构图。
 - [x] Phase 7 integrated teaching mock 保持 deterministic、offline、Python 标准库。
 - [x] 文本输出和 JSON trace 保留 `Teaching mock only` 免责声明。
+- [x] s12 pilot 插图标注为教学抽象，并保留“官方事实（FACT）”、“待核实”、“教学抽象（TEACHING）”、“失败/拒绝（FAIL/DENY）”、“恢复选择（RECOVERY）”图例。
 - [x] 真实 Codex 映射只使用 fact-snapshot 中登记的固定 SHA permalink。
 - [x] 不绘制无法公开核验的 Codex Cloud 或内部系统。
 - [x] s10/s11 在总图中保持待核实语义，不升级为官方主线能力。

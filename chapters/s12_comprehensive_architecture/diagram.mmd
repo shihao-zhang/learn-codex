@@ -1,5 +1,5 @@
 flowchart TB
-    U["User"] --> UI["Product surface<br/>CLI / app / IDE"]
+    U["User"] --> UI["Product surface examples<br/>产品入口示例 / teaching lens"]
     UI --> AP["App-server + protocol<br/>interface boundary"]
     UI --> CLI["CLI harness entry"]
 
@@ -10,7 +10,7 @@ flowchart TB
     CORE --> CTX["Context window<br/>compaction"]
     CORE --> TOOLS["Tool registry<br/>router + handlers"]
     TOOLS --> PERM["Sandbox + permissions<br/>approval boundary"]
-    CORE --> SES["Session / thread<br/>rollout state"]
+    CORE --> SES["Session / thread<br/>rollout state<br/>s08 待核实"]
 
     TOOLS --> OBS["Tool observations"]
     PERM --> OBS
