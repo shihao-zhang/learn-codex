@@ -16,6 +16,12 @@
 
 好的 agent 产品不应把 compaction 包装成无损记忆。更稳妥的设计是把长任务拆成可恢复的工作单元，并在摘要中优先保留：用户目标、不可违反的约束、已经做过的关键决策、当前文件/分支/环境状态、失败原因、待确认问题和下一步计划。平台侧则需要给摘要质量、触发时机和失败恢复留出观测点，否则用户只会看到“agent 突然变笨了”。
 
+## PM 真正关心的问题
+
+- 用户为什么觉得 agent “忘了”？很多时候不是模型态度问题，而是上下文预算迫使系统摘要、截断或重新取证。
+- 哪些信息绝对不能丢？安全约束、用户明确偏好、当前任务目标、已做决策和失败原因，通常比早期寒暄或完整日志更重要。
+- 要不要告诉用户正在整理上下文？透明能建立信任，但不能暗示“我们有无损长期记忆”；更好的文案是说明为了继续任务正在压缩历史，并保留关键约束。
+
 ## 机制图
 
 见 [diagram.mmd](diagram.mmd)。该图是教学抽象，用来说明上下文压力下的选择路径，不是 OpenAI 官方架构图。
@@ -28,6 +34,16 @@ python3 chapters/s05_context_window_compaction/mock.py --demo
 
 这个 mock 只演示“测量预算 -> 决定继续/压缩/截断 -> 形成下一轮输入”的控制流。它不是真实 Codex 实现，也不代表真实摘要策略、token 计数方式或模型输入格式。
 
+## mock trace 怎么读
+
+运行 failure trace：
+
+```bash
+python3 chapters/s05_context_window_compaction/mock.py --demo --path failure --trace-json
+```
+
+trace 展示 `measure -> compact -> truncate -> model_input` 的教学链路。重点不是 `10000` 这个阈值，而是决策含义：系统先发现 context pressure，再把旧 turns 摘要，必要时移除非关键细节，最后把 compacted context 交给模型。所有 token 数字、阈值和保留字段都只是教学参数。
+
 ## 核心机制
 
 - `context window`：模型单轮可见的信息上限。它不是长期记忆，只是下一次推理时能被放进输入里的工作台。
@@ -35,6 +51,12 @@ python3 chapters/s05_context_window_compaction/mock.py --demo
 - `compaction`：把较早的交互压成摘要，让后续轮次仍能保留任务脉络。它适合保留“为什么这么做”和“现在做到哪里”，但不适合承诺逐字保真。
 - `truncation`：直接移除部分低价值或过旧内容。它更简单，也更危险；一旦被截掉的信息后来变重要，agent 只能依赖用户、文件系统或工具重新取证。
 - `working set`：当前轮最该保真的信息集合，通常包括最新用户意图、当前错误、最近工具输出、待编辑文件和明确约束。
+
+## 典型 failure path
+
+教学 failure path：长任务中历史超过预算，系统进行 compaction，但摘要漏掉了“未经授权不得调用外部 review”。后续 agent 可能错误地把外部 review 当成可用动作。这个失败不是单纯的 token 问题，而是治理约束丢失问题。
+
+产品上应把安全约束、授权状态和当前阻塞点列为高保真信息；平台上应保留摘要生成、历史替换和后续恢复的可观测线索。这个例子是教学抽象，不声明官方 compact prompt 一定以同样字段保留信息。
 
 ## 真实 Codex 映射
 
@@ -45,6 +67,8 @@ python3 chapters/s05_context_window_compaction/mock.py --demo
 以上固定 SHA 链接是本章的官方事实入口：它们说明当前教学对象中存在 compaction 相关源码。README 中的机制解释用于教学，不把 Python mock 或 Mermaid 图声明为官方实现。
 
 机制级证据登记在 [docs/source-evidence.md](../../docs/source-evidence.md)，包括 compact task 入口、compact 后历史替换与 rollout 记录、以及 thread rollout truncation helper。
+
+本章新增的 PM 问题、failure path 和 mock trace 解读只说明上下文管理的产品风险；真实 compact 触发条件、摘要提示词、remote/v2 字段职责和 token 策略仍以固定 SHA 证据为准。
 
 ## 教学简化与生产差异
 

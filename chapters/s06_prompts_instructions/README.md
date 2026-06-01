@@ -16,6 +16,12 @@
 
 平台设计要把“谁有权写规则”“规则覆盖多大范围”“冲突时是否必须停下来问人”产品化。最稳妥的用户体验不是让 agent 背诵全部规则，而是在关键动作前体现规则约束：例如调用外部服务前说明发送范围并请求授权，或在用户要求改禁止文件时明确拒绝/询问。
 
+## PM 真正关心的问题
+
+- 用户最后一句话和项目长期规则冲突时，agent 应该听谁的？产品必须让优先级可解释，而不是让用户猜 agent 为什么拒绝或追问。
+- 规则有没有真正生效？用户不需要看完整 prompt，但需要在关键动作前看到 agent 正在遵守哪条约束。
+- 外部服务、发布、删除、全局写入等高副作用动作如何授权？规则系统应把“必须先问人”的触发条件写清楚。
+
 ## 机制图
 
 见 [diagram.mmd](diagram.mmd)。该图是教学抽象，用来展示指令来源、作用域和冲突处理，不包含官方或私有 prompt 文本。
@@ -28,6 +34,16 @@ python3 chapters/s06_prompts_instructions/mock.py --demo
 
 这个 mock 只演示“加载多层指令 -> 合并成有序指令栈 -> 冲突时先处理授权/优先级”的思路。它不是真实 Codex 实现，也不会暴露官方 prompt 或任何私有 prompt。
 
+## mock trace 怎么读
+
+建议看 failure path：
+
+```bash
+python3 chapters/s06_prompts_instructions/mock.py --demo --path failure --trace-json
+```
+
+trace 展示项目规则先被加载，用户随后提出外部 review 请求，但授权状态为 false，于是决策应转为 `ask_first`。这里的重点是“冲突要表面化”，不是具体层级名或字段名；mock 不代表官方 prompt 文本、真实优先级算法或所有客户端行为。
+
 ## 核心机制
 
 - `system/developer instructions`：平台和运行时给 agent 的高优先级约束，通常定义身份、工具使用边界、安全策略和回复规范。
@@ -36,12 +52,20 @@ python3 chapters/s06_prompts_instructions/mock.py --demo
 - `conflict handling`：当规则互相冲突或任务会越界时，agent 应表面化权衡：说明冲突点、能做什么、不能做什么，以及是否需要用户授权。
 - `scoped guidance`：不是所有规则都应该永久进入每次调用；平台需要按仓库、路径、任务类型和当前步骤控制哪些规则进入上下文。
 
+## 典型 failure path
+
+教学 failure path：`AGENTS.md` 要求调用外部 review 服务前必须获得授权，但用户直接要求“把私密 diff 发出去 review”。稳妥行为不是立即执行，也不是默默忽略用户请求，而是说明将发送的范围、调用方式和副作用，请求人类明确授权；未获授权时改用本地自审或缩小到不外发材料的方案。
+
+这个 failure path 来自本仓协作规则和产品治理经验，用来帮助读者理解指令冲突，不把 Codex 桌面端体验或本仓 `AGENTS.md` 直接写成 `openai/codex` 官方实现事实。
+
 ## 真实 Codex 映射
 
 - [codex-rs/protocol/src/prompts](https://github.com/openai/codex/tree/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/protocol/src/prompts)
 - [codex-rs/core/src/agents_md.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/core/src/agents_md.rs)
 
 以上固定 SHA 链接是本章的官方事实入口：它们说明当前教学对象中存在 prompt 与 `AGENTS.md` 相关源码。README 中对优先级和冲突处理的描述是面向产品/平台的机制化解释，不引用不可公开核验的 prompt 内容。
+
+机制级证据登记在 [docs/source-evidence.md](../../docs/source-evidence.md)，包括 `AGENTS.md` 发现、用户指令与项目说明拼接、初始上下文注入多类指令。新增任何关于真实 prompt 文案、优先级细节或客户端行为的结论前，都必须补固定 SHA 证据。
 
 ## 教学简化与生产差异
 

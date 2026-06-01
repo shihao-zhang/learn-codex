@@ -20,6 +20,12 @@
 
 对平台设计者来说，loop 是调度边界：它决定什么时候组装上下文、什么时候暴露工具、什么时候等待 observation、什么时候允许取消、什么时候把结果持久化或上报给客户端。这里的关键权衡是：循环越自主，越需要清晰的停止条件、权限边界和可观测性；循环越保守，用户摩擦和延迟就会增加。
 
+## PM 真正关心的问题
+
+- 用户不是只问“模型聪不聪明”，而是在问：它现在到底在想、在查、在执行，还是已经卡住了？
+- 什么时候应该继续自动推进，什么时候应该停下来问人？例如连续多次工具失败、权限缺失、上下文不足时，继续重试可能只是在消耗用户耐心和预算。
+- 一次 turn 的成本和风险上限在哪里？产品需要能限制工具次数、运行时间、审批次数和最终失败呈现，而不是把 loop 当成无限自动驾驶。
+
 ## 机制图
 
 见 [diagram.mmd](diagram.mmd)。图里把 agent loop 画成“模型决策 -> 工具执行 -> observation 回填 -> 再决策”的闭环，并显式标出终止出口。
@@ -32,6 +38,16 @@ python3 chapters/s01_agent_loop/mock.py --demo
 
 这个 mock 只演示教学抽象：一个 happy path 会先读上下文、再把工具结果回填给模型；一个 failure path 会把工具错误转成可解释的最终回复。它不是 Codex 官方实现，也不复刻 Rust 异步运行时或真实模型行为。
 
+## mock trace 怎么读
+
+建议先运行 happy path，再运行：
+
+```bash
+python3 chapters/s01_agent_loop/mock.py --demo --path failure --trace-json
+```
+
+trace 的价值不是事件名本身，而是因果顺序：`input` 进入 turn，`model` 决定调用工具，`tool_error` 作为 observation 回到运行时，最后模型解释阻塞而不是假装成功。这里的 `recoverable`、`action` 等字段都是教学字段，不是官方 Rust 类型或协议字段。
+
 ## 核心机制
 
 - 用户输入进入运行时后，会被放入当前任务/回合的上下文中。平台需要同时携带用户意图、指令、历史、可用工具和权限状态。
@@ -40,6 +56,12 @@ python3 chapters/s01_agent_loop/mock.py --demo
 - observation 回填后，模型才拥有“工具刚刚发生了什么”的上下文。下一步可能继续调用工具，也可能收束成最终答复。
 - 终止条件要产品化：正常完成、用户取消、权限拒绝、工具不可用、不可恢复错误、上下文或预算限制，都应该形成不同的用户体验和平台事件。
 - 失败不是循环外的异常小尾巴。一个好的 harness 会把可恢复失败交还给模型解释或改路，把不可恢复失败暴露为稳定状态，而不是假装完成。
+
+## 典型 failure path
+
+教学 failure path：用户要求修改一个文件，模型先调用 `read_file`，但工具返回“文件不存在”。此时最重要的产品判断不是“报错了吗”，而是“能不能恢复”：如果用户可能给错路径，agent 应该解释缺口并请求新路径；如果路径来自 agent 自己的假设，agent 应该尝试搜索或缩小范围；如果权限或工作区边界阻止读取，就应转入 s04 的审批/权限路径。
+
+这个 failure path 用来训练读者识别 loop 的安全出口。它不声明官方 Codex 对“文件不存在”一定采用同样文案、事件名或恢复策略；官方事实只限于本章登记的 loop、tool routing 和 item/event 证据。
 
 ## 真实 Codex 映射
 
@@ -52,6 +74,7 @@ python3 chapters/s01_agent_loop/mock.py --demo
 - `tools` 目录是理解工具调用如何进入执行层的入口。教学里的“tool observation”强调结果回填语义；真实实现还要处理工具注册、路由、生命周期、错误、取消和 telemetry。
 - 本章只用这两个已登记 permalink 建立阅读入口；具体类型名、字段名和事件名以固定 SHA 下的源码为准。
 - 机制级证据登记在 [docs/source-evidence.md](../../docs/source-evidence.md)，包括 session loop 启动、tool call 路由和 conversation item 记录。
+- 本章的 PM 问题、failure path 和 mock trace 解读是面向产品理解的教学表达；除非能追到固定 SHA 源码证据，否则不要把它们改写成官方行为断言。
 
 ## 教学简化与生产差异
 

@@ -20,6 +20,12 @@
 
 对平台设计者来说，protocol 是运行时和界面之间的契约。它需要稳定、可版本化、可恢复，并能承载流式输出、工具状态、错误码和权限请求。核心权衡是：协议越稳定，演进越慢；协议越贴近内部实现，客户端越容易被内部重构牵连。
 
+## PM 真正关心的问题
+
+- 用户看到的状态是否能解释等待原因？“正在处理”不够，产品需要区分模型输出、工具执行、权限等待、失败和完成。
+- 失败能不能被恢复和追责？没有稳定错误事件和关联信息，客服、开发者和用户只能靠截图猜测发生了什么。
+- 客户端升级不一致时会怎样？协议新增事件或字段时，旧客户端应该能降级显示，而不是把未知状态误判成成功或崩溃。
+
 ## 机制图
 
 见 [diagram.mmd](diagram.mmd)。图里把“内部状态变化”和“客户端可消费事件”分开，强调事件是契约层，不是运行时对象的原样泄漏。
@@ -32,6 +38,16 @@ python3 chapters/s02_protocol_events/mock.py --demo
 
 这个 mock 用少量教学事件展示状态如何被发给客户端。事件名如 `turn_started`、`model_message_delta` 是教学抽象，不应当当成 Codex 官方 wire format。
 
+## mock trace 怎么读
+
+建议用 JSON trace 对比 happy path 和 failure path：
+
+```bash
+python3 chapters/s02_protocol_events/mock.py --demo --path failure --trace-json
+```
+
+failure trace 展示的是“协议层先验证，再发稳定错误事件”的教学顺序。重点看 `request`、`validate`、`event` 三步如何把一个坏输入变成客户端可处理的状态。`toolz`、`recoverable` 和示例事件名不是官方字段，只是帮助读者理解 schema drift 和错误事件的产品意义。
+
 ## 核心机制
 
 - `protocol event` 是客户端可见的状态变化。它应该回答“发生了什么、属于哪个 turn、是否终止、是否需要用户动作”。
@@ -40,6 +56,12 @@ python3 chapters/s02_protocol_events/mock.py --demo
 - 事件协议要区分“流式内容”和“状态事件”。流式文本可以频繁到达，但状态事件必须能驱动 UI 状态机。
 - schema drift 是长期风险：一旦字段改名、枚举新增、语义变化，旧客户端可能误判状态。所以新增事件要考虑兼容默认值、未知字段处理和降级显示。
 - 好的协议不会把所有内部细节都暴露给客户端。它选择性暴露产品需要的事实，同时保留内部重构空间。
+
+## 典型 failure path
+
+教学 failure path：客户端或运行时交给协议层的 tool output 结构不符合 schema。理想处理不是把错误吞掉，也不是让 UI 继续显示长 spinner，而是发出稳定、可归因的错误状态，让客户端知道这次 turn 已经不可继续或需要重试。
+
+这个例子服务于产品判断：协议错误、工具业务失败、模型内容不满意是三类不同问题。它不声明官方 Codex 对未知字段一定采用同样校验策略或错误码；真实事件类型、item 类型和字段命名仍以固定 SHA 的 `protocol/src` 为准。
 
 ## 真实 Codex 映射
 
@@ -50,6 +72,7 @@ python3 chapters/s02_protocol_events/mock.py --demo
 - `protocol/src` 是本章唯一使用的固定 SHA 源码入口。该目录承载运行时、客户端、工具和权限相关的数据契约。
 - 教学里的“事件”对应真实源码中的协议事件族和消息结构；教学里的“item”对应真实源码中用于表达输入、输出和模型响应片段的数据结构。具体枚举、结构体和字段名以该固定 SHA 下源码为准。
 - 本章不新增更细链接，是为了遵守当前 fact snapshot：章节只依赖已登记的 `protocol/src` 目录 permalink。
+- 本章新增的 PM 问题和 failure path 是协议设计解释，不等同于官方 wire format；如果后续要写具体枚举名、错误码或兼容策略，必须先补固定 SHA 证据并登记到统一证据索引。
 
 ## 教学简化与生产差异
 

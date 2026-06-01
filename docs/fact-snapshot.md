@@ -60,15 +60,18 @@
 
 ## 已引用但行为待核实的源码路径
 
-以下路径同样已在 2026-05-29 通过 GitHub Contents API 对目标 commit 验证存在，返回 HTTP 200。但对应章节仍标为 `待核实` 或 `教学抽象`，因为路径存在不等于行为解释已经核实。
+以下路径同样已在 2026-05-29 或 2026-06-01 对目标 commit 验证存在。但对应章节仍标为 `待核实` 或 `教学抽象`，因为路径存在不等于行为解释已经核实。
 
 | 章节 | 已核实存在的路径 |
 | --- | --- |
 | s08_sessions_threads_rollout | [codex-rs/protocol/src/session_id.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/protocol/src/session_id.rs) |
 | s08_sessions_threads_rollout | [codex-rs/protocol/src/thread_id.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/protocol/src/thread_id.rs) |
+| s08_sessions_threads_rollout | [codex-rs/app-server-protocol/src/protocol/v2/thread.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/app-server-protocol/src/protocol/v2/thread.rs) |
+| s08_sessions_threads_rollout | [codex-rs/app-server/src/request_processors/thread_processor.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/app-server/src/request_processors/thread_processor.rs) |
 | s08_sessions_threads_rollout | [codex-rs/core/src/thread_rollout_truncation.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/core/src/thread_rollout_truncation.rs) |
 | s08_sessions_threads_rollout | [codex-rs/thread-store](https://github.com/openai/codex/tree/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/thread-store) |
 | s08_sessions_threads_rollout | [codex-rs/rollout](https://github.com/openai/codex/tree/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/rollout) |
+| s08_sessions_threads_rollout | [codex-rs/exec/src/lib.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/exec/src/lib.rs) |
 | s10_extensions_mcp_skills | [codex-rs/core/src/tools/handlers/mcp.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/core/src/tools/handlers/mcp.rs) |
 | s10_extensions_mcp_skills | [codex-rs/core/src/tools/handlers/extension_tools.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/core/src/tools/handlers/extension_tools.rs) |
 | s10_extensions_mcp_skills | [codex-rs/skills/src](https://github.com/openai/codex/tree/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/skills/src) |
@@ -88,7 +91,7 @@
 
 ## 待核实队列
 
-- `codex-rs/skills/src`、session available skills instructions 与 CLI 用户可见 skills 能力之间的关系。
+- extension tools 的用户安装/发现入口，以及 MCP、dynamic tools、extension tools、skills 是否共享同一治理路径；skills TUI 可见入口和配置路径已在 `docs/source-evidence.md` 复核。
 - `thread-store`、`rollout`、`thread_rollout_truncation.rs` 与 app-server/thread 恢复的完整数据流。
 - `app-server`、`app-server-protocol` 中 request、outgoing message、thread state/status、protocol export 的字段级兼容性。
 - 多 agent v1/v2、agent jobs 与普通工具并行的产品入口、默认启用条件和体验边界。

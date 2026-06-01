@@ -21,6 +21,12 @@
 
 对平台设计者来说，registry/router 是能力治理的入口。它要回答：哪些工具对模型可见？哪些只供内部使用？未知工具如何失败？参数不兼容算用户错误、模型错误还是平台错误？工具执行前后是否要跑 hook、记录 telemetry、支持取消和并行？
 
+## PM 真正关心的问题
+
+- 这个 agent 到底能做什么？工具列表就是能力边界，决定它能读文件、跑命令、改代码、访问外部系统还是只能回答问题。
+- 工具暴露错了怎么办？把危险工具暴露给模型会放大风险，把关键工具藏起来又会让 agent 反复失败或向用户要手工操作。
+- 未知工具、坏参数和 handler 失败应该如何解释给用户？产品上要区分“模型叫错工具”“平台没装能力”“工具执行失败”和“权限不允许”。
+
 ## 机制图
 
 见 [diagram.mmd](diagram.mmd)。图里把工具从“可见 spec”到“handler 执行”再到“结构化结果”的路径拆开，方便理解 registry 和 router 的职责差异。
@@ -33,6 +39,16 @@ python3 chapters/s03_tool_registry_dispatch/mock.py --demo
 
 这个 mock 只展示最小路由链路：注册两个工具、模型请求其中一个、router 找到 handler、handler 返回结果；失败路径展示未知工具如何被结构化拒绝。它不是 Codex 官方工具系统。
 
+## mock trace 怎么读
+
+先看 happy path 的 `register -> model -> router -> handler`，再看：
+
+```bash
+python3 chapters/s03_tool_registry_dispatch/mock.py --demo --path failure --trace-json
+```
+
+failure trace 的重点是未知工具不会直接变成任意执行：router 先查 registry，发现不在 `known_tools` 内，再返回结构化 tool error。这里的 `ApplyPatchHandler`、`delete_world` 和 `known_tools` 都是教学字段，用来帮助理解“工具名必须经过受控解析”。
+
 ## 核心机制
 
 - `tool spec` 是给模型看的能力说明，也是平台控制工具暴露面的第一道门。没有清晰 spec，模型会猜参数；spec 暴露过宽，模型会尝试危险或昂贵动作。
@@ -41,6 +57,12 @@ python3 chapters/s03_tool_registry_dispatch/mock.py --demo
 - `handler` 是真正执行工具逻辑的地方。handler 不应该绕开运行时的权限、hook、trace、取消和生命周期通知。
 - 工具结果至少有两种读者：模型需要可继续推理的结果，客户端需要可展示的状态。把二者混在一起，会让 UI 或模型任一方被迫消费不适合自己的格式。
 - 工具失败也要结构化。未知工具、参数非法、权限拒绝、handler 运行失败、取消和超时，应尽量形成可恢复或可解释的分支。
+
+## 典型 failure path
+
+教学 failure path：模型请求一个 registry 中不存在的工具。平台不能把这个名字交给 shell 猜，也不能悄悄忽略；更稳妥的路径是返回结构化错误，让模型改路、向用户解释缺失能力，或由产品提示需要安装/启用某个能力。
+
+这个例子帮助 PM 看清“能力治理”的产品含义：未知工具不是小 bug，它可能代表提示词过时、工具 schema 漂移、插件未安装或权限策略收紧。本章不把 mock 的工具名、handler 名或错误格式写成官方实现。
 
 ## 真实 Codex 映射
 
@@ -55,6 +77,7 @@ python3 chapters/s03_tool_registry_dispatch/mock.py --demo
 - `handlers` 目录是具体工具实现的入口。教学里的 handler 是一个极简函数；真实 handler 会面对权限、环境、参数解析、错误传播和结果格式。
 - 本章不把 mock 中的 `ApplyPatchHandler` 当成官方类型名；它只是帮助读者理解“路由到 handler”这件事。
 - 机制级证据登记在 [docs/source-evidence.md](../../docs/source-evidence.md)，包括 router 参数、registry 构造、pre/post hook、handler 调用和错误回写。
+- 本章新增的产品问题与 failure path 只扩大教学解释，不扩大官方事实边界；涉及动态工具、MCP、extension 或 skills 的内容仍按 s10 的 `待核实` 边界处理。
 
 ## 教学简化与生产差异
 
