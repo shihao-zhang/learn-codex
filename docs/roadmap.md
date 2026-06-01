@@ -63,13 +63,13 @@ Phase 7 implementation 已让 s12 具备可运行 integrated teaching trace。�
 | --- | --- | --- | --- | --- |
 | P0 | 收口 `design-diagram-redraw-style-guide` 轻量调研 | `design-diagram-redraw-style-guide` | 先 review 设计，不替换现有 Mermaid，不生成事实图。 | OpenSpec valid；确认主方案是手写 SVG、Mermaid 保留；FACT/待核实/TEACHING 标记规则清楚。 |
 | P1 | s12 pilot trace 插图 | `implement-s12-diagram-redraw-pilot` | 只做 s12 小样，优先 failure trace；不推广到全章全仓。 | 插图中文优先、可 diff、无外部生成依赖；不替换 `diagram.mmd`；s08/s10 保持 `待核实`。 |
-| P2 | 事实快照更新评估 | future fact snapshot update change | 可与视觉线并行，但必须独立 session/branch。 | 更新目标 commit 前先列差异；同步固定 SHA 链接和 `scripts/check_docs.py`。 |
+| P2 | 事实快照更新评估 | `evaluate-fact-snapshot-refresh-phase10` | 已完成评估，本轮保守不更新 target commit 或 release 核验值。 | 候选 commit 路径可访问不等于行号锚点和机制解释已复核；真正迁移需另开 implementation change。 |
 | P3 | s08/s10 深核验 | future focused verification changes | 与图形线分离，避免把未闭环能力画成稳定事实。 | 能升级才升级；否则继续 `待核实` 并写清缺口。 |
 | P4 | 开源维护收口 | future release/review hygiene change | 在下一批内容稳定后做提交说明、review checklist 和归档策略。 | 工作树干净，检查全过，summary 能说明事实边界与未处理风险。 |
 
 `design-diagram-redraw-style-guide` 是待办入口，不是全仓重绘许可。只有 s12 pilot 被 review 证明有教学价值后，才考虑是否抽象成 `docs/diagram-style-guide.md` 或推广到其他章节。
 
-当前状态：P0 `design-diagram-redraw-style-guide` 与 P1 `implement-s12-diagram-redraw-pilot` 已完成本轮收口。P2 之后仍待启动，且必须继续保持事实核验、图形线和开源收口的 session 边界。
+当前状态：P0 `design-diagram-redraw-style-guide`、P1 `implement-s12-diagram-redraw-pilot` 与 P2 `evaluate-fact-snapshot-refresh-phase10` 已完成本轮收口。P3 之后仍待启动，且必须继续保持事实核验、图形线和开源收口的 session 边界。
 
 ## Integrated Teaching Mock Planning
 
