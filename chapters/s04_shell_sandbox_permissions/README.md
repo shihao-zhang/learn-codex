@@ -16,6 +16,12 @@ shell 是最强也最危险的工具之一。它既能跑测试、读文件、�
 
 对平台设计者来说，shell 权限不是一个开关，而是组合策略：文件系统可读写范围、是否允许网络、是否允许绕过 sandbox、何时要求人类审批、审批是否可缓存、不同 OS sandbox 能力是否一致。核心权衡是：最小权限、可恢复性、用户摩擦、企业策略和跨平台一致性。
 
+## PM 真正关心的问题
+
+- 用户为什么要批准这条命令？审批文案必须说明命令、原因、影响范围、允许多久，以及拒绝后 agent 会怎么继续。
+- 拒绝是否真的安全？产品承诺应落在“未获授权不执行相应高风险动作”，而不是泛泛说“agent 很安全”。
+- 企业策略和个人效率冲突时谁说了算？平台需要区分用户临时批准、管理员策略、网络 allowlist、工作区写入范围和不可绕过的禁止项。
+
 ## 机制图
 
 见 [diagram.mmd](diagram.mmd)。图里把 shell 执行拆成“权限判定、审批、sandbox 执行、网络拦截、结果回传”几个决策点。
@@ -28,6 +34,16 @@ python3 chapters/s04_shell_sandbox_permissions/mock.py --demo
 
 这个 mock 只展示决策点：普通测试命令可在工作区 sandbox 中运行；请求网络和高权限的命令需要升级审批，用户拒绝时不执行。它不是 macOS Seatbelt、Linux sandbox 或 Windows restricted token 的复刻。
 
+## mock trace 怎么读
+
+建议重点读 failure path：
+
+```bash
+python3 chapters/s04_shell_sandbox_permissions/mock.py --demo --path failure --trace-json
+```
+
+trace 里的 `tool -> policy -> approval -> result` 展示了四个产品关键点：命令请求先被识别为高风险，策略要求升级，人类拒绝，运行时返回 denial 而不是执行。`network_and_privilege` 和 `exit_code: null` 是教学表达，不代表官方审批 reason 或结果字段。
+
 ## 核心机制
 
 - shell 请求首先是一段待执行命令，但平台不能只看字符串。还要结合 cwd、工作区根、环境、是否需要网络、是否要求提升权限、当前 approval policy 和 sandbox policy。
@@ -36,6 +52,12 @@ python3 chapters/s04_shell_sandbox_permissions/mock.py --demo
 - `network policy` 和文件系统权限是两条线。一个命令即使能在工作区写文件，也不代表它能访问任意域名；网络 allowlist miss 可能触发单独的网络审批或直接拒绝。
 - sandbox 与 approval 不是同义词。sandbox 是技术执行边界，approval 是人类/策略决策边界；一个命令可以“已获批但仍在 sandbox 中运行”，也可以“无需审批但仍受 sandbox 限制”。
 - 失败路径必须安全：审批拒绝不能执行；策略禁止不能绕过；sandbox 失败后的重试必须重新评估是否允许非 sandbox 执行。
+
+## 典型 failure path
+
+教学 failure path：命令形态类似 `curl | sudo sh`，同时触发网络访问和高权限写入。稳妥产品路径是先说明风险和影响范围，再请求明确授权；如果用户拒绝，运行时应报告拒绝结果，并让 agent 寻找低风险替代方案，例如读取本地依赖、使用已有缓存或请求用户手动安装。
+
+这个例子不等同于官方 Codex 对任意 shell 字符串的真实分类器。真实判断还要结合固定 SHA 中的 approval、filesystem sandbox、network approval、OS backend 和执行上下文；本章不承诺跨平台底层 sandbox 能力完全一致。
 
 ## 真实 Codex 映射
 
@@ -50,6 +72,7 @@ python3 chapters/s04_shell_sandbox_permissions/mock.py --demo
 - `permissions.rs` 是理解文件系统 sandbox policy、访问模式、特殊路径、writable roots、deny-read 规则和网络 sandbox policy 的入口。
 - 本章只使用 fact snapshot 已登记的三个固定 SHA permalink；不同 OS 的底层 sandbox 细节需要继续逐文件核验。
 - 机制级证据登记在 [docs/source-evidence.md](../../docs/source-evidence.md)，包括 approval requirement、sandbox attempt、网络审批结构和 filesystem permission 类型。
+- 本章的 PM 文案建议和示例命令是教学抽象；新增任何“某命令一定需要审批/一定允许”的结论前，都必须补源码证据或写成策略建议。
 
 ## 教学简化与生产差异
 

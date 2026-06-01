@@ -1,0 +1,14 @@
+- [x] 1.1 Create OpenSpec change `evaluate-fact-snapshot-refresh-phase10`.
+- [x] 1.2 Define proposal, design, tasks, and spec for snapshot refresh evaluation.
+- [x] 2.1 Obtain explicit human authorization before联网读取官方 GitHub 来源。
+- [x] 2.2 Verify current `openai/codex` default branch commit from official GitHub source.
+- [x] 2.3 Verify current latest GitHub release value from official GitHub source.
+- [x] 2.4 Check whether every existing fact-snapshot OpenAI source path is reachable at the candidate target commit.
+- [x] 3.1 Decide whether to update `docs/fact-snapshot.md` target commit, release value, or both. Decision: preserve both values in this change.
+- [x] 3.2 If target commit changes, update all fixed SHA OpenAI source links and `scripts/check_docs.py`. Not applicable because target commit is preserved.
+- [x] 3.3 Confirm s08 and s10 statuses remain unchanged unless separately verified.
+- [x] 4.1 Run `openspec validate evaluate-fact-snapshot-refresh-phase10 --strict`.
+- [x] 4.2 Run `python3 scripts/check_docs.py`.
+- [x] 4.3 Run `python3 scripts/run_all.py`.
+- [x] 4.4 Run `python3 -m unittest discover -s tests`.
+- [x] 4.5 Run `git diff --check`.

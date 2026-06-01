@@ -10,7 +10,7 @@
 2. OpenAI 官方文档、release note 或官方 README。
 3. 明确标注为“待核实”“教学抽象”或行内“推断”。
 
-不能用社区文章、教学 mock、其他 agent 产品经验来证明 Codex 官方实现。
+不能用社区文章、教学 mock、其他 agent 产品经验来证明 Codex 官方实现。Codex 桌面端体验也只能作为观察视角、产品设计启发或源码阅读问题，不能作为 `openai/codex` 官方事实来源。
 
 ## Permalink 要求
 
