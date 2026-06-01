@@ -6,9 +6,9 @@
 
 ## 本章回答什么
 
-本章解释长任务恢复的产品问题：一次 agent 工作如何被识别、历史如何被关联、进程中断后用户如何继续。当前状态仍是待核实：本章已核实 `session_id.rs`、`thread_id.rs`、`ThreadStore` trait、rollout 记录、`InitialHistory::Resumed/Forked`、`thread/resume` / `thread/fork` 的 app-server 主链路，以及 `codex exec resume` 通过 app-server API 恢复的路径。
+本章解释长任务恢复的产品问题：一次 agent 工作如何被识别、历史如何被关联、进程中断后用户如何继续。当前状态仍是待核实：本章已核实 `session_id.rs`、`thread_id.rs`、`ThreadStore` trait/local store、rollout 记录与 replay、`InitialHistory::Resumed/Forked`、`thread/resume` / `thread/fork` 的 app-server 主链路，以及 `codex exec resume`、TUI resume/fork、debug-client resume 通过 app-server API 恢复的路径。
 
-但这还不足以升级整章：app-server 协议里有 experimental 字段，TUI/daemon/remote store 与所有用户可见恢复体验尚未逐一闭环。因此，本章采用“局部官方事实 + 待核实产品边界”的写法：把 session、thread、rollout、resume 作为理解会话恢复的概念框架，但不把局部源码证据扩写成稳定产品承诺。
+但这还不足以升级整章：app-server 协议里仍有 experimental/unstable 字段，当前固定 SHA 只核实到 local 与 test/debug 用的 in-memory thread store，真实 remote thread-store backend 未闭环；daemon 与 remote app-server transport 也只证明连接和生命周期边界。因此，本章采用“局部官方事实 + 待核实产品边界”的写法：把 session、thread、rollout、resume 作为理解会话恢复的概念框架，但不把局部源码证据扩写成稳定产品承诺。
 
 ## 对产品与平台设计的意义
 
@@ -35,8 +35,12 @@ python3 chapters/s08_sessions_threads_rollout/mock.py --demo
 - `rollout`：教学上表示可保存、可回放或可截断的历史轨迹。源码显示 rollout writer 会把 canonical items 写入 JSONL；读取时可解析为 `InitialHistory::Resumed`。但 limited/extended 持久化策略会过滤事件，不能假设所有运行时事件都会完整保留。
 - `resume`：源码显示 app-server 的 cold resume 可从显式 history、thread id 或 rollout path 构造初始历史；running thread rejoin 会复用 live thread 并发送 resume response；core 会对 `InitialHistory::Resumed/Forked` 做 rollout reconstruction、token 信息恢复和 persist/flush。真实产品体验与所有客户端边界仍需继续核实。
 - `fork`：源码显示 app-server fork 会读取源 thread history，并用 `ForkSnapshot::Interrupted` 创建新 thread；持久 fork 和 ephemeral fork 的可见历史来源不同。该结论只覆盖 app-server 代码路径。
-- `exec resume`：源码显示 `codex exec resume` 通过 in-process app-server 的 `thread/list` + `thread/resume` 恢复，而不是直接读取 rollout 存储。该结论不覆盖 TUI、debug-client、daemon 或桌面端。
-- `thread rollout truncation`：路径已在事实快照登记；其职责边界需要继续读源码确认，不能直接等同于 s05 的 compaction。
+- `exec resume`：源码显示 `codex exec resume` 通过 in-process app-server 的 `thread/list` + `thread/resume` 恢复，而不是直接读取 rollout 存储。
+- `TUI resume/fork`：源码显示 TUI picker 通过 app-server `thread/list` 与 `thread/read` 获取列表和预览；选择后用 `thread_id` 发送 `ThreadResume` 或 `ThreadFork`。TUI 的本地 rollout fallback 只用于 app-server 恢复前解析 thread id、cwd、model 等辅助元数据，不能写成直接恢复机制。
+- `debug-client resume`：源码显示 `:resume <thread-id>` 会解析为 debug-client 命令，并发送 app-server `ThreadResume`。这是调试客户端链路，不代表稳定用户入口。
+- `daemon / remote app-server transport`：源码显示 daemon 负责 app-server 生命周期和 remote-control ready 状态；remote transport 负责 WebSocket/UDS handshake、request/response 与 notification stream。它们不是 thread-store 后端。
+- `remote thread store`：当前固定 SHA 的配置只暴露 `ThreadStoreToml::{Local, InMemory}`；旧 `experimental_thread_store_endpoint` 已移除并用于 fail fast。`in_memory` 明确是 test/debug 用于模拟 non-local persistence，不是可升级为官方远端存储事实的证据。
+- `thread rollout truncation`：源码显示该 helper 按 user message boundary、fork-turn boundary 和 rollback marker 计算截断；fork snapshot 会把 resumed history 转成 forked history，并在中断场景追加 interrupted boundary。这个边界属于 s08 的 fork/历史截断，不等同于 s05 的 compaction。
 
 ## 真实 Codex 映射
 
@@ -51,13 +55,13 @@ python3 chapters/s08_sessions_threads_rollout/mock.py --demo
 
 以上固定 SHA 链接是本章的官方事实入口。由于本章状态仍为待核实，本文不把局部机制证据扩写成完整产品语义或稳定恢复承诺。
 
-机制级证据登记在 [docs/source-evidence.md](../../docs/source-evidence.md)。当前证据足以支持 id 生成、thread-store trait/local store、app-server cold resume/running rejoin/fork、rollout replay、initial turns pagination、response-only redaction、exec resume API 路径等局部事实；不足以支持所有客户端和稳定产品语义的完整恢复承诺。
+机制级证据登记在 [docs/source-evidence.md](../../docs/source-evidence.md)。当前证据足以支持 id 生成、thread-store trait/local store、app-server cold resume/running rejoin/fork、rollout replay、thread rollout truncation、initial turns pagination、response-only redaction、exec/TUI/debug-client app-server API 路径，以及 daemon/remote transport 的连接边界；不足以支持真实 remote thread-store backend、所有客户端体验和稳定产品语义的完整恢复承诺。
 
 ## 教学简化与生产差异
 
 教学版把问题拆成四块：创建身份、关联历史、写入记录、恢复继续。这个拆法适合产品理解，但生产实现可能会有不同的边界：历史可能分层存储，恢复可能依赖索引或摘要，过长历史可能需要截断，异常恢复可能需要用户选择。
 
-本章不会先声明 rollout 的完整生产职责，也不会把 `thread_rollout_truncation.rs` 直接解释为 compaction。s05 处理“下一轮模型看什么”的上下文预算问题；s08 关注“历史如何被识别、保存、恢复”的会话连续性问题。二者可能相关，但本章目前仍保留待核实边界。
+本章不会先声明 rollout 的完整生产职责，也不会把 `thread_rollout_truncation.rs` 直接解释为 compaction。当前只能说它在固定 SHA 中承担 fork/历史截断相关 helper 职责。s05 处理“下一轮模型看什么”的上下文预算问题；s08 关注“历史如何被识别、保存、恢复”的会话连续性问题。二者可能相关，但本章目前仍保留待核实边界。
 
 另一个边界是 redaction：源码注释明确 app-server resume 的 redaction 是 response-only，用于特定 remote client 的返回 payload；它不改变 persisted rollout history、model resume history 或其他 API。因此不能把它写成完整隐私策略。
 
@@ -75,5 +79,8 @@ python3 chapters/s08_sessions_threads_rollout/mock.py --demo
 - [x] 核实 `InitialHistory::Resumed/Forked` 会触发 rollout reconstruction 和历史替换。
 - [x] 核实 app-server resume 请求、thread-store 读取、rollout reconstruction、running rejoin、history pagination 和 response redaction 的主源码路径。
 - [x] 核实 `codex exec resume` 通过 app-server `thread/list` + `thread/resume` 恢复。
-- [ ] 明确 TUI、daemon、debug-client、remote store 与 experimental app-server API 的稳定边界；在完成前保持本章状态为待核实。
-- [ ] 明确哪些状态由 CLI、app-server 或存储 crate 维护；在完成前保持本章状态为待核实。
+- [x] 核实 TUI resume/fork 与 debug-client resume 通过 app-server API，而不是直接接管 rollout replay。
+- [x] 核实 daemon/remote app-server transport 只闭合连接和生命周期边界，不等同于 thread-store 后端。
+- [x] 核实当前固定 SHA 下 `experimental_thread_store` 只有 local/in-memory 选择，真实 remote thread-store backend 未闭环。
+- [x] 明确状态职责边界：TUI/debug-client 负责入口与参数，app-server 负责 resume/fork 编排和响应，`ThreadStore` 负责历史读写/list，rollout 负责 JSONL replay surface。
+- [ ] 验证真实 remote thread-store backend、Codex Cloud/桌面端产品恢复语义，以及 experimental app-server API 是否可升级为稳定公开承诺；在完成前保持本章状态为待核实。

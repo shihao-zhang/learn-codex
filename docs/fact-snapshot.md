@@ -73,7 +73,9 @@
 | s08_sessions_threads_rollout | [codex-rs/rollout](https://github.com/openai/codex/tree/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/rollout) |
 | s08_sessions_threads_rollout | [codex-rs/exec/src/lib.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/exec/src/lib.rs) |
 | s10_extensions_mcp_skills | [codex-rs/core/src/tools/handlers/mcp.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/core/src/tools/handlers/mcp.rs) |
+| s10_extensions_mcp_skills | [codex-rs/core/src/mcp_tool_exposure.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/core/src/mcp_tool_exposure.rs) |
 | s10_extensions_mcp_skills | [codex-rs/core/src/tools/handlers/extension_tools.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/core/src/tools/handlers/extension_tools.rs) |
+| s10_extensions_mcp_skills | [codex-rs/core/src/tools/handlers/dynamic.rs](https://github.com/openai/codex/blob/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/core/src/tools/handlers/dynamic.rs) |
 | s10_extensions_mcp_skills | [codex-rs/skills/src](https://github.com/openai/codex/tree/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/skills/src) |
 | s12_comprehensive_architecture | [codex-rs/core](https://github.com/openai/codex/tree/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/core) |
 | s12_comprehensive_architecture | [codex-rs/protocol](https://github.com/openai/codex/tree/740d942f901a5a63421298c74dafbeb4255e946d/codex-rs/protocol) |
