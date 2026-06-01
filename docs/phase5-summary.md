@@ -28,12 +28,12 @@ Phase 5 第一轮事实核验已经完成：s08 和 s10 都补强了固定 SHA �
 
 ## Later Phases
 
-Phase 5 之后的 Phase 6~9 已完成本轮推进：前 6 章内容加厚、integrated teaching mock 设计、证据抽样复核和维护 review checklist 都已落地。Phase 5 的结论仍然有效：s08/s10 只提升证据密度，不升级章节状态。
+Phase 5 之后的 Phase 6~9 已完成本轮推进：前 6 章内容加厚、integrated teaching mock 设计与实现、证据抽样复核和维护 review checklist 都已落地。Phase 5 的结论仍然有效：s08/s10 只提升证据密度，不升级章节状态。
 
 后续继续引用 s08/s10 时，只能作为 `待核实` 边界、源码阅读问题或产品风险提示，不能当作稳定官方产品承诺。
 
 如果后续要继续推进，可以从以下方向单独开 change：
 
-- Phase 7 implementation：实现 integrated teaching mock，但继续保持 deterministic、offline、Python 标准库和非官方教学抽象。
+- Phase 7 scenario extension：继续扩展 integrated teaching mock 场景，但必须另开 change，并保持 deterministic、offline、Python 标准库和非官方教学抽象。
 - Fact snapshot update：更新目标 commit 或追新 release，并同步固定 SHA 链接和检查脚本。
 - s08/s10 deep verification：继续端到端核验 session/thread/rollout 或 extensions/MCP/skills 的用户可见边界。

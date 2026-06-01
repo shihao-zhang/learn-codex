@@ -27,9 +27,21 @@
 
 ```bash
 python3 chapters/s12_comprehensive_architecture/mock.py --demo
+python3 chapters/s12_comprehensive_architecture/mock.py --demo --path failure
+python3 chapters/s12_comprehensive_architecture/mock.py --demo --scenario session_recovery --trace-json
 ```
 
-教学 mock 只演示端到端控制流，不代表真实 Codex 架构、进程边界、网络边界、存储边界或官方模块划分。
+教学 mock 只演示端到端控制流，不代表真实 Codex 架构、Codex 桌面端实现、进程边界、网络边界、存储边界或官方模块划分。它是 deterministic、offline、Python 标准库教学抽象；不会调用 OpenAI API、网络、Keychain、外部 CLI、真实审批系统或真实桌面端状态。
+
+可选场景：
+
+- `--path happy`：agent loop、tool dispatch、permission allow、context budget 和 final answer 的主线。
+- `--path failure`：综合失败摘要，串起 tool dispatch、permission、context pressure、instruction conflict 和 recovery stop。
+- `--scenario tool_dispatch_error`：工具名无法路由时如何返回 recoverable error。
+- `--scenario permission_denied`：权限拒绝后如何避免执行并给出低风险选项。
+- `--scenario context_pressure`：固定教学预算下如何触发 `teaching_summary`，不模拟真实 tokenization。
+- `--scenario instruction_conflict`：项目 offline 约束与用户联网请求冲突时如何解释优先级。
+- `--scenario session_recovery`：从教学 checkpoint 恢复，避免重复有副作用动作；s08 session/thread/rollout 语义继续标为 `待核实`。
 
 ## 核心机制
 
@@ -40,6 +52,7 @@ python3 chapters/s12_comprehensive_architecture/mock.py --demo
 - `context and memory plane`：上下文窗口、压缩、session/thread/rollout 决定长任务能否连续、可恢复、可解释。
 - `model/config/auth plane`：模型选择、provider、认证和配置决定成本、能力、合规和默认体验。
 - `extensions and parallelism`：s10/s11 仍是待核实语义；总图只能把它们标成“待核实扩展面/并行面”，不能写成官方主线架构。
+- `integrated teaching trace`：Phase 7 mock 用 `teaching_session_id`、`teaching_checkpoint`、`decision_reason`、`context_budget_state` 等教学字段解释状态，不代表官方 session、protocol、thread-store、MCP 或 skills schema。
 - `fact vs abstraction`：真实 Codex 映射只用固定 SHA permalink；任何跨章节总图都是教学抽象。
 
 ## 真实 Codex 映射
@@ -57,6 +70,9 @@ python3 chapters/s12_comprehensive_architecture/mock.py --demo
 
 - 图把多种异步、并发、错误恢复和状态投影压成少数节点。
 - 图不表达真实部署、进程、线程、网络、存储或云端边界。
+- mock 的 context budget 是固定整数教学预算，不是 OpenAI Codex 的真实 tokenization 或 compaction 实现。
+- mock 的 permission table 是策略演示，不代表真实沙箱、审批 UI 或 Codex 桌面端权限模型。
+- mock 的 session recovery 是 checkpoint 教学，不代表 s08 已完成官方核验。
 - 图不补画未经公开核验的 Codex Cloud、内部服务、私有 prompt 或隐藏策略。
 - s10/s11 的扩展与并行语义仍待核实，所以在总图中只能作为虚线能力面。
 - 总图适合教学和产品讨论，不适合拿去当实现设计评审的唯一依据。
@@ -71,7 +87,10 @@ python3 chapters/s12_comprehensive_architecture/mock.py --demo
 ## 事实核验清单
 
 - [x] 明确本章是教学抽象，不是 OpenAI 官方架构图。
+- [x] Phase 7 integrated teaching mock 保持 deterministic、offline、Python 标准库。
+- [x] 文本输出和 JSON trace 保留 `Teaching mock only` 免责声明。
 - [x] 真实 Codex 映射只使用 fact-snapshot 中登记的固定 SHA permalink。
 - [x] 不绘制无法公开核验的 Codex Cloud 或内部系统。
 - [x] s10/s11 在总图中保持待核实语义，不升级为官方主线能力。
+- [x] s08 session/thread/rollout 和 s10 MCP/skills/extension 相关语义在 mock 中继续保持 `待核实` 边界。
 - [ ] 后续每新增一条跨模块边，都必须回到对应章节事实，或在图中显式标为教学抽象。

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, Iterable, List, Mapping, Sequence
 
 
@@ -30,6 +30,7 @@ class TeachingScenario:
     summary: str
     happy_path: Sequence[TraceEvent]
     failure_path: Sequence[TraceEvent]
+    scenario_paths: Mapping[str, Sequence[TraceEvent]] = field(default_factory=dict)
 
 
 def event(kind: str, message: str, **detail: Any) -> TraceEvent:
@@ -57,6 +58,7 @@ def render_json(scenario: TeachingScenario, path_name: str, events: Sequence[Tra
         "title": scenario.title,
         "summary": scenario.summary,
         "path": path_name,
+        "scenario": path_name,
         "events": [item.to_json(index) for index, item in enumerate(events, start=1)],
         "note": "Teaching mock only; not an OpenAI Codex implementation.",
     }
@@ -72,6 +74,12 @@ def run_cli(scenario: TeachingScenario, argv: Sequence[str] | None = None) -> in
         default="happy",
         help="choose the happy path or failure path",
     )
+    if scenario.scenario_paths:
+        parser.add_argument(
+            "--scenario",
+            choices=sorted(scenario.scenario_paths),
+            help="choose an additional teaching scenario",
+        )
     parser.add_argument("--trace-json", action="store_true", help="emit structured JSON trace")
     args = parser.parse_args(argv)
 
@@ -79,9 +87,19 @@ def run_cli(scenario: TeachingScenario, argv: Sequence[str] | None = None) -> in
         parser.print_help()
         return 0
 
-    events = list(scenario.happy_path if args.path == "happy" else scenario.failure_path)
+    base_paths = {
+        "happy": scenario.happy_path,
+        "failure": scenario.failure_path,
+    }
+    path_name = getattr(args, "scenario", None) or args.path
+    selected_path = (
+        scenario.scenario_paths[path_name]
+        if path_name in scenario.scenario_paths
+        else base_paths[path_name]
+    )
+    events = list(selected_path)
     if args.trace_json:
-        print(render_json(scenario, args.path, events))
+        print(render_json(scenario, path_name, events))
     else:
-        print(render_text(scenario, args.path, events))
+        print(render_text(scenario, path_name, events))
     return 0

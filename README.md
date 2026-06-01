@@ -6,7 +6,7 @@
 
 Step 1 已完成：目录、章节边界、状态标签、事实快照和溯源规则已经固定。
 
-Step 2 初版已完成：12 章均包含 README、Mermaid 图、Python mock、真实映射、生产差异、练习和事实核验清单。Phase 3/4 的主要产出已落地：项目已经建立机制级证据索引，并收窄 `sessions`、`skills`、`multi-agent` 等容易误读的边界。Phase 5~9 本轮收口已完成：s08/s10 证据密度提升但继续保持 `待核实`；s01~s06 已完成内容加厚；Phase 7 只完成 integrated teaching mock 设计，不实现代码；Phase 8 已完成证据抽样复核；Phase 9 已补维护与 review 规则。本轮不更新目标 commit、不追最新 release、不实现 integrated teaching mock。Python mock 只用于教学，不调用 OpenAI API，不代表官方实现，也不证明与官方 Codex 实现等价。
+Step 2 初版已完成：12 章均包含 README、Mermaid 图、Python mock、真实映射、生产差异、练习和事实核验清单。Phase 3/4 的主要产出已落地：项目已经建立机制级证据索引，并收窄 `sessions`、`skills`、`multi-agent` 等容易误读的边界。Phase 5~9 本轮收口已完成：s08/s10 证据密度提升但继续保持 `待核实`；s01~s06 已完成内容加厚；Phase 7 integrated teaching mock 已在 s12 落地；Phase 8 已完成证据抽样复核；Phase 9 已补维护与 review 规则。本轮不更新目标 commit、不追最新 release。Python mock 只用于教学，不调用 OpenAI API，不代表官方实现，也不证明与官方 Codex 实现等价。
 
 ## 事实边界
 

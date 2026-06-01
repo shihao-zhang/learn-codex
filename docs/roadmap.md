@@ -8,7 +8,7 @@
 | --- | --- | --- | --- | --- |
 | Phase 5：s08/s10 验证优先 | 先收敛最容易误写成官方能力的 session/thread/rollout 与 skills/MCP/extension 语义。 | s08、s10 的源码阅读问题、证据补登记、章节保守表述；必要时保留 `待核实`。 | 每个新增官方事实都有固定 SHA 或官方文档依据；`source-evidence.md` 有对应证据级别；章节状态不被强行升级。 | 如果端到端链路仍无法闭环，停止在 `待核实`，把缺口写清楚，不用推断补事实。 |
 | Phase 6：前 6 章内容加厚 | 提高读者进入 agent harness 的第一屏密度。 | s01~s06 的产品问题、机制解释、failure path、mock trace 说明更完整。 | 文档检查、mock 检查、单测通过；新增源码映射进入统一证据索引；review summary 逐章说明产品问题、failure path 或 mock trace 的具体改进。 | 如果某段解释只能靠类比或经验支撑，先标为 `推断` 或删减。 |
-| Phase 7：integrated teaching mock 设计 | 把分散机制串成一个端到端教学体验，帮助读者看见 runtime 组合关系。 | 一个未来 integrated mock 的设计稿或实现 proposal，覆盖 loop、tool dispatch、permission decision、context pressure、instruction conflict、session trace、failure recovery。 | 设计必须声明未来 mock 离线、确定性、仅标准库，并保留 “Teaching mock only” 类免责声明；本阶段不要求实现代码或测试。 | 如果设计看起来像 OpenAI Codex 复刻，或需要调用真实 API，停止并降级为教学抽象。 |
+| Phase 7：integrated teaching mock | 把分散机制串成一个端到端教学体验，帮助读者看见 runtime 组合关系。 | s12 integrated teaching mock，覆盖 loop、tool dispatch、permission decision、context pressure、instruction conflict、session trace、failure recovery。 | mock 必须离线、确定性、仅标准库，并保留 “Teaching mock only” 类免责声明；s08/s10 继续保持 `待核实`。 | 如果 mock 看起来像 OpenAI Codex 复刻，或需要调用真实 API，停止并降级为教学抽象。 |
 | Phase 8：证据抽样复核 | 防止章节解释随 release、模型名、权限策略或 app-server 协议漂移。 | 抽样复核记录、过期风险清单；如需更新事实快照，另开 proposal。 | 固定 SHA 链接不使用 moving ref；变更事实快照前走 OpenSpec；review summary 说明哪些内容保持保守。 | 如果新 release 改动较大，先开新 change，不在原章节里直接混写新旧事实。 |
 | Phase 9：维护与贡献流程 | 让后续贡献者知道如何改文档、证据和 mock。 | 贡献流程、review checklist、常见误区和回滚方式。 | 文档、mock、单测、diff whitespace 检查通过；人工 summary 能说明事实边界。 | 如果流程文档变成复盘或命令日志，停止并删减为可执行规则。 |
 
@@ -29,11 +29,11 @@ Phase 5~9 本轮已经收拢到可 review 状态：
 
 - Phase 5：s08/s10 完成第一轮核验和阶段总结，状态继续 `待核实`。
 - Phase 6：s01~s06 完成内容加厚，新增内容保持产品判断、教学解释和官方事实边界分离。
-- Phase 7：只完成 integrated teaching mock 设计，不实现 mock、不新增测试、不修改 runner。
+- Phase 7：完成 integrated teaching mock 设计与实现；实现承接 s12，不新增章节，不升级 s08/s10 状态。
 - Phase 8：完成证据抽样复核，不更新目标 commit、不追最新 release、不升级章节状态。
 - Phase 9：完成维护与 review checklist，作为后续贡献和提交前自查入口。
 
-下一步如果进入 Phase 7 实现，必须另开 implementation change；如果更新目标 commit 或追新 release，也必须另开 fact snapshot update change。
+如果后续继续扩展 Phase 7 场景，必须另开 change 并继续保持 deterministic、offline、Python 标准库和非官方教学抽象；如果更新目标 commit 或追新 release，也必须另开 fact snapshot update change。
 
 ## Phase 6 Status
 
@@ -43,9 +43,9 @@ Phase 6 当轮没有启动 integrated teaching mock。跨章端到端 trace 保�
 
 ## Phase 7 Status
 
-Phase 7 integrated teaching mock 已通过 OpenSpec change `design-integrated-teaching-mock-phase7` 完成设计。本轮只定义 proposal、design、tasks 和 spec：不实现 mock、不新增依赖、不修改测试或 runner。
+Phase 7 integrated teaching mock 已通过 OpenSpec changes `design-integrated-teaching-mock-phase7` 和 `implement-integrated-teaching-mock-phase7` 完成设计与实现。实现承接 s12：保留既有 `--path happy|failure` 兼容性，并新增 `--scenario` 教学场景覆盖 tool dispatch、permission denied、context pressure、instruction conflict 和 session recovery。
 
-后续如果进入实现，必须继续保持 deterministic、offline、Python 标准库和 “Teaching mock only” 免责声明；引用 s08/s10 时仍只能作为 `待核实` 边界，不得写成 OpenAI Codex 官方稳定产品承诺。
+实现继续保持 deterministic、offline、Python 标准库和 “Teaching mock only” 免责声明；引用 s08/s10 时仍只能作为 `待核实` 边界，不得写成 OpenAI Codex 官方稳定产品承诺。
 
 ## Phase 8 Status
 
