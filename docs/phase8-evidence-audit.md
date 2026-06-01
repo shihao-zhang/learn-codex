@@ -20,7 +20,7 @@
 
 ## 无需修改
 
-- 固定 SHA 链接抽样结果：190 个 `github.com/openai/codex/blob|tree/<sha>` 链接均指向当前目标 commit。
+- 固定 SHA 链接抽样结果：Phase 8 审计当日统计为 190 个 `github.com/openai/codex/blob|tree/<sha>` 链接，均指向当前目标 commit。
 - 未发现 `openai/codex` 源码链接使用 `main`、`master` 或 `latest` moving ref。
 - README 学习地图仍保持 s08、s10 为 `待核实`，s12 为 `教学抽象`。
 - s08 在 roadmap、Phase 5 summary、章节 README 和 source evidence 中一致保留 `待核实`；原因仍是 TUI、daemon、remote store、experimental API 和用户可见恢复体验未闭环。

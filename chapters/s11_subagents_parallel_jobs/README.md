@@ -4,7 +4,7 @@
 
 状态：已核实官方事实
 
-这里的“已核实”只指 openai/codex 在目标 commit 中存在并行工具运行时、multi-agent tool surface、delegate 和 agent jobs 等源码机制；它不等于“这些能力在 Codex CLI 中默认对所有用户开放”，也不等于 OpenAI 官方产品承诺。
+这里的“已核实”只指 openai/codex 在目标 commit 中存在并行工具运行时、multi-agent tool surface、delegate 和 agent jobs 等源码机制；它不等于“这些能力在 Codex CLI 中默认对所有用户开放”，也不等于 OpenAI 官方产品承诺。multi-agent v1/v2 的产品体验差异、默认启用条件和用户入口仍需继续核实。
 
 ## 本章回答什么
 

@@ -34,7 +34,7 @@ Step 2 初版已完成：12 章均包含 README、Mermaid 图、Python mock、�
 | 会话状态 | [s08_sessions_threads_rollout](chapters/s08_sessions_threads_rollout/README.md) | session、thread、恢复、rollout 持久化 | 待核实 |
 | App Server | [s09_app_server_transport](chapters/s09_app_server_transport/README.md) | app-server、transport、状态同步 | 已核实官方事实 |
 | 扩展面 | [s10_extensions_mcp_skills](chapters/s10_extensions_mcp_skills/README.md) | MCP、extensions、skills 目录与动态工具 | 待核实 |
-| 并行与委派 | [s11_subagents_parallel_jobs](chapters/s11_subagents_parallel_jobs/README.md) | 子任务、并行、委派 | 已核实官方事实 |
+| 并行与委派 | [s11_subagents_parallel_jobs](chapters/s11_subagents_parallel_jobs/README.md) | 子任务、并行、委派（限已登记源码机制；入口、默认启用和 v1/v2 体验仍待核实） | 已核实官方事实 |
 | 综合架构 | [s12_comprehensive_architecture](chapters/s12_comprehensive_architecture/README.md) | 端到端架构整合 | 教学抽象 |
 
 ## 读者路径
