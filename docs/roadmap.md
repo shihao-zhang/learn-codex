@@ -35,6 +35,8 @@ Phase 5~9 本轮已经收拢到可 review 状态：
 
 如果后续继续扩展 Phase 7 场景，必须另开 change 并继续保持 deterministic、offline、Python 标准库和非官方教学抽象；如果更新目标 commit 或追新 release，也必须另开 fact snapshot update change。
 
+PR #1 merge 后，本轮 completed OpenSpec changes 已归档到 `openspec/changes/archive/`，长期规格位于 `openspec/specs/`。
+
 ## Phase 6 Status
 
 Phase 6 本轮内容加厚已覆盖 s01~s06：每章补强了 PM 真正关心的问题、至少一个教学 failure path、mock trace 解读方式，以及不扩大官方事实边界的措辞。此进展只说明本教学仓的写作密度提升，不改变 `openai/codex` 官方事实快照，也不升级 s08/s10 状态。
@@ -43,7 +45,7 @@ Phase 6 当轮没有启动 integrated teaching mock。跨章端到端 trace 保�
 
 ## Phase 7 Status
 
-Phase 7 integrated teaching mock 已通过 OpenSpec changes `design-integrated-teaching-mock-phase7` 和 `implement-integrated-teaching-mock-phase7` 完成设计与实现。实现承接 s12：保留既有 `--path happy|failure` 兼容性，并新增 `--scenario` 教学场景覆盖 tool dispatch、permission denied、context pressure、instruction conflict 和 session recovery。
+Phase 7 integrated teaching mock 已通过 OpenSpec changes `design-integrated-teaching-mock-phase7` 和 `implement-integrated-teaching-mock-phase7` 完成设计与实现，并已归档为 `openspec/specs/integrated-teaching-mock-phase7/spec.md`。实现承接 s12：保留既有 `--path happy|failure` 兼容性，并新增 `--scenario` 教学场景覆盖 tool dispatch、permission denied、context pressure、instruction conflict 和 session recovery。
 
 实现继续保持 deterministic、offline、Python 标准库和 “Teaching mock only” 免责声明；引用 s08/s10 时仍只能作为 `待核实` 边界，不得写成 OpenAI Codex 官方稳定产品承诺。
 
@@ -61,15 +63,15 @@ Phase 7 implementation 已让 s12 具备可运行 integrated teaching trace。�
 
 | 优先级 | 待办 | 建议 change | 推进方式 | 验收口径 |
 | --- | --- | --- | --- | --- |
-| P0 | 收口 `design-diagram-redraw-style-guide` 轻量调研 | `design-diagram-redraw-style-guide` | 先 review 设计，不替换现有 Mermaid，不生成事实图。 | OpenSpec valid；确认主方案是手写 SVG、Mermaid 保留；FACT/待核实/TEACHING 标记规则清楚。 |
-| P1 | s12 pilot trace 插图 | `implement-s12-diagram-redraw-pilot` | 只做 s12 小样，优先 failure trace；不推广到全章全仓。 | 插图中文优先、可 diff、无外部生成依赖；不替换 `diagram.mmd`；s08/s10 保持 `待核实`。 |
-| P2 | 事实快照更新评估 | `evaluate-fact-snapshot-refresh-phase10` | 已完成评估，本轮保守不更新 target commit 或 release 核验值。 | 候选 commit 路径可访问不等于行号锚点和机制解释已复核；真正迁移需另开 implementation change。 |
-| P3 | s08/s10 深核验 | `deep-verify-s08-sessions-rollout` / `deep-verify-s10-extensions-mcp-skills` | 已完成两条 focused verification；s08/s10 都继续保持 `待核实`，但局部机制证据更细。 | s08 真实 remote thread-store/产品恢复语义未闭环；s10 通用 extension 入口、dynamic tools 产品边界和统一治理未闭环。 |
-| P4 | 开源维护收口 | `prepare-open-source-review-closeout-p4` | 已完成维护收口文档、active OpenSpec change 清点、PR/review hygiene 和归档策略。 | 工作树干净，检查全过；summary 能说明事实边界、未处理风险，以及 review 后再归档的策略。 |
+| P0 | 收口 `design-diagram-redraw-style-guide` 轻量调研 | `design-diagram-redraw-style-guide` | 已完成并归档；不替换现有 Mermaid，不生成事实图。 | OpenSpec valid；确认主方案是手写 SVG、Mermaid 保留；FACT/待核实/TEACHING 标记规则清楚。 |
+| P1 | s12 pilot trace 插图 | `implement-s12-diagram-redraw-pilot` | 已完成并归档；只做 s12 小样，优先 failure trace；不推广到全章全仓。 | 插图中文优先、可 diff、无外部生成依赖；不替换 `diagram.mmd`；s08/s10 保持 `待核实`。 |
+| P2 | 事实快照更新评估 | `evaluate-fact-snapshot-refresh-phase10` | 已完成并归档；本轮保守不更新 target commit 或 release 核验值。 | 候选 commit 路径可访问不等于行号锚点和机制解释已复核；真正迁移需另开 implementation change。 |
+| P3 | s08/s10 深核验 | `deep-verify-s08-sessions-rollout` / `deep-verify-s10-extensions-mcp-skills` | 已完成并归档；s08/s10 都继续保持 `待核实`，但局部机制证据更细。 | s08 真实 remote thread-store/产品恢复语义未闭环；s10 通用 extension 入口、dynamic tools 产品边界和统一治理未闭环。 |
+| P4 | 开源维护收口 | `prepare-open-source-review-closeout-p4` | 已完成并归档；active OpenSpec changes 已清空。 | 工作树检查和 archive 校验通过后，summary 说明事实边界、未处理风险和归档结果。 |
 
-`design-diagram-redraw-style-guide` 是待办入口，不是全仓重绘许可。只有 s12 pilot 被 review 证明有教学价值后，才考虑是否抽象成 `docs/diagram-style-guide.md` 或推广到其他章节。
+`design-diagram-redraw-style-guide` 是已归档规格入口，不是全仓重绘许可。只有 s12 pilot 被 review 证明有教学价值后，才考虑是否抽象成 `docs/diagram-style-guide.md` 或推广到其他章节。
 
-当前状态：P0 `design-diagram-redraw-style-guide`、P1 `implement-s12-diagram-redraw-pilot`、P2 `evaluate-fact-snapshot-refresh-phase10`、P3 `deep-verify-s08-sessions-rollout` / `deep-verify-s10-extensions-mcp-skills` 与 P4 `prepare-open-source-review-closeout-p4` 已完成本轮收口。后续如果要迁移 target commit、继续升级 s08/s10、推广 diagram style guide 或归档 OpenSpec changes，仍需单独 change 或明确人类指令。
+当前状态：P0 `design-diagram-redraw-style-guide`、P1 `implement-s12-diagram-redraw-pilot`、P2 `evaluate-fact-snapshot-refresh-phase10`、P3 `deep-verify-s08-sessions-rollout` / `deep-verify-s10-extensions-mcp-skills` 与 P4 `prepare-open-source-review-closeout-p4` 已完成本轮收口并归档。后续如果要迁移 target commit、继续升级 s08/s10 或推广 diagram style guide，仍需单独 change 或明确人类指令。
 
 ## Integrated Teaching Mock Planning
 

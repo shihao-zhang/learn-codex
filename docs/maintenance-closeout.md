@@ -6,9 +6,9 @@
 
 ## Review Status
 
-当前分支：`codex/phase5-9-roadmap-closure`
+当前分支：`main`（PR #1 已合并）
 
-相对 `main` 的主要提交：
+PR #1 中的主要提交：
 
 | Commit | 主题 |
 | --- | --- |
@@ -19,7 +19,7 @@
 | `540a5a3` | Phase 10 fact snapshot refresh evaluation |
 | `69d3191` | s08/s10 deep verification |
 
-P4 收口只整理 review 状态，不推送、不创建 PR、不归档 OpenSpec changes。
+P4 收口已完成 review 并合入 `main`。本次 archive cleanup 只处理 merge 后 OpenSpec 维护状态，不推送、不创建 PR。
 
 ## What Changed
 
@@ -28,7 +28,7 @@ P4 收口只整理 review 状态，不推送、不创建 PR、不归档 OpenSpec
 - 高风险章节：s08 和 s10 经过 Phase 5 与 P3 两轮核验，局部机制证据更细，但章节状态继续 `待核实`。
 - 教学 mock：s12 落地 integrated teaching mock，保持 deterministic、offline、Python 标准库和 `Teaching mock only`。
 - 图形表达：新增 diagram redraw style guide 和 s12 failure trace SVG pilot；Mermaid 仍是主机制图。
-- 维护规则：新增 review checklist、P4 closeout 和 OpenSpec change 清点。
+- 维护规则：新增 review checklist、P4 closeout，并在 merge 后完成 OpenSpec change 归档清点。
 
 ## Fact Boundaries
 
@@ -40,11 +40,13 @@ P4 收口只整理 review 状态，不推送、不创建 PR、不归档 OpenSpec
 - s12 继续 `教学抽象`：integrated mock 和 SVG pilot 只帮助读者理解 trace，不代表 OpenAI 官方架构。
 - Codex Desktop Lens 只能作为观察视角、源码阅读问题和产品设计启发，不能作为官方事实。
 
-## Active OpenSpec Changes
+## Archived OpenSpec Changes
 
-这些 changes 已完成任务和校验，建议在 reviewer 看完前保持 active。归档会改变 OpenSpec 结构，适合 review 通过后另开归档步骤或按人类明确指令执行。
+这些 changes 已随 PR #1 merge 后的 archive cleanup 归档到 `openspec/changes/archive/`；`openspec list` 当前显示无 active changes。主规格已生成在 `openspec/specs/`。
 
-| 分组 | Changes |
+Phase 7 的 `design-integrated-teaching-mock-phase7` 与 `implement-integrated-teaching-mock-phase7` 原本都对 `integrated-teaching-mock-phase7` 使用 `ADDED Requirements`。归档后已在主规格中合并为长期要求，去掉 design-only 与 future implementation 的临时重复语义。
+
+| 分组 | Archived changes |
 | --- | --- |
 | 基础证据与路线 | `implement-phase-3-4`, `define-next-phase-roadmap` |
 | Phase 5 | `verify-s08-sessions-rollout-phase5`, `verify-s10-extensions-mcp-skills-phase5`, `summarize-phase5-verification` |
@@ -64,7 +66,7 @@ P4 收口只整理 review 状态，不推送、不创建 PR、不归档 OpenSpec
 - 加厚 s01~s06 的产品问题、failure path 和 mock trace 解释。
 - 在 s12 实现 integrated teaching mock，并新增一张中文优先的 failure trace SVG pilot。
 - 评估 fact snapshot 是否追新；本轮保守不迁移 target commit 或 release 核验值。
-- 补充 P4 maintenance closeout，说明 active OpenSpec changes、事实边界、检查结果和后续风险。
+- 补充 P4 maintenance closeout，说明 OpenSpec changes、事实边界、检查结果和后续风险。
 
 未改变：
 
@@ -87,7 +89,7 @@ P4 收口只整理 review 状态，不推送、不创建 PR、不归档 OpenSpec
 - s08 若要升级，需要闭合真实 remote thread-store backend、产品恢复语义和 experimental API 稳定性。
 - s10 若要升级，需要闭合通用 extension 用户入口、dynamic tools 客户端边界和统一治理路径。
 - diagram style guide 若要推广，需要先抽成 `docs/diagram-style-guide.md`，再做少量章节试点。
-- OpenSpec changes 是否归档，应在 reviewer 确认后单独执行。
+- 已归档 specs 若继续演进，应另开 OpenSpec change；本次归档不改变 fact snapshot、s08/s10 状态或 s12 教学抽象边界。
 
 ## Validation
 
