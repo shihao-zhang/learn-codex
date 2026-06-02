@@ -30,6 +30,10 @@
 
 见 [diagram.mmd](diagram.mmd)。图里把 agent loop 画成“模型决策 -> 工具执行 -> observation 回填 -> 再决策”的闭环，并显式标出终止出口。
 
+## 可选教学辅助 SVG
+
+见 [turn-loop.md](diagrams/turn-loop.md)。这张图只辅助理解一个 turn 中的 loop 主干、observation 回填和继续/停止出口，不替代本章 Mermaid，也不新增官方事实。
+
 ## 运行 mock
 
 ```bash

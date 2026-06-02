@@ -31,6 +31,10 @@
 
 见 [diagram.mmd](diagram.mmd)。图里把工具从“可见 spec”到“handler 执行”再到“结构化结果”的路径拆开，方便理解 registry 和 router 的职责差异。
 
+## 可选教学辅助 SVG
+
+见 [tool-dispatch.md](diagrams/tool-dispatch.md)。这张图只辅助理解工具声明、registry、router、handler 和结果回写的受控链路，不替代本章 Mermaid，也不新增官方事实。
+
 ## 运行 mock
 
 ```bash
