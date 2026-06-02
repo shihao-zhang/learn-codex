@@ -73,6 +73,8 @@ Phase 7 implementation 已让 s12 具备可运行 integrated teaching trace。�
 
 当前状态：P0 `design-diagram-redraw-style-guide`、P1 `implement-s12-diagram-redraw-pilot`、P2 `evaluate-fact-snapshot-refresh-phase10`、P3 `deep-verify-s08-sessions-rollout` / `deep-verify-s10-extensions-mcp-skills` 与 P4 `prepare-open-source-review-closeout-p4` 已完成本轮收口并归档。后续如果要迁移 target commit、继续升级 s08/s10 或推广 diagram style guide，仍需单独 change 或明确人类指令。
 
+SVG 教学辅助图的长期规范见 [diagram-style-guide.md](diagram-style-guide.md)。本轮 `promote-diagram-style-guide` 只推进规范和 s04 低风险试点，试点入口见 [../chapters/s04_shell_sandbox_permissions/diagrams/permission-boundary.md](../chapters/s04_shell_sandbox_permissions/diagrams/permission-boundary.md)，不一次性重画全仓 Mermaid。
+
 ## Integrated Teaching Mock Planning
 
 Phase 7 的 integrated mock 只做教学，不复刻 OpenAI Codex。它必须是确定性的、离线的、只依赖 Python 标准库，并明确声明不等同于 OpenAI Codex 或 Codex 桌面端。

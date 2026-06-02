@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="980" viewBox="0 0 1280 980" role="img" aria-labelledby="title desc">
+  <title id="title">s04 辅助图：shell 权限边界</title>
+  <desc id="desc">s04 的可选教学辅助图，展示 shell 命令如何穿过审批需求、人工决策、sandbox attempt 和网络审批边界；示例命令来自教学 mock，不是 OpenAI 官方架构图。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/>
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#C2410C"/>
+    </marker>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2563EB"/>
+    </marker>
+    <style><![CDATA[
+      .canvas { fill: #F8FAFC; }
+      .title { font: 700 28px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #111827; }
+      .subtitle { font: 400 15px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #475569; }
+      .card { rx: 8; ry: 8; stroke-width: 2; }
+      .fact { fill: #F0FDFA; stroke: #176B87; }
+      .teaching { fill: #FBFAFF; stroke: #6B5B95; stroke-dasharray: 4 4; }
+      .pending { fill: #FFFBEB; stroke: #B7791F; stroke-dasharray: 7 5; }
+      .deny { fill: #FFF7ED; stroke: #C2410C; }
+      .recovery { fill: #EFF6FF; stroke: #2563EB; }
+      .neutral { fill: #FFFFFF; stroke: #CBD5E1; }
+      .card-title { font: 700 16px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #111827; }
+      .card-body { font: 400 14px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #334155; }
+      .tiny { font: 400 12px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #64748B; }
+      .chip-text { font: 600 12px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #334155; }
+      .badge-text { font: 700 11px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #FFFFFF; letter-spacing: 0; }
+      .mono { font: 600 12px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #475569; }
+      .line { fill: none; stroke: #475569; stroke-width: 2; marker-end: url(#arrow); }
+      .line-red { fill: none; stroke: #C2410C; stroke-width: 2.5; marker-end: url(#arrow-red); }
+      .line-blue { fill: none; stroke: #2563EB; stroke-width: 2.5; marker-end: url(#arrow-blue); }
+      .dash { fill: none; stroke: #B7791F; stroke-width: 2; stroke-dasharray: 8 6; marker-end: url(#arrow); }
+    ]]></style>
+  </defs>
+
+  <rect class="canvas" x="0" y="0" width="1280" height="980"/>
+  <text class="title" x="40" y="48">s04 辅助图：shell 权限边界</text>
+  <text class="subtitle" x="40" y="78">Mermaid 仍是主机制图；本 SVG 用来解释审批、sandbox、网络和拒绝后的恢复选择。</text>
+
+  <rect x="1020" y="34" width="84" height="26" rx="13" fill="#176B87"/>
+  <text class="badge-text" x="1042" y="52">FACT</text>
+  <rect x="1118" y="34" width="92" height="26" rx="13" fill="#6B5B95"/>
+  <text class="badge-text" x="1137" y="52">教学辅助</text>
+
+  <text class="tiny" x="40" y="124">主路径：高风险 shell 请求先经过机制事实边界；示例命令、审批文案和替代方案是教学表达。</text>
+
+  <path class="line" d="M 250 235 L 292 235"/>
+  <path class="line-red" d="M 542 235 L 590 235"/>
+  <path class="line-red" d="M 790 235 L 838 235"/>
+  <path class="line-blue" d="M 1038 295 C 1038 328 1000 348 960 370"/>
+  <path class="line" d="M 600 478 L 650 478"/>
+  <path class="dash" d="M 835 508 C 890 558 930 600 1000 642"/>
+
+  <g>
+    <rect class="card teaching" x="40" y="150" width="210" height="170"/>
+    <rect x="58" y="170" width="40" height="22" rx="11" fill="#6B5B95"/>
+    <text class="badge-text" x="72" y="186">T1</text>
+    <text class="card-title" x="58" y="216">shell 命令请求</text>
+    <text class="card-body" x="58" y="246">
+      <tspan x="58" dy="0">命令可能只是测试，</tspan>
+      <tspan x="58" dy="19">也可能请求网络和高权限。</tspan>
+    </text>
+    <rect x="58" y="286" width="140" height="20" rx="10" fill="#F1F5F9" stroke="#CBD5E1"/>
+    <text class="chip-text" x="68" y="301">curl | sudo sh</text>
+  </g>
+
+  <g>
+    <rect class="card fact" x="292" y="150" width="250" height="170"/>
+    <rect x="310" y="170" width="54" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="322" y="186">FACT</text>
+    <text class="card-title" x="310" y="216">审批需求计算</text>
+    <text class="card-body" x="310" y="246">
+      <tspan x="310" dy="0">approval policy 与 filesystem</tspan>
+      <tspan x="310" dy="19">sandbox policy 共同影响判断。</tspan>
+    </text>
+    <rect x="310" y="286" width="174" height="20" rx="10" fill="#CCFBF1" stroke="#99F6E4"/>
+    <text class="chip-text" x="320" y="301">needs / skip / forbidden</text>
+  </g>
+
+  <g>
+    <rect class="card fact" x="590" y="150" width="200" height="170"/>
+    <rect x="608" y="170" width="54" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="620" y="186">FACT</text>
+    <text class="card-title" x="608" y="216">人类 / 策略审批</text>
+    <text class="card-body" x="608" y="246">
+      <tspan x="608" dy="0">approval primitive 与缓存</tspan>
+      <tspan x="608" dy="19">决定是否可继续。</tspan>
+    </text>
+    <rect x="608" y="286" width="104" height="20" rx="10" fill="#CCFBF1" stroke="#99F6E4"/>
+    <text class="chip-text" x="618" y="301">decision</text>
+  </g>
+
+  <g>
+    <rect class="card deny" x="838" y="150" width="200" height="170"/>
+    <rect x="856" y="170" width="40" height="22" rx="11" fill="#C2410C"/>
+    <text class="badge-text" x="869" y="186">T3</text>
+    <rect x="904" y="170" width="54" height="22" rx="11" fill="#C2410C"/>
+    <text class="badge-text" x="921" y="186">拒绝</text>
+    <text class="card-title" x="856" y="216">高风险请求被拒</text>
+    <text class="card-body" x="856" y="246">
+      <tspan x="856" dy="0">人类拒绝联网安装和</tspan>
+      <tspan x="856" dy="19">高权限写入。</tspan>
+    </text>
+    <rect x="856" y="286" width="124" height="20" rx="10" fill="#FFEDD5" stroke="#FDBA74"/>
+    <text class="chip-text" x="866" y="301">decision=denied</text>
+  </g>
+
+  <g>
+    <rect class="card deny" x="1040" y="150" width="170" height="170"/>
+    <rect x="1058" y="170" width="78" height="22" rx="11" fill="#C2410C"/>
+    <text class="badge-text" x="1072" y="186">未执行</text>
+    <text class="card-title" x="1058" y="216">真实副作用</text>
+    <text class="card-body" x="1058" y="246">
+      <tspan x="1058" dy="0">不运行该命令。</tspan>
+      <tspan x="1058" dy="19">不越权写系统目录。</tspan>
+    </text>
+    <rect x="1058" y="286" width="102" height="20" rx="10" fill="#FFEDD5" stroke="#FDBA74"/>
+    <text class="chip-text" x="1068" y="301">exit_code=null</text>
+  </g>
+
+  <g>
+    <rect class="card fact" x="270" y="392" width="330" height="160"/>
+    <rect x="288" y="412" width="54" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="300" y="428">FACT</text>
+    <text class="card-title" x="288" y="462">sandbox attempt</text>
+    <text class="card-body" x="288" y="492">
+      <tspan x="288" dy="0">获准或无需审批的命令，会进入</tspan>
+      <tspan x="288" dy="19">sandbox attempt 与执行结果回传。</tspan>
+    </text>
+    <rect x="288" y="526" width="152" height="20" rx="10" fill="#CCFBF1" stroke="#99F6E4"/>
+    <text class="chip-text" x="298" y="541">workspace-write</text>
+  </g>
+
+  <g>
+    <rect class="card fact" x="650" y="392" width="330" height="160"/>
+    <rect x="668" y="412" width="54" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="680" y="428">FACT</text>
+    <text class="card-title" x="668" y="462">网络审批状态</text>
+    <text class="card-body" x="668" y="492">
+      <tspan x="668" dy="0">网络审批有 immediate / deferred</tspan>
+      <tspan x="668" dy="19">等状态结构，但策略细节需回证据。</tspan>
+    </text>
+    <rect x="668" y="526" width="174" height="20" rx="10" fill="#CCFBF1" stroke="#99F6E4"/>
+    <text class="chip-text" x="678" y="541">network_approval</text>
+  </g>
+
+  <g>
+    <rect class="card recovery" x="890" y="650" width="320" height="140"/>
+    <rect x="908" y="670" width="86" height="22" rx="11" fill="#2563EB"/>
+    <text class="badge-text" x="926" y="686">恢复选择</text>
+    <text class="card-title" x="908" y="722">把选择权交还给人</text>
+    <text class="card-body" x="908" y="752">
+      <tspan x="908" dy="0">使用本地缓存、离线 fixture，</tspan>
+      <tspan x="908" dy="19">或单独申请授权后再继续。</tspan>
+    </text>
+  </g>
+
+  <g>
+    <rect class="card pending" x="40" y="650" width="300" height="140"/>
+    <rect x="58" y="670" width="64" height="22" rx="11" fill="#B7791F"/>
+    <text class="badge-text" x="72" y="686">待核实</text>
+    <text class="card-title" x="58" y="722">跨平台 sandbox 能力</text>
+    <text class="card-body" x="58" y="752">
+      <tspan x="58" dy="0">不同 OS backend 的细节</tspan>
+      <tspan x="58" dy="19">不能由本图直接承诺。</tspan>
+    </text>
+  </g>
+
+  <g>
+    <rect class="card neutral" x="40" y="832" width="1170" height="114"/>
+    <text class="card-title" x="62" y="866">图例与边界</text>
+
+    <rect x="62" y="884" width="54" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="74" y="900">FACT</text>
+    <text class="tiny" x="126" y="900">来自固定 SHA 或 docs/source-evidence.md 的机制点</text>
+
+    <rect x="392" y="884" width="92" height="22" rx="11" fill="#6B5B95"/>
+    <text class="badge-text" x="411" y="900">教学辅助</text>
+    <text class="tiny" x="494" y="900">示例命令、mock trace、审批文案</text>
+
+    <rect x="696" y="884" width="64" height="22" rx="11" fill="#B7791F"/>
+    <text class="badge-text" x="710" y="900">待核实</text>
+    <text class="tiny" x="770" y="900">OS backend、UI 呈现和跨平台细节</text>
+
+    <rect x="62" y="916" width="54" height="22" rx="11" fill="#C2410C"/>
+    <text class="badge-text" x="75" y="932">拒绝</text>
+    <text class="tiny" x="126" y="932">拒绝后不执行相应高风险动作</text>
+
+    <rect x="392" y="916" width="86" height="22" rx="11" fill="#2563EB"/>
+    <text class="badge-text" x="410" y="932">恢复选择</text>
+    <text class="tiny" x="488" y="932">低风险替代或单独授权</text>
+
+    <text class="mono" x="696" y="932">来源：s04 mock failure path T1-T4</text>
+  </g>
+</svg>

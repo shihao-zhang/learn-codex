@@ -26,6 +26,8 @@ shell 是最强也最危险的工具之一。它既能跑测试、读文件、�
 
 见 [diagram.mmd](diagram.mmd)。图里把 shell 执行拆成“权限判定、审批、sandbox 执行、网络拦截、结果回传”几个决策点。
 
+可选教学辅助 SVG 见 [diagrams/permission-boundary.md](diagrams/permission-boundary.md) 和 [diagrams/permission-boundary.svg](diagrams/permission-boundary.svg)。它用中文标出 `FACT`、教学示例、拒绝路径、恢复选择和待核实边界，不替代现有 Mermaid。
+
 ## 运行 mock
 
 ```bash
