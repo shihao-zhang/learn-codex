@@ -26,6 +26,10 @@
 
 见 [diagram.mmd](diagram.mmd)。该图是教学抽象，用来说明上下文压力下的选择路径，不是 OpenAI 官方架构图。
 
+## 可选教学辅助 SVG
+
+见 [context-pressure.md](diagrams/context-pressure.md)。这张图只辅助理解 context pressure 下继续、compact、truncate、摘要风险和恢复选择，不替代本章 Mermaid，也不新增官方事实。
+
 ## 运行 mock
 
 ```bash
