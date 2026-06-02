@@ -28,6 +28,10 @@
 
 见 [diagram.mmd](diagram.mmd)。图用实线表达已核实到源码的 agent jobs、AgentControl、delegate 和 parallel runtime，用旁注保留产品入口与默认启用条件的 open questions。
 
+## 可选教学辅助 SVG
+
+见 [subagents-parallel-jobs.md](diagrams/subagents-parallel-jobs.md)。这张图只辅助理解 delegate、父子事件、审批转发、并行 job 和 result merge，不替代本章 Mermaid，也不新增官方事实。
+
 ## 运行 mock
 
 ```bash
