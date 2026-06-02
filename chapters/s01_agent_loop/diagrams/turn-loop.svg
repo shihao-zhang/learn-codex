@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="900" viewBox="0 0 1280 900" role="img" aria-labelledby="title desc">
+  <title id="title">s01 辅助图：turn 中的 agent loop</title>
+  <desc id="desc">s01 的可选教学辅助图，展示一个 turn 中用户输入、模型动作、工具调用、observation 回填和继续或停止出口；FACT 只覆盖已登记 loop 主干机制，简化时序和恢复话术是教学辅助，不是 OpenAI 官方架构图。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/>
+    </marker>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2563EB"/>
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#C2410C"/>
+    </marker>
+    <style><![CDATA[
+      .canvas { fill: #F8FAFC; }
+      .band { fill: #EEF6F8; stroke: #D5E7EC; stroke-width: 1.5; }
+      .title { font: 700 28px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #111827; }
+      .subtitle { font: 400 15px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #475569; }
+      .section { font: 700 13px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #176B87; }
+      .card { rx: 8; ry: 8; stroke-width: 2; }
+      .fact { fill: #F0FDFA; stroke: #176B87; }
+      .teaching { fill: #FBFAFF; stroke: #6B5B95; stroke-dasharray: 5 4; }
+      .fail { fill: #FFF7ED; stroke: #C2410C; }
+      .recovery { fill: #EFF6FF; stroke: #2563EB; }
+      .neutral { fill: #FFFFFF; stroke: #CBD5E1; }
+      .card-title { font: 700 16px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #111827; }
+      .card-body { font: 400 14px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #334155; }
+      .tiny { font: 400 12px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #64748B; }
+      .badge-text { font: 700 11px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #FFFFFF; letter-spacing: 0; }
+      .chip-text { font: 600 12px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #334155; }
+      .mono { font: 600 12px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #475569; }
+      .line { fill: none; stroke: #475569; stroke-width: 2; marker-end: url(#arrow); }
+      .line-blue { fill: none; stroke: #2563EB; stroke-width: 2.5; marker-end: url(#arrow-blue); }
+      .line-red { fill: none; stroke: #C2410C; stroke-width: 2.5; marker-end: url(#arrow-red); }
+      .loop { fill: none; stroke: #2563EB; stroke-width: 2.5; stroke-dasharray: 8 6; marker-end: url(#arrow-blue); }
+    ]]></style>
+  </defs>
+
+  <rect class="canvas" width="1280" height="900"/>
+  <text class="title" x="40" y="48">s01 辅助图：turn 中的 agent loop</text>
+  <text class="subtitle" x="40" y="78">第一眼先看上方主路径；下方只解释失败与恢复，不抢占 loop 主干。</text>
+
+  <rect x="1030" y="34" width="54" height="26" rx="13" fill="#176B87"/>
+  <text class="badge-text" x="1042" y="52">FACT</text>
+  <rect x="1100" y="34" width="92" height="26" rx="13" fill="#6B5B95"/>
+  <text class="badge-text" x="1119" y="52">教学辅助</text>
+
+  <rect class="band" x="40" y="126" width="1170" height="236" rx="8"/>
+  <text class="section" x="60" y="154">主阅读路径：turn 推进 -> tool call -> observation -> 再决策或停止</text>
+
+  <path class="line" d="M 232 238 L 272 238"/>
+  <path class="line" d="M 462 238 L 502 238"/>
+  <path class="line" d="M 692 238 L 732 238"/>
+  <path class="line" d="M 922 238 L 962 238"/>
+  <path class="loop" d="M 846 330 C 760 390 420 390 376 314"/>
+
+  <g>
+    <rect class="card fact" x="60" y="178" width="172" height="136"/>
+    <rect x="78" y="198" width="54" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="90" y="214">FACT</text>
+    <text class="card-title" x="78" y="244">1. turn 入口</text>
+    <text class="card-body" x="78" y="272">
+      <tspan x="78" dy="0">submission loop</tspan>
+      <tspan x="78" dy="19">接收并推进提交。</tspan>
+    </text>
+  </g>
+
+  <g>
+    <rect class="card teaching" x="272" y="178" width="190" height="136"/>
+    <rect x="290" y="198" width="92" height="22" rx="11" fill="#6B5B95"/>
+    <text class="badge-text" x="309" y="214">教学辅助</text>
+    <text class="card-title" x="290" y="244">2. 模型动作</text>
+    <text class="card-body" x="290" y="272">
+      <tspan x="290" dy="0">简化为 final 或</tspan>
+      <tspan x="290" dy="19">请求工具两类出口。</tspan>
+    </text>
+    <rect x="290" y="294" width="116" height="20" rx="10" fill="#F1F5F9" stroke="#CBD5E1"/>
+    <text class="chip-text" x="300" y="309">action=call_tool</text>
+  </g>
+
+  <g>
+    <rect class="card fact" x="502" y="178" width="190" height="136"/>
+    <rect x="520" y="198" width="54" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="532" y="214">FACT</text>
+    <text class="card-title" x="520" y="244">3. ToolCall 路由</text>
+    <text class="card-body" x="520" y="272">
+      <tspan x="520" dy="0">ResponseItem 转成</tspan>
+      <tspan x="520" dy="19">受控 tool call。</tspan>
+    </text>
+    <rect x="520" y="294" width="88" height="20" rx="10" fill="#CCFBF1" stroke="#99F6E4"/>
+    <text class="chip-text" x="530" y="309">router.rs</text>
+  </g>
+
+  <g>
+    <rect class="card fact" x="732" y="178" width="190" height="136"/>
+    <rect x="750" y="198" width="54" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="762" y="214">FACT</text>
+    <text class="card-title" x="750" y="244">4. observation</text>
+    <text class="card-body" x="750" y="272">
+      <tspan x="750" dy="0">工具结果回填，</tspan>
+      <tspan x="750" dy="19">模型下一步可消费。</tspan>
+    </text>
+  </g>
+
+  <g>
+    <rect class="card teaching" x="962" y="178" width="190" height="136"/>
+    <rect x="980" y="198" width="92" height="22" rx="11" fill="#6B5B95"/>
+    <text class="badge-text" x="999" y="214">教学辅助</text>
+    <text class="card-title" x="980" y="244">5. 继续 / 停止</text>
+    <text class="card-body" x="980" y="272">
+      <tspan x="980" dy="0">继续下一轮模型动作，</tspan>
+      <tspan x="980" dy="19">或收束为最终答复。</tspan>
+    </text>
+  </g>
+
+  <g>
+    <rect class="card fact" x="60" y="420" width="280" height="128"/>
+    <rect x="78" y="440" width="54" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="90" y="456">FACT</text>
+    <text class="card-title" x="78" y="490">item / event 记录</text>
+    <text class="card-body" x="78" y="518">
+      <tspan x="78" dy="0">conversation items 写历史，</tspan>
+      <tspan x="78" dy="19">并通知观察端。</tspan>
+    </text>
+  </g>
+
+  <text class="section" x="60" y="610">下方只看教学 failure path：它解释“失败后不要假装成功”，不扩展官方事实边界</text>
+  <path class="line-red" d="M 342 670 L 390 670"/>
+  <path class="line-blue" d="M 604 670 L 654 670"/>
+
+  <g>
+    <rect class="card teaching" x="60" y="628" width="282" height="130"/>
+    <rect x="78" y="648" width="92" height="22" rx="11" fill="#6B5B95"/>
+    <text class="badge-text" x="97" y="664">教学辅助</text>
+    <text class="card-title" x="78" y="698">示例工具执行</text>
+    <text class="card-body" x="78" y="728">
+      <tspan x="78" dy="0">`read_file` 来自 Python mock，</tspan>
+      <tspan x="78" dy="19">不是官方工具类型名。</tspan>
+    </text>
+  </g>
+
+  <g>
+    <rect class="card fail" x="390" y="628" width="214" height="130"/>
+    <rect x="408" y="648" width="46" height="22" rx="11" fill="#C2410C"/>
+    <text class="badge-text" x="420" y="664">FAIL</text>
+    <text class="card-title" x="408" y="698">工具错误</text>
+    <text class="card-body" x="408" y="728">文件不存在等教学阻塞。</text>
+  </g>
+
+  <g>
+    <rect class="card recovery" x="654" y="628" width="256" height="130"/>
+    <rect x="672" y="648" width="86" height="22" rx="11" fill="#2563EB"/>
+    <text class="badge-text" x="690" y="664">恢复选择</text>
+    <text class="card-title" x="672" y="698">解释、追问或停止</text>
+    <text class="card-body" x="672" y="728">产品化表达，不声明官方文案。</text>
+  </g>
+
+  <g>
+    <rect class="card neutral" x="958" y="628" width="252" height="130"/>
+    <text class="card-title" x="978" y="662">边界提醒</text>
+    <text class="card-body" x="978" y="694">
+      <tspan x="978" dy="0">本图不使用待核实或 DENY：</tspan>
+      <tspan x="978" dy="19">本批不引入 s08/s10 语义，</tspan>
+      <tspan x="978" dy="19">也不展示人工拒绝动作。</tspan>
+    </text>
+  </g>
+
+  <g>
+    <rect class="card neutral" x="40" y="800" width="1170" height="64"/>
+    <rect x="62" y="822" width="54" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="74" y="838">FACT</text>
+    <text class="tiny" x="126" y="838">已登记机制：submission loop、ToolCall 路由、observation 回填、conversation item 记录</text>
+    <rect x="650" y="822" width="92" height="22" rx="11" fill="#6B5B95"/>
+    <text class="badge-text" x="669" y="838">教学辅助</text>
+    <text class="tiny" x="752" y="838">mock event、简化时序、示例工具名、恢复话术</text>
+  </g>
+</svg>

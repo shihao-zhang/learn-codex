@@ -30,6 +30,10 @@
 
 见 [diagram.mmd](diagram.mmd)。图里把“内部状态变化”和“客户端可消费事件”分开，强调事件是契约层，不是运行时对象的原样泄漏。
 
+## 可选教学辅助 SVG
+
+见 [event-interface.md](diagrams/event-interface.md)。这张图只辅助理解 request、item、event、trace context 和产品界面状态之间的关系，不替代本章 Mermaid，也不新增官方事实。
+
 ## 运行 mock
 
 ```bash
