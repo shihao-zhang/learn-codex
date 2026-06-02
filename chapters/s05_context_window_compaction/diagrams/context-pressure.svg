@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="960" viewBox="0 0 1280 960" role="img" aria-labelledby="title desc">
+  <title id="title">s05 辅助图：上下文压力、压缩与恢复选择</title>
+  <desc id="desc">s05 的可选教学辅助图，展示 context pressure 下继续、压缩、截断、摘要风险与恢复选择；compaction 入口和已登记机制可标为 FACT，阈值、保真字段与摘要质量是教学辅助，不是 OpenAI 官方架构图。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/>
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#C2410C"/>
+    </marker>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2563EB"/>
+    </marker>
+    <style><![CDATA[
+      .canvas { fill: #F8FAFC; }
+      .title { font: 700 28px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #111827; }
+      .subtitle { font: 400 15px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #475569; }
+      .card { rx: 8; ry: 8; stroke-width: 2; }
+      .fact { fill: #F0FDFA; stroke: #176B87; }
+      .teaching { fill: #FBFAFF; stroke: #6B5B95; stroke-dasharray: 4 4; }
+      .risk { fill: #FFF7ED; stroke: #C2410C; }
+      .recovery { fill: #EFF6FF; stroke: #2563EB; }
+      .neutral { fill: #FFFFFF; stroke: #CBD5E1; }
+      .card-title { font: 700 16px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #111827; }
+      .card-body { font: 400 14px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #334155; }
+      .tiny { font: 400 12px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #64748B; }
+      .chip-text { font: 600 12px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #334155; }
+      .badge-text { font: 700 11px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #FFFFFF; letter-spacing: 0; }
+      .mono { font: 600 12px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #475569; }
+      .line { fill: none; stroke: #475569; stroke-width: 2; marker-end: url(#arrow); }
+      .line-soft { fill: none; stroke: #94A3B8; stroke-width: 2; marker-end: url(#arrow); }
+      .line-red { fill: none; stroke: #C2410C; stroke-width: 2.5; marker-end: url(#arrow-red); }
+      .line-blue { fill: none; stroke: #2563EB; stroke-width: 2.5; marker-end: url(#arrow-blue); }
+    ]]></style>
+  </defs>
+
+  <rect class="canvas" x="0" y="0" width="1280" height="960"/>
+  <text class="title" x="40" y="48">s05 辅助图：上下文压力、压缩与恢复选择</text>
+  <text class="subtitle" x="40" y="78">Mermaid 仍是主机制图；本 SVG 解释长任务接近窗口上限时，继续、compact、truncate 和恢复如何被区分。</text>
+
+  <rect x="998" y="34" width="84" height="26" rx="13" fill="#176B87"/>
+  <text class="badge-text" x="1020" y="52">FACT</text>
+  <rect x="1096" y="34" width="112" height="26" rx="13" fill="#6B5B95"/>
+  <text class="badge-text" x="1117" y="52">教学辅助</text>
+
+  <text class="tiny" x="40" y="116">第一阅读路径：context pressure 触发选择；FACT 只标已登记源码入口或历史/截断边界，示例阈值和保真字段均为教学表达。</text>
+
+  <path class="line-soft" d="M 250 220 L 300 220"/>
+  <path class="line" d="M 530 220 L 580 220"/>
+  <path class="line" d="M 810 220 L 860 220"/>
+  <path class="line-soft" d="M 415 292 L 415 360"/>
+  <path class="line-soft" d="M 530 400 C 650 318 780 318 860 400"/>
+  <path class="line-soft" d="M 695 292 L 695 360"/>
+  <path class="line-soft" d="M 810 420 L 860 420"/>
+  <path class="line" d="M 985 292 L 985 360"/>
+  <path class="line-red" d="M 695 480 C 660 520 600 555 510 580"/>
+  <path class="line-blue" d="M 660 650 L 720 650"/>
+  <path class="line-blue" d="M 910 580 C 960 525 985 485 985 480"/>
+
+  <g>
+    <rect class="card teaching" x="40" y="145" width="210" height="145"/>
+    <rect x="58" y="165" width="84" height="22" rx="11" fill="#6B5B95"/>
+    <text class="badge-text" x="74" y="181">教学辅助</text>
+    <text class="card-title" x="58" y="214">输入候选变厚</text>
+    <text class="card-body" x="58" y="244">
+      <tspan x="58" dy="0">turn history、工具输出、</tspan>
+      <tspan x="58" dy="19">用户约束挤占窗口。</tspan>
+    </text>
+    <rect x="58" y="270" width="116" height="20" rx="10" fill="#F1F5F9" stroke="#CBD5E1"/>
+    <text class="chip-text" x="68" y="285">working_set</text>
+  </g>
+
+  <g>
+    <rect class="card teaching" x="300" y="145" width="230" height="145"/>
+    <rect x="318" y="165" width="84" height="22" rx="11" fill="#6B5B95"/>
+    <text class="badge-text" x="334" y="181">教学辅助</text>
+    <text class="card-title" x="318" y="214">context pressure</text>
+    <text class="card-body" x="318" y="244">
+      <tspan x="318" dy="0">接近或超过预算时，</tspan>
+      <tspan x="318" dy="19">继续工作需要做取舍。</tspan>
+    </text>
+    <rect x="318" y="270" width="152" height="20" rx="10" fill="#F1F5F9" stroke="#CBD5E1"/>
+    <text class="chip-text" x="328" y="285">13200 / 10000</text>
+  </g>
+
+  <g>
+    <rect class="card fact" x="580" y="145" width="230" height="145"/>
+    <rect x="598" y="165" width="54" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="610" y="181">FACT</text>
+    <text class="card-title" x="598" y="214">compact task 入口</text>
+    <text class="card-body" x="598" y="244">
+      <tspan x="598" dy="0">已登记 compact 源码入口，</tspan>
+      <tspan x="598" dy="19">不承诺真实触发阈值。</tspan>
+    </text>
+    <rect x="598" y="270" width="112" height="20" rx="10" fill="#CCFBF1" stroke="#99F6E4"/>
+    <text class="chip-text" x="608" y="285">compact.rs</text>
+  </g>
+
+  <g>
+    <rect class="card fact" x="860" y="145" width="250" height="145"/>
+    <rect x="878" y="165" width="54" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="890" y="181">FACT</text>
+    <text class="card-title" x="878" y="214">历史替换与记录</text>
+    <text class="card-body" x="878" y="244">
+      <tspan x="878" dy="0">compact 后历史替换，</tspan>
+      <tspan x="878" dy="19">写入 rollout 相关记录。</tspan>
+    </text>
+    <rect x="878" y="270" width="164" height="20" rx="10" fill="#CCFBF1" stroke="#99F6E4"/>
+    <text class="chip-text" x="888" y="285">Compacted / TurnContext</text>
+  </g>
+
+  <g>
+    <rect class="card teaching" x="300" y="360" width="230" height="120"/>
+    <rect x="318" y="380" width="70" height="22" rx="11" fill="#6B5B95"/>
+    <text class="badge-text" x="331" y="396">继续</text>
+    <text class="card-title" x="318" y="434">预算可容纳</text>
+    <text class="card-body" x="318" y="462">
+      <tspan x="318" dy="0">保留最近 working set，</tspan>
+      <tspan x="318" dy="19">不代表无限记忆。</tspan>
+    </text>
+  </g>
+
+  <g>
+    <rect class="card fact" x="580" y="360" width="230" height="120"/>
+    <rect x="598" y="380" width="54" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="610" y="396">FACT</text>
+    <text class="card-title" x="598" y="434">truncation helper</text>
+    <text class="card-body" x="598" y="462">
+      <tspan x="598" dy="0">已登记截断 helper，</tspan>
+      <tspan x="598" dy="19">不等同完整摘要策略。</tspan>
+    </text>
+  </g>
+
+  <g>
+    <rect class="card teaching" x="860" y="360" width="250" height="120"/>
+    <rect x="878" y="380" width="84" height="22" rx="11" fill="#6B5B95"/>
+    <text class="badge-text" x="894" y="396">教学辅助</text>
+    <text class="card-title" x="878" y="434">下一轮输入</text>
+    <text class="card-body" x="878" y="462">
+      <tspan x="878" dy="0">模型看到的是整理后</tspan>
+      <tspan x="878" dy="19">的当前工作台。</tspan>
+    </text>
+  </g>
+
+  <g>
+    <rect class="card teaching" x="40" y="580" width="260" height="140"/>
+    <rect x="58" y="600" width="84" height="22" rx="11" fill="#6B5B95"/>
+    <text class="badge-text" x="74" y="616">教学辅助</text>
+    <text class="card-title" x="58" y="652">保真字段清单</text>
+    <text class="card-body" x="58" y="682">
+      <tspan x="58" dy="0">目标、约束、已改文件、</tspan>
+      <tspan x="58" dy="19">失败原因和下一步。</tspan>
+    </text>
+  </g>
+
+  <g>
+    <rect class="card risk" x="360" y="580" width="300" height="140"/>
+    <rect x="378" y="600" width="54" height="22" rx="11" fill="#C2410C"/>
+    <text class="badge-text" x="391" y="616">FAIL</text>
+    <rect x="440" y="600" width="84" height="22" rx="11" fill="#6B5B95"/>
+    <text class="badge-text" x="456" y="616">教学辅助</text>
+    <text class="card-title" x="378" y="652">摘要风险：漏掉约束</text>
+    <text class="card-body" x="378" y="682">
+      <tspan x="378" dy="0">例如忘记“外部 review</tspan>
+      <tspan x="378" dy="19">必须先授权”。</tspan>
+    </text>
+  </g>
+
+  <g>
+    <rect class="card recovery" x="720" y="580" width="390" height="140"/>
+    <rect x="738" y="600" width="86" height="22" rx="11" fill="#2563EB"/>
+    <text class="badge-text" x="756" y="616">恢复选择</text>
+    <text class="card-title" x="738" y="652">重新取证或交还确认</text>
+    <text class="card-body" x="738" y="682">
+      <tspan x="738" dy="0">重新读取文件、复述约束，</tspan>
+      <tspan x="738" dy="19">或向用户确认授权状态。</tspan>
+    </text>
+  </g>
+
+  <g>
+    <rect class="card neutral" x="40" y="780" width="1170" height="130"/>
+    <text class="card-title" x="62" y="814">图例与边界</text>
+
+    <rect x="62" y="832" width="54" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="74" y="848">FACT</text>
+    <text class="tiny" x="126" y="848">来自 docs/source-evidence.md 的 compact 入口、历史替换或截断 helper 证据</text>
+
+    <rect x="650" y="832" width="84" height="22" rx="11" fill="#6B5B95"/>
+    <text class="badge-text" x="666" y="848">教学辅助</text>
+    <text class="tiny" x="744" y="848">token 数字、阈值、保真字段、mock trace 与用户文案</text>
+
+    <rect x="62" y="866" width="54" height="22" rx="11" fill="#C2410C"/>
+    <text class="badge-text" x="75" y="882">FAIL</text>
+    <text class="tiny" x="126" y="882">摘要可能丢失关键约束；本图不承诺 compaction 是无损记忆</text>
+
+    <rect x="650" y="866" width="86" height="22" rx="11" fill="#2563EB"/>
+    <text class="badge-text" x="668" y="882">恢复选择</text>
+    <text class="tiny" x="746" y="882">重新取证、复述约束、请求确认或缩小任务范围</text>
+
+    <text class="mono" x="62" y="902">来源：s05 README / diagram.mmd / mock.py / docs/source-evidence.md</text>
+    <text class="tiny" x="650" y="902">本图是教学辅助图，不是 OpenAI 官方架构图。</text>
+  </g>
+</svg>

@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="980" viewBox="0 0 1280 980" role="img" aria-labelledby="title desc">
+  <title id="title">s06 辅助图：指令来源、冲突与授权边界</title>
+  <desc id="desc">s06 的可选教学辅助图，展示 system、developer、user、AGENTS.md 与项目约束如何进入有作用域的指令解释，并在冲突或缺授权时转为恢复选择；来源与注入入口可标为 FACT，冲突案例和文案是教学辅助，不是 OpenAI 官方架构图。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/>
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#C2410C"/>
+    </marker>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2563EB"/>
+    </marker>
+    <style><![CDATA[
+      .canvas { fill: #F8FAFC; }
+      .title { font: 700 28px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #111827; }
+      .subtitle { font: 400 15px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #475569; }
+      .card { rx: 8; ry: 8; stroke-width: 2; }
+      .fact { fill: #F0FDFA; stroke: #176B87; }
+      .teaching { fill: #FBFAFF; stroke: #6B5B95; stroke-dasharray: 4 4; }
+      .deny { fill: #FFF7ED; stroke: #C2410C; }
+      .recovery { fill: #EFF6FF; stroke: #2563EB; }
+      .neutral { fill: #FFFFFF; stroke: #CBD5E1; }
+      .stack-band { fill: #FFFFFF; stroke: #CBD5E1; }
+      .card-title { font: 700 16px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #111827; }
+      .card-body { font: 400 14px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #334155; }
+      .tiny { font: 400 12px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #64748B; }
+      .chip-text { font: 600 12px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #334155; }
+      .badge-text { font: 700 11px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #FFFFFF; letter-spacing: 0; }
+      .mono { font: 600 12px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #475569; }
+      .line { fill: none; stroke: #475569; stroke-width: 2; marker-end: url(#arrow); }
+      .line-red { fill: none; stroke: #C2410C; stroke-width: 2.5; marker-end: url(#arrow-red); }
+      .line-blue { fill: none; stroke: #2563EB; stroke-width: 2.5; marker-end: url(#arrow-blue); }
+    ]]></style>
+  </defs>
+
+  <rect class="canvas" x="0" y="0" width="1280" height="980"/>
+  <text class="title" x="40" y="48">s06 辅助图：指令来源、冲突与授权边界</text>
+  <text class="subtitle" x="40" y="78">Mermaid 仍是主机制图；本 SVG 解释多层指令来源如何进入上下文，以及冲突时如何表面化权衡。</text>
+
+  <rect x="998" y="34" width="84" height="26" rx="13" fill="#176B87"/>
+  <text class="badge-text" x="1020" y="52">FACT</text>
+  <rect x="1096" y="34" width="112" height="26" rx="13" fill="#6B5B95"/>
+  <text class="badge-text" x="1117" y="52">教学辅助</text>
+
+  <text class="tiny" x="40" y="116">第一阅读路径：已登记的来源/组合/注入入口形成边界；具体优先级算法、冲突案例和授权文案是教学表达。</text>
+
+  <path class="line" d="M 150 285 C 190 330 235 350 300 375"/>
+  <path class="line" d="M 410 285 C 430 325 445 348 450 365"/>
+  <path class="line" d="M 670 285 C 640 325 602 350 560 375"/>
+  <path class="line" d="M 970 285 C 1010 320 1080 340 1110 365"/>
+  <path class="line" d="M 620 455 L 680 455"/>
+  <path class="line" d="M 940 455 L 1000 455"/>
+  <path class="line-red" d="M 1110 540 C 1050 585 940 612 570 650"/>
+  <path class="line-blue" d="M 1110 540 C 1030 600 940 620 830 650"/>
+  <path class="line-blue" d="M 1010 692 L 1040 692"/>
+
+  <g>
+    <rect class="card fact" x="40" y="145" width="220" height="140"/>
+    <rect x="58" y="165" width="54" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="70" y="181">FACT</text>
+    <text class="card-title" x="58" y="214">system / developer</text>
+    <text class="card-body" x="58" y="244">
+      <tspan x="58" dy="0">初始上下文会组织多类</tspan>
+      <tspan x="58" dy="19">指令块和运行边界。</tspan>
+    </text>
+    <rect x="58" y="270" width="132" height="20" rx="10" fill="#CCFBF1" stroke="#99F6E4"/>
+    <text class="chip-text" x="68" y="285">session/mod.rs</text>
+  </g>
+
+  <g>
+    <rect class="card fact" x="300" y="145" width="220" height="140"/>
+    <rect x="318" y="165" width="54" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="330" y="181">FACT</text>
+    <text class="card-title" x="318" y="214">AGENTS.md 项目规则</text>
+    <text class="card-body" x="318" y="244">
+      <tspan x="318" dy="0">发现、读取和组合入口</tspan>
+      <tspan x="318" dy="19">已登记为机制证据。</tspan>
+    </text>
+    <rect x="318" y="270" width="118" height="20" rx="10" fill="#CCFBF1" stroke="#99F6E4"/>
+    <text class="chip-text" x="328" y="285">agents_md.rs</text>
+  </g>
+
+  <g>
+    <rect class="card fact" x="560" y="145" width="220" height="140"/>
+    <rect x="578" y="165" width="54" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="590" y="181">FACT</text>
+    <text class="card-title" x="578" y="214">当前 user request</text>
+    <text class="card-body" x="578" y="244">
+      <tspan x="578" dy="0">用户任务会与项目说明</tspan>
+      <tspan x="578" dy="19">一起进入组合路径。</tspan>
+    </text>
+    <rect x="578" y="270" width="112" height="20" rx="10" fill="#CCFBF1" stroke="#99F6E4"/>
+    <text class="chip-text" x="588" y="285">user input</text>
+  </g>
+
+  <g>
+    <rect class="card teaching" x="820" y="145" width="320" height="140"/>
+    <rect x="838" y="165" width="84" height="22" rx="11" fill="#6B5B95"/>
+    <text class="badge-text" x="854" y="181">教学辅助</text>
+    <text class="card-title" x="838" y="214">项目约束示例</text>
+    <text class="card-body" x="838" y="244">
+      <tspan x="838" dy="0">外部 review、发布、删除等</tspan>
+      <tspan x="838" dy="19">高副作用动作需先授权。</tspan>
+    </text>
+  </g>
+
+  <g>
+    <rect class="card fact" x="260" y="365" width="360" height="175"/>
+    <rect x="278" y="385" width="54" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="290" y="401">FACT</text>
+    <text class="card-title" x="278" y="435">组合与初始上下文注入</text>
+    <text class="card-body" x="278" y="463">
+      <tspan x="278" dy="0">已登记路径覆盖 AGENTS.md 组合、</tspan>
+      <tspan x="278" dy="19">用户指令拼接和多类指令注入。</tspan>
+    </text>
+    <rect class="stack-band" x="278" y="493" width="286" height="24" rx="6"/>
+    <text class="tiny" x="290" y="510">来源可核实；优先级解释需保守</text>
+    <rect x="278" y="523" width="184" height="20" rx="10" fill="#CCFBF1" stroke="#99F6E4"/>
+    <text class="chip-text" x="288" y="538">initial context blocks</text>
+  </g>
+
+  <g>
+    <rect class="card teaching" x="680" y="365" width="260" height="175"/>
+    <rect x="698" y="385" width="84" height="22" rx="11" fill="#6B5B95"/>
+    <text class="badge-text" x="714" y="401">教学辅助</text>
+    <text class="card-title" x="698" y="435">有序指令栈</text>
+    <text class="card-body" x="698" y="463">
+      <tspan x="698" dy="0">高层约束、项目规则和用户</tspan>
+      <tspan x="698" dy="19">请求共同塑造本轮输入。</tspan>
+    </text>
+    <rect x="698" y="500" width="90" height="20" rx="10" fill="#F1F5F9" stroke="#CBD5E1"/>
+    <text class="chip-text" x="708" y="515">priority?</text>
+    <rect x="800" y="500" width="112" height="20" rx="10" fill="#F1F5F9" stroke="#CBD5E1"/>
+    <text class="chip-text" x="810" y="515">scoped rules</text>
+  </g>
+
+  <g>
+    <rect class="card deny" x="1000" y="365" width="220" height="175"/>
+    <rect x="1018" y="385" width="54" height="22" rx="11" fill="#C2410C"/>
+    <text class="badge-text" x="1031" y="401">FAIL</text>
+    <rect x="1080" y="385" width="54" height="22" rx="11" fill="#C2410C"/>
+    <text class="badge-text" x="1093" y="401">冲突</text>
+    <text class="card-title" x="1018" y="435">冲突或缺授权</text>
+    <text class="card-body" x="1018" y="463">
+      <tspan x="1018" dy="0">用户要外发私密 diff，</tspan>
+      <tspan x="1018" dy="19">项目规则要求先授权。</tspan>
+    </text>
+    <rect x="1018" y="510" width="146" height="20" rx="10" fill="#FFEDD5" stroke="#FDBA74"/>
+    <text class="chip-text" x="1028" y="525">authorization=false</text>
+  </g>
+
+  <g>
+    <rect class="card deny" x="300" y="650" width="270" height="135"/>
+    <rect x="318" y="670" width="78" height="22" rx="11" fill="#C2410C"/>
+    <text class="badge-text" x="332" y="686">未执行</text>
+    <text class="card-title" x="318" y="720">不外发私密材料</text>
+    <text class="card-body" x="318" y="750">
+      <tspan x="318" dy="0">未获授权时不调用外部</tspan>
+      <tspan x="318" dy="19">review 或发布评论。</tspan>
+    </text>
+  </g>
+
+  <g>
+    <rect class="card recovery" x="650" y="650" width="360" height="135"/>
+    <rect x="668" y="670" width="86" height="22" rx="11" fill="#2563EB"/>
+    <text class="badge-text" x="686" y="686">恢复选择</text>
+    <text class="card-title" x="668" y="720">表面化范围与副作用</text>
+    <text class="card-body" x="668" y="750">
+      <tspan x="668" dy="0">说明发送范围、调用方式和成本，</tspan>
+      <tspan x="668" dy="19">请求授权；未授权则本地自审。</tspan>
+    </text>
+  </g>
+
+  <g>
+    <rect class="card teaching" x="1040" y="650" width="180" height="135"/>
+    <rect x="1058" y="670" width="84" height="22" rx="11" fill="#6B5B95"/>
+    <text class="badge-text" x="1074" y="686">教学辅助</text>
+    <text class="card-title" x="1058" y="720">可继续部分</text>
+    <text class="card-body" x="1058" y="750">
+      <tspan x="1058" dy="0">缩小范围、保留本地</tspan>
+      <tspan x="1058" dy="19">证据，等人类确认。</tspan>
+    </text>
+  </g>
+
+  <g>
+    <rect class="card neutral" x="40" y="820" width="1170" height="130"/>
+    <text class="card-title" x="62" y="854">图例与边界</text>
+
+    <rect x="62" y="872" width="54" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="74" y="888">FACT</text>
+    <text class="tiny" x="126" y="888">来自 docs/source-evidence.md 的 AGENTS.md 发现、拼接和初始上下文注入证据</text>
+
+    <rect x="650" y="872" width="84" height="22" rx="11" fill="#6B5B95"/>
+    <text class="badge-text" x="666" y="888">教学辅助</text>
+    <text class="tiny" x="744" y="888">优先级可视化、冲突案例、授权文案、项目约束示例和 mock trace</text>
+
+    <rect x="62" y="906" width="54" height="22" rx="11" fill="#C2410C"/>
+    <text class="badge-text" x="75" y="922">冲突</text>
+    <text class="tiny" x="126" y="922">缺授权时不执行外发、发布或其他高副作用动作</text>
+
+    <rect x="650" y="906" width="86" height="22" rx="11" fill="#2563EB"/>
+    <text class="badge-text" x="668" y="922">恢复选择</text>
+    <text class="tiny" x="746" y="922">说明范围与影响、请求授权，或改成本地自审</text>
+
+    <text class="mono" x="62" y="942">来源：s06 README / diagram.mmd / mock.py / docs/source-evidence.md</text>
+    <text class="tiny" x="650" y="942">本图不暴露或发明官方/私有 prompt 文本，不声明真实优先级算法。</text>
+  </g>
+</svg>

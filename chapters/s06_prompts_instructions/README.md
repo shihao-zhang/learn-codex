@@ -26,6 +26,10 @@
 
 见 [diagram.mmd](diagram.mmd)。该图是教学抽象，用来展示指令来源、作用域和冲突处理，不包含官方或私有 prompt 文本。
 
+## 可选教学辅助 SVG
+
+见 [instruction-conflict.md](diagrams/instruction-conflict.md)。这张图只辅助理解指令来源、项目约束、冲突解释和授权边界，不替代本章 Mermaid，也不新增官方事实。
+
 ## 运行 mock
 
 ```bash
