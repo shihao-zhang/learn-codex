@@ -20,6 +20,10 @@ PM 需要把模型选择看成“能力策略”，而不只是偏好设置。�
 
 见 [diagram.mmd](diagram.mmd)。该图是教学抽象，用来说明配置、认证和模型请求上下文的关系，不表示官方运行时完整流程。
 
+## 可选教学辅助 SVG
+
+见 [model-choice-impact.md](diagrams/model-choice-impact.md)。这张图只辅助理解 config/auth/provider/model 选择对成本、能力、合规和可用性的影响，不替代本章 Mermaid，也不新增官方事实。
+
 ## 运行 mock
 
 ```bash

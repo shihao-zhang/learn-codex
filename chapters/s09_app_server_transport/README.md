@@ -23,6 +23,10 @@
 
 见 [diagram.mmd](diagram.mmd)。图是教学拆解：把客户端请求、transport、app-server 协调层、核心运行时、状态投影和 outgoing message 分开看，帮助读者理解接口边界；它不是官方部署图。
 
+## 可选教学辅助 SVG
+
+见 [state-sync-boundary.md](diagrams/state-sync-boundary.md)。这张图只辅助理解 app-server/protocol/product surface 的状态同步边界，不替代本章 Mermaid，也不新增官方事实。
+
 ## 运行 mock
 
 ```bash

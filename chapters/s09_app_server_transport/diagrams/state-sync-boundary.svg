@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="1280" viewBox="0 0 1280 1280" role="img" aria-labelledby="title desc">
+  <title id="title">s09 辅助图：状态同步边界</title>
+  <desc id="desc">s09 的可选教学辅助图，展示 runtime event、app-server、protocol、transport 和 product surface 之间的状态同步边界；本图不是 OpenAI 官方部署图，也不声明 Codex Cloud 或具体客户端 UI 行为。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/>
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#C2410C"/>
+    </marker>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2563EB"/>
+    </marker>
+    <style><![CDATA[
+      .canvas { fill: #F8FAFC; }
+      .band-runtime { fill: #F8FAFC; stroke: #E2E8F0; }
+      .band-server { fill: #F0FDFA; stroke: #CCFBF1; }
+      .band-protocol { fill: #EFF6FF; stroke: #DBEAFE; }
+      .band-product { fill: #FBFAFF; stroke: #EDE9FE; }
+      .title { font: 700 28px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #111827; }
+      .subtitle { font: 400 15px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #475569; }
+      .band-label { font: 700 13px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #475569; }
+      .card { rx: 8; ry: 8; stroke-width: 2; }
+      .fact { fill: #F0FDFA; stroke: #176B87; }
+      .teaching { fill: #FBFAFF; stroke: #6B5B95; stroke-dasharray: 4 4; }
+      .pending { fill: #FFFBEB; stroke: #B7791F; stroke-dasharray: 7 5; }
+      .fail { fill: #FFF7ED; stroke: #C2410C; }
+      .recovery { fill: #EFF6FF; stroke: #2563EB; }
+      .neutral { fill: #FFFFFF; stroke: #CBD5E1; }
+      .card-title { font: 700 16px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #111827; }
+      .card-body { font: 400 14px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #334155; }
+      .tiny { font: 400 12px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #64748B; }
+      .chip-text { font: 600 12px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #334155; }
+      .badge-text { font: 700 11px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #FFFFFF; letter-spacing: 0; }
+      .mono { font: 600 12px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #475569; }
+      .line { fill: none; stroke: #475569; stroke-width: 2; marker-end: url(#arrow); }
+      .line-soft { fill: none; stroke: #94A3B8; stroke-width: 1.7; marker-end: url(#arrow); }
+      .line-red { fill: none; stroke: #C2410C; stroke-width: 2.5; marker-end: url(#arrow-red); }
+      .line-blue { fill: none; stroke: #2563EB; stroke-width: 2.5; marker-end: url(#arrow-blue); }
+      .boundary-line { stroke: #CBD5E1; stroke-width: 1.5; stroke-dasharray: 8 6; }
+    ]]></style>
+  </defs>
+
+  <rect class="canvas" x="0" y="0" width="1280" height="1280"/>
+  <text class="title" x="40" y="48">s09 辅助图：app-server 状态同步边界</text>
+  <text class="subtitle" x="40" y="78">Mermaid 仍是主机制图；本 SVG 只说明 runtime、protocol、transport 和产品界面的同步分工。</text>
+
+  <rect x="1014" y="34" width="54" height="26" rx="13" fill="#176B87"/>
+  <text class="badge-text" x="1026" y="52">FACT</text>
+  <rect x="1082" y="34" width="92" height="26" rx="13" fill="#6B5B95"/>
+  <text class="badge-text" x="1101" y="52">教学辅助</text>
+
+  <rect class="band-runtime" x="40" y="112" width="226" height="560" rx="8"/>
+  <rect class="band-server" x="286" y="112" width="350" height="560" rx="8"/>
+  <rect class="band-protocol" x="656" y="112" width="318" height="560" rx="8"/>
+  <rect class="band-product" x="994" y="112" width="214" height="560" rx="8"/>
+  <line class="boundary-line" x1="276" y1="112" x2="276" y2="672"/>
+  <line class="boundary-line" x1="646" y1="112" x2="646" y2="672"/>
+  <line class="boundary-line" x1="984" y1="112" x2="984" y2="672"/>
+
+  <text class="band-label" x="58" y="136">runtime 产生事实</text>
+  <text class="band-label" x="304" y="136">app-server 整理与投影</text>
+  <text class="band-label" x="674" y="136">protocol / transport 合同</text>
+  <text class="band-label" x="1012" y="136">product surface</text>
+
+  <path class="line" d="M 226 248 L 304 248"/>
+  <path class="line" d="M 466 248 L 514 248"/>
+  <path class="line" d="M 614 248 L 708 248"/>
+  <path class="line" d="M 892 248 L 1018 248"/>
+  <path class="line-soft" d="M 514 414 L 708 414"/>
+  <path class="line-soft" d="M 824 322 L 824 370"/>
+  <path class="line-red" d="M 824 544 C 846 590 906 620 1004 622"/>
+  <path class="line-blue" d="M 1118 622 C 1090 564 1050 520 930 468"/>
+
+  <g>
+    <rect class="card teaching" x="58" y="172" width="208" height="156"/>
+    <rect x="76" y="192" width="92" height="22" rx="11" fill="#6B5B95"/>
+    <text class="badge-text" x="95" y="208">教学辅助</text>
+    <text class="card-title" x="76" y="242">runtime events</text>
+    <text class="card-body" x="76" y="272">
+      <tspan x="76" dy="0">agent loop、工具进度、</tspan>
+      <tspan x="76" dy="19">错误和完成信号产生变化。</tspan>
+    </text>
+    <rect x="76" y="304" width="120" height="20" rx="10" fill="#F1F5F9" stroke="#CBD5E1"/>
+    <text class="chip-text" x="86" y="319">turn_started</text>
+  </g>
+
+  <g>
+    <rect class="card fact" x="304" y="172" width="162" height="156"/>
+    <rect x="322" y="192" width="54" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="334" y="208">FACT</text>
+    <text class="card-title" x="322" y="242">outgoing 路由</text>
+    <text class="card-body" x="322" y="272">
+      <tspan x="322" dy="0">消息可定向或广播，</tspan>
+      <tspan x="322" dy="19">慢连接队列会影响连接。</tspan>
+    </text>
+    <rect x="322" y="304" width="110" height="20" rx="10" fill="#CCFBF1" stroke="#99F6E4"/>
+    <text class="chip-text" x="332" y="319">transport.rs</text>
+  </g>
+
+  <g>
+    <rect class="card fact" x="514" y="172" width="214" height="156"/>
+    <rect x="532" y="192" width="54" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="544" y="208">FACT</text>
+    <text class="card-title" x="532" y="242">server request 回调</text>
+    <text class="card-body" x="532" y="272">
+      <tspan x="532" dy="0">app-server 生成 id、注册</tspan>
+      <tspan x="532" dy="19">callback，再发到连接。</tspan>
+    </text>
+    <rect x="532" y="304" width="166" height="20" rx="10" fill="#CCFBF1" stroke="#99F6E4"/>
+    <text class="chip-text" x="542" y="319">outgoing_message.rs</text>
+  </g>
+
+  <g>
+    <rect class="card fact" x="708" y="172" width="184" height="156"/>
+    <rect x="726" y="192" width="54" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="738" y="208">FACT</text>
+    <text class="card-title" x="726" y="242">protocol schema</text>
+    <text class="card-body" x="726" y="272">
+      <tspan x="726" dy="0">协议 crate 有 TypeScript</tspan>
+      <tspan x="726" dy="19">和 JSON schema 导出入口。</tspan>
+    </text>
+    <rect x="726" y="304" width="92" height="20" rx="10" fill="#CCFBF1" stroke="#99F6E4"/>
+    <text class="chip-text" x="736" y="319">export.rs</text>
+  </g>
+
+  <g>
+    <rect class="card fact" x="708" y="370" width="184" height="142"/>
+    <rect x="726" y="390" width="54" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="738" y="406">FACT</text>
+    <text class="card-title" x="726" y="440">transport 状态</text>
+    <text class="card-body" x="726" y="470">
+      <tspan x="726" dy="0">连接状态、实验 API flag、</tspan>
+      <tspan x="726" dy="19">notification opt-out 已核实。</tspan>
+    </text>
+  </g>
+
+  <g>
+    <rect class="card fact" x="304" y="370" width="210" height="142"/>
+    <rect x="322" y="390" width="54" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="334" y="406">FACT</text>
+    <text class="card-title" x="322" y="440">thread status 投影</text>
+    <text class="card-body" x="322" y="470">
+      <tspan x="322" dy="0">runtime facts 被投影为</tspan>
+      <tspan x="322" dy="19">产品可消费的状态集合。</tspan>
+    </text>
+    <rect x="322" y="496" width="132" height="20" rx="10" fill="#CCFBF1" stroke="#99F6E4"/>
+    <text class="chip-text" x="332" y="511">thread_status.rs</text>
+  </g>
+
+  <g>
+    <rect class="card teaching" x="1018" y="172" width="190" height="156"/>
+    <rect x="1036" y="192" width="92" height="22" rx="11" fill="#6B5B95"/>
+    <text class="badge-text" x="1055" y="208">教学辅助</text>
+    <text class="card-title" x="1036" y="242">界面状态</text>
+    <text class="card-body" x="1036" y="272">
+      <tspan x="1036" dy="0">running、waiting、failed</tspan>
+      <tspan x="1036" dy="19">等命名是产品解释。</tspan>
+    </text>
+    <rect x="1036" y="304" width="94" height="20" rx="10" fill="#F1F5F9" stroke="#CBD5E1"/>
+    <text class="chip-text" x="1046" y="319">status view</text>
+  </g>
+
+  <g>
+    <rect class="card pending" x="58" y="536" width="214" height="126"/>
+    <rect x="76" y="556" width="64" height="22" rx="11" fill="#B7791F"/>
+    <text class="badge-text" x="90" y="572">待核实</text>
+    <text class="card-title" x="76" y="610">不能外推</text>
+    <text class="card-body" x="76" y="638">
+      <tspan x="76" dy="0">字段级兼容性、客户端实现、</tspan>
+      <tspan x="76" dy="19">Codex Cloud 不在本图内。</tspan>
+    </text>
+  </g>
+
+  <g>
+    <rect class="card fail" x="708" y="536" width="214" height="126"/>
+    <rect x="726" y="556" width="44" height="22" rx="11" fill="#C2410C"/>
+    <text class="badge-text" x="739" y="572">FAIL</text>
+    <text class="card-title" x="726" y="610">连接掉线或队列过慢</text>
+    <text class="card-body" x="726" y="638">
+      <tspan x="726" dy="0">transport 是基础设施边界，</tspan>
+      <tspan x="726" dy="19">不是业务状态本身。</tspan>
+    </text>
+  </g>
+
+  <g>
+    <rect class="card recovery" x="1004" y="536" width="204" height="126"/>
+    <rect x="1022" y="556" width="86" height="22" rx="11" fill="#2563EB"/>
+    <text class="badge-text" x="1040" y="572">恢复选择</text>
+    <text class="card-title" x="1022" y="610">重新请求快照</text>
+    <text class="card-body" x="1022" y="638">
+      <tspan x="1022" dy="0">产品面应补状态快照，</tspan>
+      <tspan x="1022" dy="19">不要靠猜日志恢复。</tspan>
+    </text>
+  </g>
+
+  <g>
+    <rect class="card neutral" x="40" y="720" width="1178" height="342"/>
+    <text class="card-title" x="62" y="754">图例与边界</text>
+
+    <rect x="62" y="774" width="54" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="74" y="790">FACT</text>
+    <text class="tiny" x="126" y="790">来自固定 SHA 或 docs/source-evidence.md 的机制点</text>
+
+    <rect x="402" y="774" width="92" height="22" rx="11" fill="#6B5B95"/>
+    <text class="badge-text" x="421" y="790">教学辅助</text>
+    <text class="tiny" x="504" y="790">UI 命名、多端体验、重连建议和产品文案</text>
+
+    <rect x="748" y="774" width="64" height="22" rx="11" fill="#B7791F"/>
+    <text class="badge-text" x="762" y="790">待核实</text>
+    <text class="tiny" x="822" y="790">字段级兼容性、具体客户端和私有服务行为</text>
+
+    <rect x="62" y="814" width="44" height="22" rx="11" fill="#C2410C"/>
+    <text class="badge-text" x="75" y="830">FAIL</text>
+    <text class="tiny" x="126" y="830">断线、慢连接或同步不完整时不假装状态完整</text>
+
+    <rect x="402" y="814" width="86" height="22" rx="11" fill="#2563EB"/>
+    <text class="badge-text" x="420" y="830">恢复选择</text>
+    <text class="tiny" x="498" y="830">重新订阅连接、请求状态快照或回到人工确认</text>
+
+    <text class="card-title" x="62" y="878">同步边界</text>
+    <text class="card-body" x="62" y="906">
+      <tspan x="62" dy="0">可以讲清：连接状态、outgoing message、server request callback、thread status projection、schema export。</tspan>
+      <tspan x="62" dy="22">不能外推：完整事件日志逐字重放、客户端 UI 实现、Codex Cloud、所有字段兼容性和多端竞态策略。</tspan>
+    </text>
+
+    <text class="card-title" x="62" y="982">读法</text>
+    <text class="card-body" x="62" y="1010">
+      <tspan x="62" dy="0">先读横向主路径：runtime events 被 app-server 整理，再经 protocol/schema 与 transport 进入产品界面。</tspan>
+      <tspan x="62" dy="22">再读竖向边界：app-server/protocol/transport 可核实，product surface 的 UI 命名和恢复策略是教学表达。</tspan>
+      <tspan x="62" dy="22">最后读 failure path：断线或慢连接时应重新同步状态快照，不把不完整日志伪装成完整状态。</tspan>
+    </text>
+  </g>
+</svg>
