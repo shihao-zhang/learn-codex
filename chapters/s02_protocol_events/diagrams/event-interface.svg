@@ -11,11 +11,13 @@
     </marker>
     <style><![CDATA[
       .canvas { fill: #F8FAFC; }
+      .band { fill: #EEF6F8; stroke: #D5E7EC; stroke-width: 1.5; }
       .title { font: 700 28px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #111827; }
       .subtitle { font: 400 15px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #475569; }
+      .section { font: 700 13px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #176B87; }
       .card { rx: 8; ry: 8; stroke-width: 2; }
       .fact { fill: #F0FDFA; stroke: #176B87; }
-      .teaching { fill: #FBFAFF; stroke: #6B5B95; stroke-dasharray: 4 4; }
+      .teaching { fill: #FBFAFF; stroke: #6B5B95; stroke-dasharray: 5 4; }
       .fail { fill: #FFF7ED; stroke: #C2410C; }
       .neutral { fill: #FFFFFF; stroke: #CBD5E1; }
       .card-title { font: 700 16px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #111827; }
@@ -32,143 +34,120 @@
 
   <rect class="canvas" width="1280" height="940"/>
   <text class="title" x="40" y="48">s02 辅助图：protocol event 与产品界面</text>
-  <text class="subtitle" x="40" y="78">事件协议把内部动作翻译成客户端可理解的状态；UI 文案和展示策略属于教学辅助。</text>
+  <text class="subtitle" x="40" y="78">上方是事件契约主路径；下方是 schema drift 教学 failure path；trace context 单独作为关联说明。</text>
 
   <rect x="1030" y="34" width="54" height="26" rx="13" fill="#176B87"/>
   <text class="badge-text" x="1042" y="52">FACT</text>
   <rect x="1100" y="34" width="92" height="26" rx="13" fill="#6B5B95"/>
   <text class="badge-text" x="1119" y="52">教学辅助</text>
 
-  <text class="tiny" x="40" y="118">主路径：request 和 response item 进入协议边界，event 驱动客户端状态，trace context 帮助关联调试。</text>
+  <rect class="band" x="40" y="126" width="1170" height="224" rx="8"/>
+  <text class="section" x="60" y="154">主阅读路径：客户端输入 -> protocol item -> event -> stream -> UI 状态</text>
 
-  <path class="line" d="M 238 220 L 286 220"/>
-  <path class="line" d="M 536 220 L 584 220"/>
-  <path class="line" d="M 824 220 L 872 220"/>
-  <path class="line" d="M 1032 220 L 1080 220"/>
-  <path class="trace-line" d="M 690 412 C 760 366 786 312 794 286"/>
-  <path class="line-red" d="M 536 470 L 584 470"/>
-  <path class="line" d="M 824 470 L 900 470"/>
+  <path class="line" d="M 232 236 L 272 236"/>
+  <path class="line" d="M 502 236 L 542 236"/>
+  <path class="line" d="M 772 236 L 812 236"/>
+  <path class="line" d="M 972 236 L 1012 236"/>
 
   <g>
-    <rect class="card teaching" x="40" y="150" width="198" height="140"/>
-    <rect x="58" y="170" width="38" height="22" rx="11" fill="#6B5B95"/>
-    <text class="badge-text" x="70" y="186">T1</text>
-    <text class="card-title" x="58" y="214">客户端 request</text>
-    <text class="card-body" x="58" y="242">
-      <tspan x="58" dy="0">用户输入或工具结果</tspan>
-      <tspan x="58" dy="19">进入运行时。</tspan>
-    </text>
-    <rect x="58" y="266" width="88" height="20" rx="10" fill="#F1F5F9" stroke="#CBD5E1"/>
-    <text class="chip-text" x="68" y="281">UserInput</text>
+    <rect class="card teaching" x="60" y="178" width="172" height="126"/>
+    <rect x="78" y="198" width="38" height="22" rx="11" fill="#6B5B95"/>
+    <text class="badge-text" x="90" y="214">T1</text>
+    <text class="card-title" x="78" y="244">客户端 request</text>
+    <text class="card-body" x="78" y="272">用户输入进入运行时。</text>
   </g>
 
   <g>
-    <rect class="card fact" x="286" y="150" width="250" height="140"/>
-    <rect x="304" y="170" width="54" height="22" rx="11" fill="#176B87"/>
-    <text class="badge-text" x="316" y="186">FACT</text>
-    <text class="card-title" x="304" y="214">输入 / 输出项</text>
-    <text class="card-body" x="304" y="242">
-      <tspan x="304" dy="0">protocol 层有模型输入</tspan>
-      <tspan x="304" dy="19">输出 item 类型入口。</tspan>
-    </text>
-    <rect x="304" y="266" width="168" height="20" rx="10" fill="#CCFBF1" stroke="#99F6E4"/>
-    <text class="chip-text" x="314" y="281">ResponseInputItem</text>
+    <rect class="card fact" x="272" y="178" width="230" height="126"/>
+    <rect x="290" y="198" width="54" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="302" y="214">FACT</text>
+    <text class="card-title" x="290" y="244">输入 / 输出项</text>
+    <text class="card-body" x="290" y="272">protocol 层公开 item 入口。</text>
+    <rect x="290" y="292" width="168" height="20" rx="10" fill="#CCFBF1" stroke="#99F6E4"/>
+    <text class="chip-text" x="300" y="307">ResponseInputItem</text>
   </g>
 
   <g>
-    <rect class="card fact" x="584" y="150" width="240" height="140"/>
-    <rect x="602" y="170" width="54" height="22" rx="11" fill="#176B87"/>
-    <text class="badge-text" x="614" y="186">FACT</text>
-    <text class="card-title" x="602" y="214">Protocol event</text>
-    <text class="card-body" x="602" y="242">
-      <tspan x="602" dy="0">Event / EventMsg 是</tspan>
-      <tspan x="602" dy="19">客户端可消费边界。</tspan>
-    </text>
-    <rect x="602" y="266" width="130" height="20" rx="10" fill="#CCFBF1" stroke="#99F6E4"/>
-    <text class="chip-text" x="612" y="281">EventMsg</text>
+    <rect class="card fact" x="542" y="178" width="230" height="126"/>
+    <rect x="560" y="198" width="54" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="572" y="214">FACT</text>
+    <text class="card-title" x="560" y="244">Protocol event</text>
+    <text class="card-body" x="560" y="272">Event / EventMsg 是协议边界。</text>
+    <rect x="560" y="292" width="96" height="20" rx="10" fill="#CCFBF1" stroke="#99F6E4"/>
+    <text class="chip-text" x="570" y="307">EventMsg</text>
   </g>
 
   <g>
-    <rect class="card teaching" x="872" y="150" width="160" height="140"/>
-    <rect x="890" y="170" width="92" height="22" rx="11" fill="#6B5B95"/>
-    <text class="badge-text" x="909" y="186">教学辅助</text>
-    <text class="card-title" x="890" y="214">传输 / stream</text>
-    <text class="card-body" x="890" y="242">
-      <tspan x="890" dy="0">把状态发给</tspan>
-      <tspan x="890" dy="19">CLI 或界面。</tspan>
-    </text>
+    <rect class="card teaching" x="812" y="178" width="160" height="126"/>
+    <rect x="830" y="198" width="92" height="22" rx="11" fill="#6B5B95"/>
+    <text class="badge-text" x="849" y="214">教学辅助</text>
+    <text class="card-title" x="830" y="244">传输 / stream</text>
+    <text class="card-body" x="830" y="272">简化为客户端通道。</text>
   </g>
 
   <g>
-    <rect class="card teaching" x="1080" y="150" width="170" height="140"/>
-    <rect x="1098" y="170" width="92" height="22" rx="11" fill="#6B5B95"/>
-    <text class="badge-text" x="1117" y="186">教学辅助</text>
-    <text class="card-title" x="1098" y="214">客户端状态机</text>
-    <text class="card-body" x="1098" y="242">
-      <tspan x="1098" dy="0">显示进度、输出、</tspan>
-      <tspan x="1098" dy="19">错误或等待授权。</tspan>
-    </text>
+    <rect class="card teaching" x="1012" y="178" width="188" height="126"/>
+    <rect x="1030" y="198" width="92" height="22" rx="11" fill="#6B5B95"/>
+    <text class="badge-text" x="1049" y="214">教学辅助</text>
+    <text class="card-title" x="1030" y="244">客户端状态机</text>
+    <text class="card-body" x="1030" y="272">显示进度、输出或错误。</text>
+  </g>
+
+  <path class="trace-line" d="M 648 452 L 648 314"/>
+  <g>
+    <rect class="card fact" x="510" y="392" width="276" height="116"/>
+    <rect x="528" y="412" width="54" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="540" y="428">FACT</text>
+    <text class="card-title" x="528" y="462">trace context</text>
+    <text class="card-body" x="528" y="490">用于关联调试，不等于完整 tracing pipeline。</text>
+  </g>
+
+  <text class="section" x="60" y="570">教学 failure path：schema drift 应变成可解释状态，而不是遮挡主路径或继续长时间 spinner</text>
+  <path class="line-red" d="M 300 652 L 350 652"/>
+  <path class="line" d="M 600 652 L 650 652"/>
+  <path class="line" d="M 900 652 L 950 652"/>
+
+  <g>
+    <rect class="card teaching" x="60" y="610" width="240" height="130"/>
+    <rect x="78" y="630" width="92" height="22" rx="11" fill="#6B5B95"/>
+    <text class="badge-text" x="97" y="646">教学辅助</text>
+    <text class="card-title" x="78" y="680">坏输入示例</text>
+    <text class="card-body" x="78" y="710">mock 字段 `toolz` 只是教学例子。</text>
   </g>
 
   <g>
-    <rect class="card fact" x="450" y="412" width="240" height="128"/>
-    <rect x="468" y="432" width="54" height="22" rx="11" fill="#176B87"/>
-    <text class="badge-text" x="480" y="448">FACT</text>
-    <text class="card-title" x="468" y="482">trace context</text>
-    <text class="card-body" x="468" y="510">
-      <tspan x="468" dy="0">协议层包含 trace context</tspan>
-      <tspan x="468" dy="19">相关字段入口。</tspan>
-    </text>
+    <rect class="card fail" x="350" y="610" width="250" height="130"/>
+    <rect x="368" y="630" width="46" height="22" rx="11" fill="#C2410C"/>
+    <text class="badge-text" x="380" y="646">FAIL</text>
+    <text class="card-title" x="368" y="680">schema 不匹配</text>
+    <text class="card-body" x="368" y="710">不声明官方校验策略或错误码。</text>
   </g>
 
   <g>
-    <rect class="card fail" x="286" y="402" width="250" height="140"/>
-    <rect x="304" y="422" width="46" height="22" rx="11" fill="#C2410C"/>
-    <text class="badge-text" x="316" y="438">FAIL</text>
-    <rect x="360" y="422" width="92" height="22" rx="11" fill="#6B5B95"/>
-    <text class="badge-text" x="379" y="438">教学辅助</text>
-    <text class="card-title" x="304" y="476">schema 不匹配</text>
-    <text class="card-body" x="304" y="506">
-      <tspan x="304" dy="0">mock 中字段 `toolz`</tspan>
-      <tspan x="304" dy="19">只是教学 failure path。</tspan>
-    </text>
+    <rect class="card teaching" x="650" y="610" width="250" height="130"/>
+    <rect x="668" y="630" width="92" height="22" rx="11" fill="#6B5B95"/>
+    <text class="badge-text" x="687" y="646">教学辅助</text>
+    <text class="card-title" x="668" y="680">稳定错误事件</text>
+    <text class="card-body" x="668" y="710">产品上避免长 spinner。</text>
   </g>
 
   <g>
-    <rect class="card teaching" x="584" y="402" width="240" height="140"/>
-    <rect x="602" y="422" width="92" height="22" rx="11" fill="#6B5B95"/>
-    <text class="badge-text" x="621" y="438">教学辅助</text>
-    <text class="card-title" x="602" y="476">稳定错误事件</text>
-    <text class="card-body" x="602" y="506">
-      <tspan x="602" dy="0">产品上避免长 spinner，</tspan>
-      <tspan x="602" dy="19">但不声明官方错误码。</tspan>
-    </text>
+    <rect class="card teaching" x="950" y="610" width="250" height="130"/>
+    <rect x="968" y="630" width="92" height="22" rx="11" fill="#6B5B95"/>
+    <text class="badge-text" x="987" y="646">教学辅助</text>
+    <text class="card-title" x="968" y="680">UI 可读状态</text>
+    <text class="card-body" x="968" y="710">失败原因是界面建议。</text>
   </g>
 
   <g>
-    <rect class="card teaching" x="900" y="402" width="250" height="140"/>
-    <rect x="918" y="422" width="92" height="22" rx="11" fill="#6B5B95"/>
-    <text class="badge-text" x="937" y="438">教学辅助</text>
-    <text class="card-title" x="918" y="476">UI 可读状态</text>
-    <text class="card-body" x="918" y="506">
-      <tspan x="918" dy="0">“正在思考 / 运行工具 /</tspan>
-      <tspan x="918" dy="19">失败原因”是界面建议。</tspan>
-    </text>
-  </g>
-
-  <g>
-    <rect class="card neutral" x="40" y="622" width="1170" height="236"/>
-    <text class="card-title" x="62" y="656">图例与边界</text>
-    <rect x="62" y="678" width="54" height="22" rx="11" fill="#176B87"/>
-    <text class="badge-text" x="74" y="694">FACT</text>
-    <text class="tiny" x="126" y="694">已登记机制：Event / EventMsg、模型输入输出 item、trace context 字段入口</text>
-    <rect x="62" y="714" width="92" height="22" rx="11" fill="#6B5B95"/>
-    <text class="badge-text" x="81" y="730">教学辅助</text>
-    <text class="tiny" x="164" y="730">mock event 名称、UI 呈现建议、传输简化和兼容降级文案</text>
-    <rect x="62" y="750" width="46" height="22" rx="11" fill="#C2410C"/>
-    <text class="badge-text" x="74" y="766">FAIL</text>
-    <text class="tiny" x="118" y="766">schema drift failure path 来自教学 mock，不声明官方校验策略或错误码</text>
-    <text class="mono" x="62" y="802">示例事件：turn_started / model_message_delta / turn_completed 均为 mock 名称</text>
-    <text class="tiny" x="62" y="832">本图不使用待核实或 DENY：本批不引入 s08/s10 未闭环语义，也不展示人工拒绝动作。</text>
+    <rect class="card neutral" x="40" y="796" width="1170" height="88"/>
+    <rect x="62" y="824" width="54" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="74" y="840">FACT</text>
+    <text class="tiny" x="126" y="840">已登记机制：Event / EventMsg、模型输入输出 item、trace context 字段入口</text>
+    <rect x="62" y="858" width="92" height="22" rx="11" fill="#6B5B95"/>
+    <text class="badge-text" x="81" y="874">教学辅助</text>
+    <text class="tiny" x="164" y="874">mock event 名称、UI 呈现建议、传输简化和兼容降级文案</text>
+    <text class="mono" x="704" y="840">示例事件：turn_started / model_message_delta / turn_completed 均为 mock 名称</text>
+    <text class="tiny" x="704" y="874">本图不使用待核实或 DENY：本批不引入 s08/s10 未闭环语义，也不展示人工拒绝动作。</text>
   </g>
 </svg>

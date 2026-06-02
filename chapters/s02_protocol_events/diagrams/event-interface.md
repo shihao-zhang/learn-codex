@@ -51,6 +51,8 @@ python3 chapters/s02_protocol_events/mock.py --demo --path failure --trace-json
 - [x] 图题、节点、说明和图例中文优先。
 - [x] SVG 包含 `<title>` 和 `<desc>`，并声明不是 OpenAI 官方架构图。
 - [x] Mermaid 仍是本章主机制图，README 只增加可选入口。
+- [x] 已渲染 PNG 预览并复核：`schema 不匹配` 与 `trace context` 模块不再重叠。
+- [x] 模块、文字、chip、箭头和图例之间未出现遮挡或重叠。
 - [x] `FACT`、`TEACHING` 和 `FAIL` 均在图中可见。
 - [x] UI 呈现建议、mock event 名称和兼容降级文案均标为教学辅助表达。
 - [x] 未新增 `待核实`、`DENY` 或 s08/s10/s12 语义。
