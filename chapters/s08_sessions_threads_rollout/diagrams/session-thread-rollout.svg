@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="980" viewBox="0 0 1280 980" role="img" aria-labelledby="title desc">
+  <title id="title">s08 辅助图：session、thread、rollout 与未闭环恢复边界</title>
+  <desc id="desc">s08 的可选教学辅助图，展示 session、thread、rollout、resume 和 fork 的教学关系；本章状态仍为待核实，remote thread-store backend、Codex Cloud 和桌面端恢复语义、experimental app-server API 稳定承诺都不能画成 OpenAI 官方稳定产品能力。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/>
+    </marker>
+    <marker id="arrow-pending" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#B45309"/>
+    </marker>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2563EB"/>
+    </marker>
+    <style><![CDATA[
+      .canvas { fill: #F8FAFC; }
+      .title { font: 700 28px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #111827; }
+      .subtitle { font: 400 15px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #475569; }
+      .card { rx: 8; ry: 8; stroke-width: 2; }
+      .fact { fill: #F0FDFA; stroke: #176B87; }
+      .pending { fill: #FFFBEB; stroke: #B45309; stroke-dasharray: 6 4; }
+      .teaching { fill: #FBFAFF; stroke: #6B5B95; stroke-dasharray: 4 4; }
+      .recovery { fill: #EFF6FF; stroke: #2563EB; stroke-dasharray: 7 4; }
+      .neutral { fill: #FFFFFF; stroke: #CBD5E1; }
+      .band { fill: #FFFFFF; stroke: #CBD5E1; }
+      .card-title { font: 700 16px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #111827; }
+      .card-body { font: 400 14px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #334155; }
+      .tiny { font: 400 12px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #64748B; }
+      .badge-text { font: 700 11px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #FFFFFF; letter-spacing: 0; }
+      .chip-text { font: 600 12px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #334155; }
+      .mono { font: 600 12px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #475569; }
+      .line { fill: none; stroke: #475569; stroke-width: 2; marker-end: url(#arrow); }
+      .line-soft { fill: none; stroke: #94A3B8; stroke-width: 2; marker-end: url(#arrow); }
+      .line-pending { fill: none; stroke: #B45309; stroke-width: 2.5; stroke-dasharray: 6 5; marker-end: url(#arrow-pending); }
+      .line-blue { fill: none; stroke: #2563EB; stroke-width: 2.5; marker-end: url(#arrow-blue); }
+    ]]></style>
+  </defs>
+
+  <rect class="canvas" x="0" y="0" width="1280" height="980"/>
+  <text class="title" x="40" y="48">s08 辅助图：session、thread、rollout 与未闭环恢复边界</text>
+  <text class="subtitle" x="40" y="78">Mermaid 仍是主机制图；本 SVG 只帮助区分局部源码证据、教学关系和待核实产品语义。</text>
+
+  <rect x="888" y="34" width="94" height="26" rx="13" fill="#176B87"/>
+  <text class="badge-text" x="909" y="52">FACT(局部)</text>
+  <rect x="998" y="34" width="84" height="26" rx="13" fill="#B45309"/>
+  <text class="badge-text" x="1020" y="52">待核实</text>
+  <rect x="1096" y="34" width="112" height="26" rx="13" fill="#6B5B95"/>
+  <text class="badge-text" x="1117" y="52">教学辅助</text>
+
+  <text class="tiny" x="40" y="116">第一阅读路径：session/thread/rollout 是理解恢复问题的教学框架；resume/fork 只画源码路径和选择点，不是稳定产品承诺。</text>
+
+  <path class="line-soft" d="M 235 235 L 280 235"/>
+  <path class="line" d="M 520 235 L 565 235"/>
+  <path class="line" d="M 805 235 L 850 235"/>
+  <path class="line-blue" d="M 980 310 C 980 360 895 380 800 402"/>
+  <path class="line-pending" d="M 980 310 C 1015 360 1055 382 1100 402"/>
+  <path class="line-pending" d="M 660 310 C 625 372 560 420 420 500"/>
+  <path class="line-pending" d="M 980 525 C 970 575 915 610 780 642"/>
+  <path class="line-pending" d="M 980 525 C 1030 575 1070 610 1100 642"/>
+  <path class="line-pending" d="M 980 525 C 910 585 775 612 560 642"/>
+
+  <g>
+    <rect class="card teaching" x="40" y="155" width="195" height="155"/>
+    <rect x="58" y="175" width="84" height="22" rx="11" fill="#6B5B95"/>
+    <text class="badge-text" x="74" y="191">教学辅助</text>
+    <text class="card-title" x="58" y="224">用户请求入口</text>
+    <text class="card-body" x="58" y="254">
+      <tspan x="58" dy="0">start、resume 或 fork</tspan>
+      <tspan x="58" dy="19">都先是产品问题。</tspan>
+    </text>
+    <rect x="58" y="286" width="110" height="20" rx="10" fill="#F1F5F9" stroke="#CBD5E1"/>
+    <text class="chip-text" x="68" y="301">user intent</text>
+  </g>
+
+  <g>
+    <rect class="card fact" x="280" y="155" width="240" height="155"/>
+    <rect x="298" y="175" width="94" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="319" y="191">FACT(局部)</text>
+    <rect x="402" y="175" width="72" height="22" rx="11" fill="#B45309"/>
+    <text class="badge-text" x="416" y="191">待核实</text>
+    <text class="card-title" x="298" y="224">session 运行身份</text>
+    <text class="card-body" x="298" y="254">
+      <tspan x="298" dy="0">id 生成有源码证据；</tspan>
+      <tspan x="298" dy="19">跨端生命周期不升级。</tspan>
+    </text>
+    <rect x="298" y="286" width="112" height="20" rx="10" fill="#CCFBF1" stroke="#99F6E4"/>
+    <text class="chip-text" x="308" y="301">SessionId</text>
+  </g>
+
+  <g>
+    <rect class="card fact" x="565" y="155" width="240" height="155"/>
+    <rect x="583" y="175" width="94" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="604" y="191">FACT(局部)</text>
+    <rect x="687" y="175" width="72" height="22" rx="11" fill="#B45309"/>
+    <text class="badge-text" x="701" y="191">待核实</text>
+    <text class="card-title" x="583" y="224">thread 任务线索</text>
+    <text class="card-body" x="583" y="254">
+      <tspan x="583" dy="0">把 turns/history 关联</tspan>
+      <tspan x="583" dy="19">到一条任务线索。</tspan>
+    </text>
+    <rect x="583" y="286" width="100" height="20" rx="10" fill="#CCFBF1" stroke="#99F6E4"/>
+    <text class="chip-text" x="593" y="301">ThreadId</text>
+  </g>
+
+  <g>
+    <rect class="card fact" x="850" y="155" width="260" height="155"/>
+    <rect x="868" y="175" width="94" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="889" y="191">FACT(局部)</text>
+    <rect x="972" y="175" width="72" height="22" rx="11" fill="#B45309"/>
+    <text class="badge-text" x="986" y="191">待核实</text>
+    <text class="card-title" x="868" y="224">rollout / history surface</text>
+    <text class="card-body" x="868" y="254">
+      <tspan x="868" dy="0">JSONL replay 与过滤策略</tspan>
+      <tspan x="868" dy="19">有边界，不等于全量记忆。</tspan>
+    </text>
+    <rect x="868" y="286" width="128" height="20" rx="10" fill="#CCFBF1" stroke="#99F6E4"/>
+    <text class="chip-text" x="878" y="301">rollout replay</text>
+  </g>
+
+  <g>
+    <rect class="card recovery" x="620" y="400" width="260" height="125"/>
+    <rect x="638" y="420" width="86" height="22" rx="11" fill="#2563EB"/>
+    <text class="badge-text" x="656" y="436">恢复选择</text>
+    <rect x="734" y="420" width="72" height="22" rx="11" fill="#B45309"/>
+    <text class="badge-text" x="748" y="436">待核实</text>
+    <text class="card-title" x="638" y="472">resume</text>
+    <text class="card-body" x="638" y="500">
+      <tspan x="638" dy="0">源码路径存在，但不画成</tspan>
+      <tspan x="638" dy="19">稳定官方产品恢复能力。</tspan>
+    </text>
+  </g>
+
+  <g>
+    <rect class="card pending" x="960" y="400" width="260" height="125"/>
+    <rect x="978" y="420" width="72" height="22" rx="11" fill="#B45309"/>
+    <text class="badge-text" x="992" y="436">待核实</text>
+    <rect x="1060" y="420" width="84" height="22" rx="11" fill="#6B5B95"/>
+    <text class="badge-text" x="1076" y="436">教学辅助</text>
+    <text class="card-title" x="978" y="472">fork</text>
+    <text class="card-body" x="978" y="500">
+      <tspan x="978" dy="0">从源 history 生成新线索；</tspan>
+      <tspan x="978" dy="19">只覆盖已核实路径边界。</tspan>
+    </text>
+  </g>
+
+  <g>
+    <rect class="card pending" x="40" y="500" width="380" height="185"/>
+    <rect x="58" y="520" width="72" height="22" rx="11" fill="#B45309"/>
+    <text class="badge-text" x="72" y="536">待核实</text>
+    <text class="card-title" x="58" y="570">remote thread-store backend</text>
+    <text class="card-body" x="58" y="600">
+      <tspan x="58" dy="0">当前固定 SHA 只闭合 local、</tspan>
+      <tspan x="58" dy="19">in-memory/test 边界；remote</tspan>
+      <tspan x="58" dy="38">backend 不能升级为产品事实。</tspan>
+    </text>
+    <rect x="58" y="660" width="210" height="20" rx="10" fill="#FEF3C7" stroke="#F59E0B"/>
+    <text class="chip-text" x="68" y="675">remote backend != transport</text>
+  </g>
+
+  <g>
+    <rect class="card pending" x="460" y="642" width="320" height="150"/>
+    <rect x="478" y="662" width="72" height="22" rx="11" fill="#B45309"/>
+    <text class="badge-text" x="492" y="678">待核实</text>
+    <text class="card-title" x="478" y="712">Codex Cloud / 桌面端恢复语义</text>
+    <text class="card-body" x="478" y="742">
+      <tspan x="478" dy="0">桌面端体验只能生成源码问题；</tspan>
+      <tspan x="478" dy="19">不能直接断言官方实现。</tspan>
+    </text>
+    <rect x="478" y="766" width="182" height="20" rx="10" fill="#FEF3C7" stroke="#F59E0B"/>
+    <text class="chip-text" x="488" y="781">product semantics?</text>
+  </g>
+
+  <g>
+    <rect class="card pending" x="820" y="642" width="400" height="150"/>
+    <rect x="838" y="662" width="72" height="22" rx="11" fill="#B45309"/>
+    <text class="badge-text" x="852" y="678">待核实</text>
+    <text class="card-title" x="838" y="712">experimental app-server API 稳定承诺</text>
+    <text class="card-body" x="838" y="742">
+      <tspan x="838" dy="0">`thread/resume`、`thread/fork` 可作为阅读入口；</tspan>
+      <tspan x="838" dy="19">不能声明 stable public API。</tspan>
+    </text>
+    <rect x="838" y="766" width="172" height="20" rx="10" fill="#FEF3C7" stroke="#F59E0B"/>
+    <text class="chip-text" x="848" y="781">experimental / unstable</text>
+  </g>
+
+  <g>
+    <rect class="card neutral" x="40" y="815" width="1170" height="135"/>
+    <text class="card-title" x="62" y="849">图例与边界</text>
+
+    <rect x="62" y="867" width="94" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="83" y="883">FACT(局部)</text>
+    <text class="tiny" x="166" y="883">只指向 docs/source-evidence.md 已登记的固定 SHA 机制证据，不升级整章状态</text>
+
+    <rect x="650" y="867" width="72" height="22" rx="11" fill="#B45309"/>
+    <text class="badge-text" x="664" y="883">待核实</text>
+    <text class="tiny" x="732" y="883">remote backend、Cloud/桌面端语义、experimental API 稳定性和恢复产品承诺</text>
+
+    <rect x="62" y="901" width="84" height="22" rx="11" fill="#6B5B95"/>
+    <text class="badge-text" x="78" y="917">教学辅助</text>
+    <text class="tiny" x="156" y="917">session/thread/rollout 的心智模型、mock trace 和产品解释</text>
+
+    <rect x="650" y="901" width="86" height="22" rx="11" fill="#2563EB"/>
+    <text class="badge-text" x="668" y="917">恢复选择</text>
+    <text class="tiny" x="746" y="917">resume/fork 只能表示选择点和源码路径提示，不是稳定产品能力</text>
+
+    <text class="mono" x="62" y="942">来源：s08 README / diagram.mmd / mock.py / docs/source-evidence.md</text>
+    <text class="tiny" x="650" y="942">本图是教学辅助图，不是 OpenAI 官方架构图；s08 状态保持待核实。</text>
+  </g>
+</svg>

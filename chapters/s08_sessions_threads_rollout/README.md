@@ -20,6 +20,10 @@
 
 见 [diagram.mmd](diagram.mmd)。该图只表达待核实章节的阅读框架：app-server 主链路已有更多源码证据，但完整产品边界仍待核实；它不是官方数据流图。
 
+## 可选教学辅助 SVG
+
+见 [session-thread-rollout.md](diagrams/session-thread-rollout.md)。这张图只辅助理解 session、thread、rollout、resume、fork 的教学关系与未闭环边界，不替代本章 Mermaid，也不把恢复链路画成官方稳定产品能力。
+
 ## 运行 mock
 
 ```bash
