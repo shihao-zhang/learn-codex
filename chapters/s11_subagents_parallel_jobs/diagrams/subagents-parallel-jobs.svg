@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="980" viewBox="0 0 1280 980" role="img" aria-labelledby="title desc">
+  <title id="title">s11 辅助图：delegate、审批转发与并行结果汇总</title>
+  <desc id="desc">s11 的可选教学辅助图，展示 delegate、父子事件、审批转发、并行 agent job 与 result merge；已登记源码机制可标为 FACT，默认启用、产品入口和 multi-agent v1/v2 体验仍需核实。本图不是 OpenAI 官方架构图，也不是通用官方子代理平台。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/>
+    </marker>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2563EB"/>
+    </marker>
+    <marker id="arrow-amber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#A16207"/>
+    </marker>
+    <style><![CDATA[
+      .canvas { fill: #F8FAFC; }
+      .title { font: 700 28px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #111827; }
+      .subtitle { font: 400 15px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #475569; }
+      .section { font: 700 13px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #64748B; }
+      .card { stroke-width: 2; }
+      .fact { fill: #F0FDFA; stroke: #176B87; }
+      .teaching { fill: #FBFAFF; stroke: #6B5B95; stroke-dasharray: 4 4; }
+      .pending { fill: #FEFCE8; stroke: #A16207; stroke-dasharray: 6 4; }
+      .neutral { fill: #FFFFFF; stroke: #CBD5E1; }
+      .approval { fill: #EFF6FF; stroke: #2563EB; }
+      .card-title { font: 700 16px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #111827; }
+      .card-body { font: 400 14px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #334155; }
+      .tiny { font: 400 12px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #64748B; }
+      .chip-text { font: 600 12px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #334155; }
+      .badge-text { font: 700 11px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #FFFFFF; letter-spacing: 0; }
+      .mono { font: 600 12px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #475569; }
+      .line { fill: none; stroke: #475569; stroke-width: 2; marker-end: url(#arrow); }
+      .line-soft { fill: none; stroke: #94A3B8; stroke-width: 2; marker-end: url(#arrow); }
+      .line-blue { fill: none; stroke: #2563EB; stroke-width: 2.5; marker-end: url(#arrow-blue); }
+      .line-amber { fill: none; stroke: #A16207; stroke-width: 2; stroke-dasharray: 6 5; marker-end: url(#arrow-amber); }
+    ]]></style>
+  </defs>
+
+  <rect class="canvas" x="0" y="0" width="1280" height="980"/>
+  <text class="title" x="40" y="48">s11 辅助图：delegate、审批转发与并行结果汇总</text>
+  <text class="subtitle" x="40" y="78">Mermaid 仍是主机制图；本 SVG 只解释已登记源码机制之间的教学关系，不把 s11 画成通用官方子代理平台。</text>
+
+  <rect x="916" y="34" width="54" height="26" rx="13" fill="#176B87"/>
+  <text class="badge-text" x="928" y="52">FACT</text>
+  <rect x="984" y="34" width="72" height="26" rx="13" fill="#A16207"/>
+  <text class="badge-text" x="1001" y="52">待核实</text>
+  <rect x="1070" y="34" width="112" height="26" rx="13" fill="#6B5B95"/>
+  <text class="badge-text" x="1091" y="52">教学辅助</text>
+
+  <text class="tiny" x="40" y="116">第一阅读路径：父任务生成子 agent，子 thread 回传事件，父任务汇总结果；审批与 CSV job worker 是侧向机制解释。</text>
+  <text class="section" x="40" y="146">主路径：delegate 与父子事件</text>
+  <text class="section" x="40" y="326">侧向机制：审批转发、普通工具并行、CSV agent job</text>
+
+  <path class="line" d="M 250 225 L 300 225"/>
+  <path class="line" d="M 540 225 L 590 225"/>
+  <path class="line" d="M 830 225 L 880 225"/>
+  <path class="line-soft" d="M 1005 295 L 1005 540"/>
+  <path class="line-blue" d="M 710 295 L 710 340"/>
+  <path class="line-blue" d="M 590 415 L 540 415"/>
+  <path class="line-blue" d="M 420 340 L 590 275"/>
+  <path class="line-amber" d="M 425 295 C 560 315 735 315 910 340"/>
+  <path class="line" d="M 290 645 L 330 645"/>
+  <path class="line" d="M 580 645 L 620 645"/>
+  <path class="line" d="M 870 645 L 910 645"/>
+
+  <g>
+    <rect class="card fact" x="40" y="160" width="210" height="130" rx="8" ry="8"/>
+    <rect x="58" y="180" width="54" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="70" y="196">FACT</text>
+    <text class="card-title" x="58" y="228">父任务 / session</text>
+    <text class="card-body" x="58" y="256">
+      <tspan x="58" dy="0">multi-agent tool surface</tspan>
+      <tspan x="58" dy="19">作为机制入口被登记。</tspan>
+    </text>
+    <rect x="58" y="275" width="126" height="20" rx="10" fill="#CCFBF1" stroke="#99F6E4"/>
+    <text class="chip-text" x="68" y="290">multi_agents.rs</text>
+  </g>
+
+  <g>
+    <rect class="card fact" x="300" y="160" width="240" height="130" rx="8" ry="8"/>
+    <rect x="318" y="180" width="54" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="330" y="196">FACT</text>
+    <text class="card-title" x="318" y="228">AgentControl / spawn</text>
+    <text class="card-body" x="318" y="256">
+      <tspan x="318" dy="0">生成子 agent thread，</tspan>
+      <tspan x="318" dy="19">登记 metadata 与初始输入。</tspan>
+    </text>
+    <rect x="318" y="275" width="120" height="20" rx="10" fill="#CCFBF1" stroke="#99F6E4"/>
+    <text class="chip-text" x="328" y="290">spawn_agent</text>
+  </g>
+
+  <g>
+    <rect class="card fact" x="590" y="160" width="240" height="130" rx="8" ry="8"/>
+    <rect x="608" y="180" width="54" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="620" y="196">FACT</text>
+    <text class="card-title" x="608" y="228">delegate 子 thread</text>
+    <text class="card-body" x="608" y="256">
+      <tspan x="608" dy="0">运行子 Codex thread，</tspan>
+      <tspan x="608" dy="19">事件与请求回到父侧。</tspan>
+    </text>
+    <rect x="608" y="275" width="134" height="20" rx="10" fill="#CCFBF1" stroke="#99F6E4"/>
+    <text class="chip-text" x="618" y="290">codex_delegate.rs</text>
+  </g>
+
+  <g>
+    <rect class="card fact" x="880" y="160" width="250" height="130" rx="8" ry="8"/>
+    <rect x="898" y="180" width="54" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="910" y="196">FACT</text>
+    <text class="card-title" x="898" y="228">父子事件回传</text>
+    <text class="card-body" x="898" y="256">
+      <tspan x="898" dy="0">子 agent 事件被转发，</tspan>
+      <tspan x="898" dy="19">父任务可观察进度。</tspan>
+    </text>
+    <rect x="898" y="275" width="140" height="20" rx="10" fill="#CCFBF1" stroke="#99F6E4"/>
+    <text class="chip-text" x="908" y="290">child events</text>
+  </g>
+
+  <g>
+    <rect class="card approval" x="300" y="340" width="240" height="150" rx="8" ry="8"/>
+    <rect x="318" y="360" width="54" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="330" y="376">FACT</text>
+    <text class="card-title" x="318" y="410">父 session 审批口</text>
+    <text class="card-body" x="318" y="438">
+      <tspan x="318" dy="0">delegate approval 请求</tspan>
+      <tspan x="318" dy="19">转回父 session 处理。</tspan>
+    </text>
+    <rect x="318" y="466" width="136" height="20" rx="10" fill="#DBEAFE" stroke="#BFDBFE"/>
+    <text class="chip-text" x="328" y="481">approval forward</text>
+  </g>
+
+  <g>
+    <rect class="card approval" x="590" y="340" width="240" height="150" rx="8" ry="8"/>
+    <rect x="608" y="360" width="54" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="620" y="376">FACT</text>
+    <rect x="670" y="360" width="72" height="22" rx="11" fill="#A16207"/>
+    <text class="badge-text" x="687" y="376">待核实</text>
+    <text class="card-title" x="608" y="410">审批结果回到子任务</text>
+    <text class="card-body" x="608" y="438">
+      <tspan x="608" dy="0">转发路径已核实；完整</tspan>
+      <tspan x="608" dy="19">权限继承策略仍需下钻。</tspan>
+    </text>
+    <rect x="608" y="466" width="132" height="20" rx="10" fill="#DBEAFE" stroke="#BFDBFE"/>
+    <text class="chip-text" x="618" y="481">sandbox approval</text>
+  </g>
+
+  <g>
+    <rect class="card pending" x="910" y="340" width="270" height="150" rx="8" ry="8"/>
+    <rect x="928" y="360" width="72" height="22" rx="11" fill="#A16207"/>
+    <text class="badge-text" x="945" y="376">待核实</text>
+    <text class="card-title" x="928" y="410">产品语义边界</text>
+    <text class="card-body" x="928" y="438">
+      <tspan x="928" dy="0">默认启用、产品入口、</tspan>
+      <tspan x="928" dy="19">multi-agent v1/v2 体验</tspan>
+      <tspan x="928" dy="19">仍需继续核实。</tspan>
+    </text>
+  </g>
+
+  <g>
+    <rect class="card fact" x="40" y="340" width="220" height="150" rx="8" ry="8"/>
+    <rect x="58" y="360" width="54" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="70" y="376">FACT</text>
+    <text class="card-title" x="58" y="410">普通工具并行</text>
+    <text class="card-body" x="58" y="438">
+      <tspan x="58" dy="0">parallel.rs 是 tool call</tspan>
+      <tspan x="58" dy="19">runtime，不等同子 agent。</tspan>
+    </text>
+    <rect x="58" y="466" width="116" height="20" rx="10" fill="#CCFBF1" stroke="#99F6E4"/>
+    <text class="chip-text" x="68" y="481">tools/parallel</text>
+  </g>
+
+  <g>
+    <rect class="card fact" x="40" y="560" width="250" height="150" rx="8" ry="8"/>
+    <rect x="58" y="580" width="54" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="70" y="596">FACT</text>
+    <text class="card-title" x="58" y="630">spawn_agents_on_csv</text>
+    <text class="card-body" x="58" y="658">
+      <tspan x="58" dy="0">特定 agent jobs 工具</tspan>
+      <tspan x="58" dy="19">按 CSV 行生成 item。</tspan>
+    </text>
+    <rect x="58" y="686" width="116" height="20" rx="10" fill="#CCFBF1" stroke="#99F6E4"/>
+    <text class="chip-text" x="68" y="701">agent_jobs.rs</text>
+  </g>
+
+  <g>
+    <rect class="card fact" x="330" y="560" width="250" height="150" rx="8" ry="8"/>
+    <rect x="348" y="580" width="54" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="360" y="596">FACT</text>
+    <text class="card-title" x="348" y="630">item ledger / 并发上限</text>
+    <text class="card-body" x="348" y="658">
+      <tspan x="348" dy="0">worker sub-agent 按上限</tspan>
+      <tspan x="348" dy="19">并行处理 item。</tspan>
+    </text>
+    <rect x="348" y="686" width="128" height="20" rx="10" fill="#CCFBF1" stroke="#99F6E4"/>
+    <text class="chip-text" x="358" y="701">concurrency</text>
+  </g>
+
+  <g>
+    <rect class="card fact" x="620" y="560" width="250" height="150" rx="8" ry="8"/>
+    <rect x="638" y="580" width="54" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="650" y="596">FACT</text>
+    <text class="card-title" x="638" y="630">result 回填</text>
+    <text class="card-body" x="638" y="658">
+      <tspan x="638" dy="0">worker 必须回填结果，</tspan>
+      <tspan x="638" dy="19">job 才能导出汇总文件。</tspan>
+    </text>
+    <rect x="638" y="686" width="168" height="20" rx="10" fill="#CCFBF1" stroke="#99F6E4"/>
+    <text class="chip-text" x="648" y="701">report_agent_job_result</text>
+  </g>
+
+  <g>
+    <rect class="card teaching" x="910" y="560" width="270" height="150" rx="8" ry="8"/>
+    <rect x="928" y="580" width="84" height="22" rx="11" fill="#6B5B95"/>
+    <text class="badge-text" x="944" y="596">教学辅助</text>
+    <text class="card-title" x="928" y="630">父任务 result merge</text>
+    <text class="card-body" x="928" y="658">
+      <tspan x="928" dy="0">排序、去重、冲突处理、</tspan>
+      <tspan x="928" dy="19">部分完成报告是产品表达。</tspan>
+    </text>
+    <rect x="928" y="686" width="108" height="20" rx="10" fill="#F1F5F9" stroke="#CBD5E1"/>
+    <text class="chip-text" x="938" y="701">mock: merge</text>
+  </g>
+
+  <g>
+    <rect class="card neutral" x="40" y="770" width="1170" height="160" rx="8" ry="8"/>
+    <text class="card-title" x="62" y="804">图例与边界</text>
+
+    <rect x="62" y="824" width="54" height="22" rx="11" fill="#176B87"/>
+    <text class="badge-text" x="74" y="840">FACT</text>
+    <text class="tiny" x="126" y="840">只表示已登记源码机制：surface、AgentControl、delegate、agent jobs、tool runtime</text>
+
+    <rect x="62" y="858" width="72" height="22" rx="11" fill="#A16207"/>
+    <text class="badge-text" x="79" y="874">待核实</text>
+    <text class="tiny" x="146" y="874">默认启用、产品入口、multi-agent v1/v2 体验和完整权限继承策略</text>
+
+    <rect x="650" y="858" width="84" height="22" rx="11" fill="#6B5B95"/>
+    <text class="badge-text" x="666" y="874">教学辅助</text>
+    <text class="tiny" x="744" y="874">mock trace、result merge 解释、UI 进度表达、读者侧风险提醒</text>
+
+    <rect x="650" y="824" width="86" height="22" rx="11" fill="#2563EB"/>
+    <text class="badge-text" x="668" y="840">审批转发</text>
+    <text class="tiny" x="746" y="840">子任务 approval 请求回父 session；不代表子 agent 自动继承全部权限</text>
+
+    <text class="mono" x="62" y="910">来源：s11 README / diagram.mmd / mock.py / docs/source-evidence.md</text>
+    <text class="tiny" x="650" y="910">本图是可选教学辅助图，不是 OpenAI 官方架构图，也不是通用官方子代理平台。</text>
+  </g>
+</svg>
