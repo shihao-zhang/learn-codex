@@ -58,4 +58,5 @@ python3 chapters/s10_extensions_mcp_skills/mock.py --demo --path failure --trace
 - [x] 四条能力线保持视觉分离，未画成统一官方扩展产品。
 - [x] dynamic tools experimental、通用 extension 用户入口、统一治理路径均显式标 `待核实`。
 - [x] `FACT`、`待核实` 和 `教学辅助` 均在图中可见。
+- [x] 全仓视觉一致性 QA 中已重新渲染预览，修正小卡片和底部说明的垂直留白，避免正文贴住边框。
 - [x] SVG 不依赖外部图片、字体文件、网络或生成工具。
