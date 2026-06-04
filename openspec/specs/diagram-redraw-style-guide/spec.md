@@ -3,9 +3,7 @@
 ## Purpose
 
 定义本仓教学图的长期边界：Mermaid 保持为章节主机制图，SVG 作为可选教学辅助图，用手写、可审查、中文优先的方式解释路径、边界、失败、恢复和 trace，同时不把教学表达升级为 `openai/codex` 官方事实。
-
 ## Requirements
-
 ### Requirement: Diagram rollout remains OpenSpec-governed and incremental
 
 Diagram redraw and SVG rollout work SHALL use OpenSpec before changing long-term diagram rules or adding batches of chapter SVGs.
@@ -309,3 +307,288 @@ The context and instruction SVG rollout SHALL pass repository checks without mod
 - **WHEN** the context and instruction SVG rollout is complete
 - **THEN** `openspec validate rollout-context-instruction-svgs --strict`, `openspec validate --all --strict`, XML parse checks for newly added SVGs, `python3 scripts/check_docs.py`, `python3 scripts/run_all.py`, `python3 -m unittest discover -s tests`, and `git diff --check` pass
 - **AND** `docs/fact-snapshot.md`, `docs/source-evidence.md`, `scripts/check_docs.py`, s08/s10/s12 statuses, and s05/s06 statuses remain unchanged
+
+### Requirement: Config and app-server SVG rollout
+
+The repository SHALL add optional SVG teaching support for the s07/s09 rollout without replacing existing Mermaid mechanism diagrams.
+
+#### Scenario: Config and app-server batch is implemented
+
+- **WHEN** `rollout-config-appserver-svgs` is implemented
+- **THEN** s07 and s09 each gain one scoped SVG under the chapter `diagrams/` directory
+- **AND** each SVG has a companion Markdown note in the same directory
+
+#### Scenario: Mermaid remains primary
+
+- **WHEN** s07 or s09 README is updated
+- **THEN** the chapter continues to present `diagram.mmd` as the main mechanism diagram
+- **AND** the SVG is linked only as optional teaching support
+
+### Requirement: Config SVG preserves model-choice fact boundaries
+
+The s07 SVG SHALL explain how config, auth, provider, and model choices affect cost, capability, compliance, and availability without turning product guidance into official implementation fact.
+
+#### Scenario: s07 diagram marks facts
+
+- **WHEN** the s07 SVG depicts config type entry points, model preset/model info, or session initialization model selection
+- **THEN** only mechanisms already registered in `docs/source-evidence.md` are marked `FACT`
+- **AND** auth product meaning, account boundaries, provider availability, latest model list, default choices, price/cost interpretation, compliance posture, UI recommendations, and recovery wording are marked `TEACHING` or `教学辅助`
+
+#### Scenario: s07 diagram shows configuration failure
+
+- **WHEN** the s07 SVG depicts missing provider, missing credential, unsupported capability, or unavailable model
+- **THEN** the blocked point is visually marked as `FAIL` or risk
+- **AND** the safe next step is marked `RECOVERY` or `恢复选择`
+- **AND** the diagram does not print, inspect, or imply validation of real credentials
+
+### Requirement: App-server SVG preserves state-sync boundaries
+
+The s09 SVG SHALL distinguish verified app-server/protocol mechanisms from product-surface state synchronization advice.
+
+#### Scenario: s09 diagram marks facts
+
+- **WHEN** the s09 SVG depicts transport connection state, outbound routing, server request callbacks, thread status projection, or schema export
+- **THEN** only mechanisms already registered in `docs/source-evidence.md` are marked `FACT`
+- **AND** product UI surfaces, multi-client behavior, reconnect policy, user-visible status names, Codex Cloud interpretation, and client implementation details are marked `TEACHING` or boundary notes
+
+#### Scenario: s09 diagram shows synchronization boundary
+
+- **WHEN** the s09 SVG depicts runtime events becoming product-visible state
+- **THEN** protocol/schema and transport boundaries are visually separated from product-surface interpretation
+- **AND** incomplete field-level compatibility or private service behavior is not drawn as stable official capability
+- **AND** disconnect or slow-connection examples are marked as risk or recovery teaching paths
+
+### Requirement: Config and app-server companion notes
+
+Each s07/s09 SVG SHALL include a companion Markdown note that records review inputs and human QA.
+
+#### Scenario: Companion note is reviewed
+
+- **WHEN** a reviewer opens a companion Markdown file for s07 or s09
+- **THEN** it includes `Source Inputs`
+- **AND** it includes `Event / Mechanism Mapping`
+- **AND** it includes `Fact Boundary`
+- **AND** it includes `Manual QA`
+
+### Requirement: Config and app-server rollout validation
+
+The s07/s09 SVG rollout SHALL pass repository checks without modifying evidence files, check scripts, chapter statuses, root README, roadmap, or the diagram style guide.
+
+#### Scenario: Change is ready
+
+- **WHEN** the config and app-server SVG rollout is complete
+- **THEN** `openspec validate rollout-config-appserver-svgs --strict`, `openspec validate --all --strict`, XML parse checks for newly added SVGs, `python3 scripts/check_docs.py`, `python3 scripts/run_all.py`, `python3 -m unittest discover -s tests`, and `git diff --check` pass
+- **AND** `README.md`, `docs/roadmap.md`, `docs/diagram-style-guide.md`, `docs/fact-snapshot.md`, `docs/source-evidence.md`, `scripts/check_docs.py`, and all chapter statuses remain unchanged
+
+### Requirement: s11 subagents SVG rollout
+
+The repository SHALL add optional SVG teaching support for s11 without replacing the existing Mermaid mechanism diagram or changing chapter status.
+
+#### Scenario: s11 SVG is implemented
+
+- **WHEN** `rollout-subagents-svg` is implemented
+- **THEN** s11 gains one scoped SVG under the chapter `diagrams/` directory
+- **AND** the SVG has a companion Markdown note in the same directory
+
+#### Scenario: Mermaid remains primary
+
+- **WHEN** s11 README is updated
+- **THEN** the chapter continues to present `diagram.mmd` as the main mechanism diagram
+- **AND** the SVG is linked only as optional teaching support
+
+### Requirement: s11 SVG preserves subagent fact boundaries
+
+The s11 SVG SHALL distinguish registered source mechanisms from unresolved product semantics and teaching simplifications.
+
+#### Scenario: s11 diagram marks facts
+
+- **WHEN** the s11 SVG depicts multi-agent tool surface, `spawn_agent`, `AgentControl`, delegate event forwarding, delegate approval forwarding, agent jobs CSV worker behavior, or ordinary tool-call parallel runtime
+- **THEN** only mechanisms already registered in `docs/source-evidence.md` are marked `FACT`
+- **AND** result-merge explanations, UI progress suggestions, mock trace events, synthetic examples, and reader guidance are marked `TEACHING` or `教学辅助`
+
+#### Scenario: s11 diagram shows unresolved product semantics
+
+- **WHEN** the s11 SVG mentions default enablement, product entry, multi-agent v1/v2 experience, or complete permission inheritance strategy
+- **THEN** those nodes or notes are visibly marked `待核实`
+- **AND** the diagram does not present them as stable official capability
+
+#### Scenario: s11 diagram avoids over-generalization
+
+- **WHEN** the s11 SVG shows delegation or parallel job execution
+- **THEN** it does not draw s11 as a general official subagent platform
+- **AND** it does not present agent jobs as a generic batch-processing API
+- **AND** it does not present `tools/parallel.rs` as child-agent parallelism
+
+### Requirement: s11 SVG companion note records boundaries
+
+The s11 SVG SHALL include a companion Markdown note that records review inputs, mapping, fact boundaries, and manual QA.
+
+#### Scenario: Companion note is reviewed
+
+- **WHEN** a reviewer opens the s11 companion Markdown file
+- **THEN** it includes `Source Inputs`
+- **AND** it includes `Event / Mechanism Mapping`
+- **AND** it includes `Fact Boundary`
+- **AND** it includes `Manual QA`
+- **AND** it explicitly states that default enablement, product entry, and multi-agent v1/v2 experience remain to be verified
+
+### Requirement: s11 rollout validation
+
+The s11 SVG rollout SHALL pass repository checks without modifying global guide, evidence files, check scripts, or chapter statuses.
+
+#### Scenario: Change is ready
+
+- **WHEN** the s11 SVG rollout is complete
+- **THEN** `openspec validate rollout-subagents-svg --strict`, `openspec validate --all --strict`, XML parse checks for the newly added SVG, `python3 scripts/check_docs.py`, `python3 scripts/run_all.py`, `python3 -m unittest discover -s tests`, and `git diff --check` pass
+- **AND** repository README, roadmap, `docs/diagram-style-guide.md`, `docs/fact-snapshot.md`, `docs/source-evidence.md`, `scripts/check_docs.py`, and chapter statuses remain unchanged
+
+### Requirement: s08 session SVG rollout preserves pending boundaries
+
+The repository SHALL add optional SVG teaching support for s08 without replacing the existing Mermaid mechanism diagram or changing the chapter status.
+
+#### Scenario: s08 optional SVG is implemented
+
+- **WHEN** `rollout-s08-session-svg` is implemented
+- **THEN** `s08_sessions_threads_rollout` gains one scoped SVG under the chapter `diagrams/` directory
+- **AND** the SVG has a companion Markdown note in the same directory
+- **AND** the chapter README links the SVG only as optional teaching support
+- **AND** `diagram.mmd` remains the main mechanism diagram
+- **AND** the s08 status remains `待核实`
+
+### Requirement: s08 SVG marks unresolved recovery and storage semantics
+
+The s08 SVG SHALL visibly mark unresolved recovery, storage, and API stability semantics as `待核实`.
+
+#### Scenario: Remote thread-store backend appears
+
+- **WHEN** the SVG references a remote thread-store backend, non-local persistence, daemon transport, or remote app-server transport as a recovery/storage boundary
+- **THEN** the relevant node or edge is marked `待核实`
+- **AND** the SVG does not present it as an implemented official backend or stable product capability
+
+#### Scenario: Cloud or desktop recovery semantics appear
+
+- **WHEN** the SVG references Codex Cloud, Codex desktop, cross-client recovery, or desktop resume semantics
+- **THEN** the relevant node or edge is marked `待核实`
+- **AND** the SVG does not infer official product behavior from desktop observations or teaching mocks
+
+#### Scenario: Experimental API stability appears
+
+- **WHEN** the SVG references `thread/resume`, `thread/fork`, app-server v2, or experimental app-server API stability
+- **THEN** the relevant node or edge is marked `待核实`
+- **AND** the SVG does not claim a stable public API commitment
+
+### Requirement: s08 SVG distinguishes teaching relationships from product promises
+
+The s08 SVG SHALL explain session/thread/rollout/resume/fork as a teaching relationship while avoiding official recovery-product claims.
+
+#### Scenario: Teaching relationship is drawn
+
+- **WHEN** the SVG depicts session, thread, rollout, resume, or fork
+- **THEN** the diagram labels the relationship as teaching support or `局部源码证据` with pending chapter boundary
+- **AND** it avoids drawing resume/fork as a guaranteed official recovery path
+
+#### Scenario: Local facts are shown
+
+- **WHEN** the SVG marks a node or edge as `FACT`
+- **THEN** the label is scoped as local or `局部` evidence only
+- **AND** it can be traced to fixed SHA evidence already registered in `docs/source-evidence.md`
+- **AND** it does not upgrade the s08 chapter status
+
+### Requirement: s08 companion note records review inputs and boundaries
+
+The s08 SVG SHALL include a companion Markdown note that records review inputs, mechanism mapping, fact boundaries, and human QA.
+
+#### Scenario: Companion note is reviewed
+
+- **WHEN** a reviewer opens `chapters/s08_sessions_threads_rollout/diagrams/session-thread-rollout.md`
+- **THEN** it includes `Source Inputs`
+- **AND** it includes `Event / Mechanism Mapping`
+- **AND** it includes `Fact Boundary`
+- **AND** it includes `Manual QA`
+
+### Requirement: s08 SVG rollout validation
+
+The s08 SVG rollout SHALL pass repository checks without modifying evidence files, check scripts, root navigation, or chapter status.
+
+#### Scenario: Change is ready
+
+- **WHEN** the s08 SVG rollout is complete
+- **THEN** `openspec validate rollout-s08-session-svg --strict`, `openspec validate --all --strict`, XML parse checks for the new SVG, `python3 scripts/check_docs.py`, `python3 scripts/run_all.py`, `python3 -m unittest discover -s tests`, and `git diff --check` pass
+- **AND** root README, roadmap, `docs/diagram-style-guide.md`, `docs/fact-snapshot.md`, `docs/source-evidence.md`, `scripts/check_docs.py`, and the s08 status remain unchanged
+
+### Requirement: s10 extension SVG rollout
+
+The repository SHALL add optional SVG teaching support for s10 without replacing the existing Mermaid mechanism diagram or changing the chapter status.
+
+#### Scenario: s10 diagram is implemented
+
+- **WHEN** `rollout-s10-extension-svg` is implemented
+- **THEN** `s10_extensions_mcp_skills` gains one scoped SVG under the chapter `diagrams/` directory
+- **AND** the SVG has a companion Markdown note in the same directory
+- **AND** the chapter status remains `待核实`
+
+#### Scenario: Mermaid remains primary
+
+- **WHEN** s10 README is updated
+- **THEN** the chapter continues to present `diagram.mmd` as the main mechanism diagram
+- **AND** the SVG is linked only as optional teaching support
+
+### Requirement: s10 SVG preserves separate capability paths
+
+The s10 SVG SHALL keep MCP, dynamic tools, extension tools, and skills as separate capability lines unless a fixed SHA official source proves a shared official mechanism.
+
+#### Scenario: Four lines are drawn
+
+- **WHEN** the s10 SVG depicts extension-like capabilities
+- **THEN** it shows MCP, dynamic tools, extension tools, and skills as separate paths
+- **AND** it does not merge them into one official extension product promise
+
+#### Scenario: Facts are marked
+
+- **WHEN** the s10 SVG marks a node or edge as `FACT`
+- **THEN** that claim is limited to mechanisms already registered in `docs/source-evidence.md`
+- **AND** the diagram does not use `FACT` to prove cross-client semantics, marketplace behavior, or unified governance
+
+### Requirement: s10 SVG marks unresolved boundaries
+
+The s10 SVG SHALL explicitly mark high-risk unresolved boundaries as `待核实`.
+
+#### Scenario: dynamic tools are shown
+
+- **WHEN** dynamic tools appear in the s10 SVG
+- **THEN** the diagram labels `thread/start.dynamicTools` as experimental or pending
+- **AND** it does not present dynamic tools as a stable CLI user-created tool entry
+
+#### Scenario: extension tools are shown
+
+- **WHEN** extension tools appear in the s10 SVG
+- **THEN** the diagram labels the generic extension user install, discovery, authorization, or marketplace-style entry as `待核实`
+- **AND** it only marks built-in app-server extension and runtime adapter evidence as verified when supported by registered evidence
+
+#### Scenario: governance is shown
+
+- **WHEN** the s10 SVG depicts governance across MCP, dynamic tools, extension tools, and skills
+- **THEN** it labels any shared or unified governance path as `待核实`
+- **AND** it preserves separate per-path governance notes instead of drawing one proven common policy pipeline
+
+### Requirement: s10 SVG companion note records review inputs
+
+The s10 SVG SHALL include a companion Markdown note that records source inputs, mapping, fact boundaries, and manual QA.
+
+#### Scenario: Companion note is reviewed
+
+- **WHEN** a reviewer opens the s10 companion Markdown file
+- **THEN** it includes `Source Inputs`
+- **AND** it includes `Event / Mechanism Mapping`
+- **AND** it includes `Fact Boundary`
+- **AND** it includes `Manual QA`
+
+### Requirement: s10 SVG rollout validation
+
+The s10 SVG rollout SHALL pass repository checks without modifying evidence files, check scripts, root navigation, roadmap, style guide, or chapter statuses.
+
+#### Scenario: Change is ready
+
+- **WHEN** the s10 SVG rollout is complete
+- **THEN** `openspec validate rollout-s10-extension-svg --strict`, `openspec validate --all --strict`, XML parse checks for the newly added SVG, `python3 scripts/check_docs.py`, `python3 scripts/run_all.py`, `python3 -m unittest discover -s tests`, and `git diff --check` pass
+- **AND** root `README.md`, `docs/roadmap.md`, `docs/diagram-style-guide.md`, `docs/fact-snapshot.md`, `docs/source-evidence.md`, `scripts/check_docs.py`, and chapter statuses remain unchanged
