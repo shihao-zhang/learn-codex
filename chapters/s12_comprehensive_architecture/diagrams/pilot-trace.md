@@ -17,7 +17,7 @@
 
 改写原则：标题、节点、说明、图例和边界说明中文优先；英文只保留在小号字段 chip 中，用来追溯 mock trace。
 
-## Source Trace
+## Source Inputs
 
 输入命令：
 
@@ -32,7 +32,7 @@ python3 chapters/s12_comprehensive_architecture/mock.py --demo --path failure --
 - `chapters/s12_comprehensive_architecture/diagram.mmd`
 - `chapters/s12_comprehensive_architecture/README.md`
 
-## Event Mapping
+## Event / Mechanism Mapping
 
 | 图中编号 | mock event | 图中表达 |
 | --- | --- | --- |

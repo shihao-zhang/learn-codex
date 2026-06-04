@@ -117,7 +117,7 @@
       <tspan x="1058" dy="0">不运行该命令。</tspan>
       <tspan x="1058" dy="19">不越权写系统目录。</tspan>
     </text>
-    <rect x="1058" y="286" width="102" height="20" rx="10" fill="#FFEDD5" stroke="#FDBA74"/>
+    <rect x="1058" y="286" width="132" height="20" rx="10" fill="#FFEDD5" stroke="#FDBA74"/>
     <text class="chip-text" x="1068" y="301">exit_code=null</text>
   </g>
 

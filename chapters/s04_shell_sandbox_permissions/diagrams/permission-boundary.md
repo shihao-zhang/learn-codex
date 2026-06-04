@@ -21,7 +21,7 @@ python3 chapters/s04_shell_sandbox_permissions/mock.py --demo --path failure --t
 - `chapters/s04_shell_sandbox_permissions/mock.py`
 - `docs/source-evidence.md`
 
-## Event Mapping
+## Event / Mechanism Mapping
 
 | 图中编号 | mock event | 图中表达 |
 | --- | --- | --- |
@@ -34,7 +34,7 @@ python3 chapters/s04_shell_sandbox_permissions/mock.py --demo --path failure --t
 
 - `FACT` 只用于本章已登记证据覆盖的机制点：approval requirement 计算、approval primitive / cache、sandbox attempt、网络审批状态与 deferred flow。
 - `TEACHING` 用于示例命令、mock trace 编号、审批文案和低风险替代建议。
-- `DENY` 表示教学 failure path 中人类拒绝后不执行高风险命令；不声明官方对任意 shell 字符串的真实分类规则。
+- `DENY` / `拒绝` 表示教学 failure path 中人类拒绝后不执行高风险命令；不声明官方对任意 shell 字符串的真实分类规则。
 - `待核实` 用于 OS sandbox backend 能力差异、具体 UI 审批呈现和跨平台细节。
 
 ## Manual QA
@@ -42,7 +42,8 @@ python3 chapters/s04_shell_sandbox_permissions/mock.py --demo --path failure --t
 - [x] 图题、节点、说明和图例中文优先。
 - [x] SVG 包含 `<title>` 和 `<desc>`，并声明不是 OpenAI 官方架构图。
 - [x] Mermaid 仍是本章主机制图，README 只增加可选入口。
-- [x] `FACT`、`TEACHING`、`DENY`、`RECOVERY` 和 `待核实` 均在图中出现。
+- [x] `FACT`、`TEACHING` / `教学辅助`、`DENY` / `拒绝`、`RECOVERY` / `恢复选择` 和 `待核实` 均在图中出现。
+- [x] 全仓视觉一致性 QA 中已重新渲染预览，修正 `exit_code=null` chip 宽度，避免文字贴边。
 - [x] 示例命令和审批文案均标为教学表达。
 - [x] 高风险命令被拒后标出“未执行真实副作用”。
 - [x] SVG 不依赖外部图片、字体文件、网络或生成工具。

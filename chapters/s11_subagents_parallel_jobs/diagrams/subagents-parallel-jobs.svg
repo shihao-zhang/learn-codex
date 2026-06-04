@@ -58,7 +58,7 @@
   <path class="line-blue" d="M 710 295 L 710 340"/>
   <path class="line-blue" d="M 590 415 L 540 415"/>
   <path class="line-blue" d="M 420 340 L 590 275"/>
-  <path class="line-amber" d="M 425 295 C 560 315 735 315 910 340"/>
+  <path class="line-amber" d="M 540 305 C 650 324 790 324 910 340"/>
   <path class="line" d="M 290 645 L 330 645"/>
   <path class="line" d="M 580 645 L 620 645"/>
   <path class="line" d="M 870 645 L 910 645"/>

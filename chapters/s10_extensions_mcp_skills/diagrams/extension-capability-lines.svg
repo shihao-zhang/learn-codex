@@ -68,7 +68,7 @@
     <rect class="lane" x="40" y="144" width="1198" height="148" rx="8"/>
     <text class="lane-label" x="60" y="174">MCP</text>
 
-    <rect class="card fact" x="90" y="188" width="220" height="80"/>
+    <rect class="card fact" x="90" y="188" width="220" height="92"/>
     <rect x="108" y="204" width="54" height="22" rx="11" fill="#176B87"/>
     <text class="badge-text" x="120" y="220">FACT</text>
     <text class="card-title" x="108" y="246">server 与配置来源</text>
@@ -106,7 +106,7 @@
     <rect class="lane" x="40" y="326" width="1198" height="148" rx="8"/>
     <text class="lane-label" x="60" y="356">dynamic tools</text>
 
-    <rect class="card fact" x="90" y="370" width="220" height="80"/>
+    <rect class="card fact" x="90" y="370" width="220" height="92"/>
     <rect x="108" y="386" width="54" height="22" rx="11" fill="#176B87"/>
     <text class="badge-text" x="120" y="402">FACT</text>
     <text class="card-title" x="108" y="428">app-server 输入</text>
@@ -144,7 +144,7 @@
     <rect class="lane" x="40" y="508" width="1198" height="148" rx="8"/>
     <text class="lane-label" x="60" y="538">extension tools</text>
 
-    <rect class="card fact" x="90" y="552" width="220" height="80"/>
+    <rect class="card fact" x="90" y="552" width="220" height="92"/>
     <rect x="108" y="568" width="54" height="22" rx="11" fill="#176B87"/>
     <text class="badge-text" x="120" y="584">FACT</text>
     <text class="card-title" x="108" y="610">extension API</text>
@@ -182,7 +182,7 @@
     <rect class="lane" x="40" y="690" width="1198" height="148" rx="8"/>
     <text class="lane-label" x="60" y="720">skills</text>
 
-    <rect class="card fact" x="90" y="734" width="220" height="80"/>
+    <rect class="card fact" x="90" y="734" width="220" height="92"/>
     <rect x="108" y="750" width="54" height="22" rx="11" fill="#176B87"/>
     <text class="badge-text" x="120" y="766">FACT</text>
     <text class="card-title" x="108" y="792">skills directory</text>
@@ -217,22 +217,22 @@
   </g>
 
   <g>
-    <rect class="card teaching" x="40" y="870" width="560" height="112"/>
-    <rect x="62" y="892" width="84" height="22" rx="11" fill="#6B5B95"/>
-    <text class="badge-text" x="78" y="908">教学辅助</text>
-    <text class="card-title" x="62" y="940">产品治理问题可以同框比较，但不能合并成官方事实</text>
-    <text class="card-body" x="62" y="964">
+    <rect class="card teaching" x="40" y="860" width="560" height="118"/>
+    <rect x="62" y="882" width="84" height="22" rx="11" fill="#6B5B95"/>
+    <text class="badge-text" x="78" y="898">教学辅助</text>
+    <text class="card-title" x="62" y="930">产品治理问题可以同框比较，但不能合并成官方事实</text>
+    <text class="card-body" x="62" y="954">
       <tspan x="62" dy="0">谁声明？谁授权？谁执行？谁记录？失败后谁负责？</tspan>
       <tspan x="62" dy="17">这些是读者分析框架，不是已经核实的统一治理实现。</tspan>
     </text>
   </g>
 
   <g>
-    <rect class="card pending" x="640" y="870" width="598" height="112"/>
-    <rect x="662" y="892" width="64" height="22" rx="11" fill="#B45309"/>
-    <text class="badge-text" x="676" y="908">待核实</text>
-    <text class="card-title" x="662" y="940">统一治理路径尚不能画成已验证流水线</text>
-    <text class="card-body" x="662" y="964">
+    <rect class="card pending" x="640" y="860" width="598" height="118"/>
+    <rect x="662" y="882" width="64" height="22" rx="11" fill="#B45309"/>
+    <text class="badge-text" x="676" y="898">待核实</text>
+    <text class="card-title" x="662" y="930">统一治理路径尚不能画成已验证流水线</text>
+    <text class="card-body" x="662" y="954">
       <tspan x="662" dy="0">MCP、dynamic tools、extension tools、skills 都能进入 tool surface，</tspan>
       <tspan x="662" dy="17">但当前证据不支持“同一审批、同一授权、同一审计”的官方承诺。</tspan>
     </text>

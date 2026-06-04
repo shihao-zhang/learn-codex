@@ -61,4 +61,5 @@ python3 chapters/s11_subagents_parallel_jobs/mock.py --demo --path failure --tra
 - [x] 默认启用、产品入口、multi-agent v1/v2 体验和完整权限继承策略均标为 `待核实`。
 - [x] `tools/parallel.rs` 被标为普通 tool call runtime，不画成子 agent 并行。
 - [x] result merge、mock trace 和产品进度表达均标为教学辅助表达。
+- [x] 全仓视觉一致性 QA 中已重新渲染预览，调整待核实虚线，避免靠近 `spawn_agent` chip。
 - [x] SVG 不依赖外部图片、字体文件、网络或生成工具。
