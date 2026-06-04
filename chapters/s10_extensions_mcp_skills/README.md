@@ -25,6 +25,10 @@
 
 见 [diagram.mmd](diagram.mmd)。图把 MCP、dynamic tools、extension tools、skills 先画成不同能力来源，再进入发现、工具规范、治理和运行时；其中多条 runtime adapter 已有机制证据，但跨客户端语义、通用 extension 用户入口和统一治理边界仍待核实。
 
+## 可选教学辅助 SVG
+
+见 [extension-capability-lines.md](diagrams/extension-capability-lines.md)。这张图只辅助并排理解 MCP、dynamic tools、extension tools 和 skills 四条能力线的来源、入口、治理和待核实边界，不替代本章 Mermaid，也不新增官方事实。
+
 ## 运行 mock
 
 ```bash
